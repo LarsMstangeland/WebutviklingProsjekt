@@ -63,9 +63,9 @@ export class RecipeDetails extends Component<{ match: { params: { id: number } }
             <Column width={2}>Description:</Column>
             <Column>{this.recipe.description}</Column>
           </Row>
-          {/* <Column>{this.ingredients[0].name}</Column> */}
+          {/* {console.log(this.ingredients)} */}
             {/* {this.ingredients.map((ingredient) => {
-              <Row key={ingredient.ingredient_id}>hei
+              <Row key={ingredient.ingredients_id}>hei
                 <Column>{ingredient.name}</Column>
                 <Column>{ingredient.amount}</Column>
                 <Column>{ingredient.unit}</Column>
@@ -84,7 +84,7 @@ export class RecipeDetails extends Component<{ match: { params: { id: number } }
       .then((recipe) => (this.recipe = recipe)).then(()=>{
         recipeService
         .getRecipeIngredients(this.recipe.recipe_id)
-        .then((ingredients) => (this.ingredients = ingredients))
+        .then((ingredients) => ( this.ingredients = ingredients)).then(()=>{console.log(this.ingredients)})
         .catch((error) => Alert.danger('Error getting ingredients: ' + error.message));
       })
       .catch((error) => Alert.danger('Error getting recipe: ' + error.message));

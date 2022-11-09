@@ -10,7 +10,7 @@ export type Recipe = {
 };
 
 export type Ingredient = {
-  ingredient_id: number;
+  ingredients_id: number;
   name: string;
   amount: number;
   unit: string;
@@ -46,10 +46,7 @@ class RecipeService {
 
   getAllRecipeIngredients(id: number) {
     return new Promise<Ingredient[]>((resolve, reject)=>{
-      pool.query('SELECT i.ingredient_id, i.name, itr.amount, itr.unit FROM `ingredients_to_recipe` itr, `recipes` r, `ingredients`' + 
-      'i WHERE r.recipe_id = itr.recipe_id' + 
-      'AND i.ingredients_id = itr.ingredients_id' + 
-      'AND r.recipe_id = ?', [id], (error: any, results: RowDataPacket[])=>{
+      pool.query('SELECT i.ingredients_id, i.name, itr.amount, itr.unit FROM `ingredients_to_recipe` itr, `recipes` r, `ingredients` i WHERE r.recipe_id = itr.recipe_id AND i.ingredients_id = itr.ingredients_id AND r.recipe_id = ?', [id], (error: any, results: RowDataPacket[])=>{
         if(error) return reject(error);
 
         resolve(results as Ingredient[]);

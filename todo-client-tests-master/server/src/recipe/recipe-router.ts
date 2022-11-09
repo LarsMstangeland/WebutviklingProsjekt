@@ -1,5 +1,5 @@
 import express, { response } from 'express';
-import recipeService from './recipe-service';
+import recipeService, {Recipe, Ingredient} from './recipe-service';
 
 /**
  * Express router containing task methods.
@@ -21,12 +21,12 @@ RecipeRouter.get('/recipes/:id', (request, response) => {
     .catch((error) => response.status(500).send(error));
 });
 
-RecipeRouter.get('recipes/:id/ingredients', (request, response) => {
+RecipeRouter.get('/recipes/:id/ingredients', (request, response) => {
 
     const id = Number(request.params.id);
     recipeService
     .getAllRecipeIngredients(id)
-    .then((recipeList) => (recipeList? response.send(recipeList): response.status(404).send('Could not find ingridients')))
+    .then((recipeIngredients) => (recipeIngredients ? response.send(recipeIngredients) : response.status(404).send('Could not find ingredients')))
     .catch((error) => response.status(500).send(error))
     })
 
