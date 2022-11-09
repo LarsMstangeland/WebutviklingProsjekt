@@ -1,8 +1,8 @@
-import pool from './mysql-pool';
+import pool from '../mysql-pool';
 import type { RowDataPacket, ResultSetHeader } from 'mysql2';
 
 export type User = {
-  User_id: number;
+  id: number;
   name: string;
   cart_id: number;
 
@@ -14,7 +14,7 @@ class UserService {
    */
   get(id: number) {
     return new Promise<User | undefined>((resolve, reject) => {
-      pool.query('SELECT * FROM User WHERE id = ?', [id], (error, results: RowDataPacket[]) => {
+      pool.query('SELECT * FROM user WHERE user_id = ?', [id], (error, results: RowDataPacket[]) => {
         if (error) return reject(error);
 
         resolve(results[0] as User);
@@ -27,7 +27,7 @@ class UserService {
    */
   getAll() {
     return new Promise<User[]>((resolve, reject) => {
-      pool.query('SELECT * FROM User', (error, results: RowDataPacket[]) => {
+      pool.query('SELECT * FROM user', (error, results: RowDataPacket[]) => {
         if (error) return reject(error);
 
         resolve(results as User[]);

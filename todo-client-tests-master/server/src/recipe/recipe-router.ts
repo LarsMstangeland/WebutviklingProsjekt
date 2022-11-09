@@ -17,7 +17,7 @@ RecipeRouter.get('/recipes/:id', (request, response) => {
   const id = Number(request.params.id);
   RecipeService
     .get(id)
-    .then((task) => (task ? response.send(task) : response.status(404).send('Recipie not found')))
+    .then((task) => (task ? response.send(task) : response.status(404).send('Recipe not found')))
     .catch((error) => response.status(500).send(error));
 });
 

@@ -1,6 +1,6 @@
 import express from 'express';
 import RecipeRouter from './recipe/recipe-router';
-import UserRouter from './user-router';
+import UserRouter from './user/user-router';
 
 /**
  * Express application.
