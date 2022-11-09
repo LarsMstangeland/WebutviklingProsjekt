@@ -1,5 +1,5 @@
 import express from 'express';
-import userService from './User-service';
+import userService from './user-service';
 
 /**
  * Express router containing task methods.

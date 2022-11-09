@@ -23,17 +23,6 @@ class RecipeService {
   getAll() {
     return axios.get<Recipe[]>('/recipes').then((response) => response.data);
   }
-
-  /**
-   * Create new recipe having the given title.
-   *
-   * Resolves the newly created recipe id.
-   */
-  create(name: string) {
-    return axios
-      .post<{ id: number }>('/recipes', { name: name })
-      .then((response) => response.data.id);
-  }
 }
 
 const recipeService = new RecipeService();
