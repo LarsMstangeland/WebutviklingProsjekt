@@ -2,16 +2,18 @@ import pool from '../mysql-pool';
 import type { RowDataPacket, ResultSetHeader } from 'mysql2';
 
 export type Recipe = {
-  id: number;
+  recipe_id: number;
   name: string;
-  description: number;
   region: string;
   picture: string;
+  description: string;
 };
 
 export type Ingredient = {
   id: number;
   name: string;
+  amount: number;
+  unit: string;
 }
 
 

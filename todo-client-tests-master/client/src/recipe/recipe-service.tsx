@@ -5,9 +5,9 @@ axios.defaults.baseURL = 'http://localhost:3000/api/v2';
 export type Recipe = {
   id: number;
   name: string;
-  description: string;
   region: string;
   picture: string;
+  description: string;
 };
 
 export type Ingredient = {
