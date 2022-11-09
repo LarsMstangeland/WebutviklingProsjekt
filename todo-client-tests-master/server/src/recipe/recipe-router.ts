@@ -1,4 +1,4 @@
-import express from 'express';
+import express, { response } from 'express';
 import RecipeService from './recipe-service';
 
 /**
@@ -17,9 +17,18 @@ RecipeRouter.get('/recipes/:id', (request, response) => {
   const id = Number(request.params.id);
   RecipeService
     .get(id)
-    .then((task) => (task ? response.send(task) : response.status(404).send('Recipe not found')))
+    .then((recipe) => (recipe ? response.send(recipe) : response.status(404).send('Recipe not found')))
     .catch((error) => response.status(500).send(error));
 });
+
+RecipeRouter.get('recipies/:id/ingredients', (request, response) => {
+
+    const id = Number(request.params.id);
+    RecipeService
+    .get(id)
+    .then((recipeList) => (recipeList? response.send(recipeList): response.status(404).send('Could not find ingridients')))
+    .catch((error) => response.status(500).send(error))
+    })
 
 // Example request body: { title: "Ny oppgave" }
 // Example response body: { id: 4 }
@@ -42,7 +51,6 @@ RecipeRouter.delete('/recipies/:id', (request, response) => {
     .then((_result) => response.send())
     .catch((error) => response.status(500).send(error));
 });
-
 */
 
 export default RecipeRouter;
