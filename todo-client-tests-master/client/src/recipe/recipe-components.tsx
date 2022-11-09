@@ -45,11 +45,15 @@ export class RecipeDetails extends Component<{ match: { params: { id: number } }
   ingredients: Ingredient[] = [];
 
   render() {
+    console.log(this.recipe);
+    
     return (
       <>
         <Card title={this.recipe.name}>
           <Row>
-            <Column>{this.recipe.picture}</Column>
+            <picture>
+              <img src={this.recipe.picture} alt={this.recipe.name} />
+            </picture>
           </Row>
           <Row>
             <Column width={2}>Region:</Column>
