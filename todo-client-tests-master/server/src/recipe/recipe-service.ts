@@ -9,6 +9,12 @@ export type Recipe = {
   picture: string;
 };
 
+export type Ingredient = {
+  id: number;
+  name: string;
+}
+
+
 class RecipeService {
   /**
    * Get task with given id.
@@ -36,7 +42,18 @@ class RecipeService {
     });
   }
 
-  
+  getAllRecipeIngredients(id: number) {
+    return new Promise<Ingredient[]>((resolve, reject)=>{
+      pool.query('SELECT i.name, itr.amount, itr.unit FROM `ingredients_to_recipe` itr, `recipes` r, `ingredients`' + 
+      'i WHERE r.recipe_id = itr.recipe_id' + 
+      'AND i.ingredients_id = itr.ingredients_id' + 
+      'AND r.recipe_id = ?', [id], (error: any, results: RowDataPacket[])=>{
+        if(error) return reject(error);
+
+        resolve(results as Ingredient[]);
+      })
+    })
+  }
 
 
 }
