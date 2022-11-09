@@ -2,55 +2,54 @@ import * as React from 'react';
 import { Component } from 'react-simplified';
 import { Alert, Card, Row, Column, Form, Button } from './widgets';
 import { NavLink } from 'react-router-dom';
-import taskService, { Task } from './task-service';
+import recipeService, { Recipe } from './recipe-service';
 import { createHashHistory } from 'history';
 
 const history = createHashHistory(); // Use history.push(...) to programmatically change path, for instance after successfully saving a student
 
 /**
- * Renders task list.
+ * Renders recipe list.
  */
-export class TaskList extends Component {
-  tasks: Task[] = [];
+export class RecipeList extends Component {
+  recipes: Recipe[] = [];
 
   render() {
     return (
       <>
-        <Card title="Tasks">
-          {this.tasks.map((task) => (
-            <Row key={task.id}>
+        <Card title="Recipes">
+          {this.recipes.map((recipe) => (
+            <Row key={recipe.id}>
               <Column>
-                <NavLink to={'/tasks/' + task.id}>{task.title}</NavLink>
+                <NavLink to={'/recipes/' + recipe.id}>{recipe.name}</NavLink>
               </Column>
             </Row>
           ))}
         </Card>
-        <Button.Success onClick={() => history.push('/tasks/new')}>New task</Button.Success>
       </>
     );
   }
 
   mounted() {
-    taskService
+    recipeService
       .getAll()
-      .then((tasks) => (this.tasks = tasks))
-      .catch((error) => Alert.danger('Error getting tasks: ' + error.message));
+      .then((recipes) => (this.recipe = recipes))
+      .catch((error) => Alert.danger('Error getting recipes: ' + error.message));
   }
 }
 
 /**
- * Renders a specific task.
+ * Renders a specific recipe.
  */
-export class TaskDetails extends Component<{ match: { params: { id: number } } }> {
-  task: Task = { id: 0, title: '', done: false };
+export class RecipeDetails extends Component<{ match: { params: { id: number } } }> {
+  recipe: Recipe = { id: 0, name: '', region: '' };
 
   render() {
     return (
       <>
-        <Card title="Task">
+        <Card title="recipe">
           <Row>
             <Column width={2}>Title:</Column>
-            <Column>{this.task.title}</Column>
+            <Column>{this.recipe.name}</Column>
           </Row>
           <Row>
             <Column width={2}>Description:</Column>
@@ -58,12 +57,12 @@ export class TaskDetails extends Component<{ match: { params: { id: number } } }
           <Row>
             <Column width={2}>Done:</Column>
             <Column>
-              <Form.Checkbox checked={this.task.done} onChange={() => {}} disabled />
+              <Form.Checkbox checked={this.recipe.done} onChange={() => {}} disabled />
             </Column>
           </Row>
         </Card>
         <Button.Success
-          onClick={() => history.push('/tasks/' + this.props.match.params.id + '/edit')}
+          onClick={() => history.push('/recipes/' + this.props.match.params.id + '/edit')}
         >
           Edit
         </Button.Success>
@@ -74,21 +73,21 @@ export class TaskDetails extends Component<{ match: { params: { id: number } } }
   mounted() {
     taskService
       .get(this.props.match.params.id)
-      .then((task) => (this.task = task))
-      .catch((error) => Alert.danger('Error getting task: ' + error.message));
+      .then((recipe) => (this.recipe = recipe))
+      .catch((error) => Alert.danger('Error getting recipe: ' + error.message));
   }
 }
 
 /**
- * Renders form to edit a specific task.
+ * Renders form to edit a specific recipe.
  */
 export class TaskEdit extends Component<{ match: { params: { id: number } } }> {
-  task: Task = { id: 0, title: '', done: false };
+  recipe: recipe = { id: 0, title: '', done: false };
 
   render() {
     return (
       <>
-        <Card title="Edit task">
+        <Card title="Edit recipe">
           <Row>
             <Column width={2}>
               <Form.Label>Title:</Form.Label>
@@ -96,8 +95,8 @@ export class TaskEdit extends Component<{ match: { params: { id: number } } }> {
             <Column>
               <Form.Input
                 type="text"
-                value={this.task.title}
-                onChange={(event) => (this.task.title = event.currentTarget.value)}
+                value={this.recipe.title}
+                onChange={(event) => (this.recipe.title = event.currentTarget.value)}
               />
             </Column>
           </Row>
@@ -113,8 +112,8 @@ export class TaskEdit extends Component<{ match: { params: { id: number } } }> {
             <Column width={2}>Done:</Column>
             <Column>
               <Form.Checkbox
-                checked={this.task.done}
-                onChange={(event) => (this.task.done = event.currentTarget.checked)}
+                checked={this.recipe.done}
+                onChange={(event) => (this.recipe.done = event.currentTarget.checked)}
               />
             </Column>
           </Row>
@@ -134,13 +133,13 @@ export class TaskEdit extends Component<{ match: { params: { id: number } } }> {
   mounted() {
     taskService
       .get(this.props.match.params.id)
-      .then((task) => (this.task = task))
-      .catch((error) => Alert.danger('Error getting task: ' + error.message));
+      .then((recipe) => (this.recipe = recipe))
+      .catch((error) => Alert.danger('Error getting recipe: ' + error.message));
   }
 }
 
 /**
- * Renders form to create new task.
+ * Renders form to create new recipe.
  */
 export class TaskNew extends Component {
   title = '';
@@ -148,7 +147,7 @@ export class TaskNew extends Component {
   render() {
     return (
       <>
-        <Card title="New task">
+        <Card title="New recipe">
           <Row>
             <Column width={2}>
               <Form.Label>Title:</Form.Label>
@@ -174,8 +173,8 @@ export class TaskNew extends Component {
           onClick={() => {
             taskService
               .create(this.title)
-              .then((id) => history.push('/tasks/' + id))
-              .catch((error) => Alert.danger('Error creating task: ' + error.message));
+              .then((id) => history.push('/recipes/' + id))
+              .catch((error) => Alert.danger('Error creating recipe: ' + error.message));
           }}
         >
           Create
