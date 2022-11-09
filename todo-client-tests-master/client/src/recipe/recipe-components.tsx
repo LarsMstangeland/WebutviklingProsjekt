@@ -2,7 +2,7 @@ import * as React from 'react';
 import { Component } from 'react-simplified';
 import { Alert, Card, Row, Column, Form, Button } from '../widgets';
 import { NavLink } from 'react-router-dom';
-import recipeService, { Recipe } from './recipe-service';
+import recipeService, { Recipe, Ingredient } from './recipe-service';
 import { createHashHistory } from 'history';
 
 const history = createHashHistory(); // Use history.push(...) to programmatically change path, for instance after successfully saving a student
@@ -41,22 +41,37 @@ export class RecipeList extends Component {
  * Renders a specific recipe.
  */
 export class RecipeDetails extends Component<{ match: { params: { id: number } } }> {
-  recipe: Recipe = { id: 0, name: '', description: '', region: '' };
+  recipe: Recipe = { id: 0, name: '', description: '', region: '', picture: '' };
+  ingredients: Ingredient[] = [];
 
   render() {
     return (
       <>
-        <Card title="recipe">
+        <Card title={this.recipe.name}>
           <Row>
-            <Column width={2}>Title:</Column>
-            <Column>{this.recipe.name}</Column>
-          </Row>
-          <Row>
-            <Column width={2}>Description:</Column>
+            <Column>{this.recipe.picture}</Column>
           </Row>
           <Row>
             <Column width={2}>Region:</Column>
+            <Column>{this.recipe.region}</Column>
           </Row>
+          <Row>
+            <Column width={2}>Description:</Column>
+            <Column>{this.recipe.description}</Column>
+          </Row>
+          {/**
+           * <Row>
+            <h3>Ingredients:</h3>
+            {this.ingredients.map((ingredient) => {
+              <Row key={ingredient.id}>
+                <Column>{ingredient.name}</Column>
+                <Column>{ingredient.amount}</Column>
+                <Column>{ingredient.unit}</Column>
+              </Row>
+            })}
+          </Row>
+           */}
+          
         </Card>
       </>
     );
@@ -67,5 +82,12 @@ export class RecipeDetails extends Component<{ match: { params: { id: number } }
       .get(this.props.match.params.id)
       .then((recipe) => (this.recipe = recipe))
       .catch((error) => Alert.danger('Error getting recipe: ' + error.message));
+
+      /** 
+      recipeService
+      .getRecipeIngredients()
+      .then((ingredients) => (this.ingredients = ingredients))
+      .catch((error) => Alert.danger('Error getting ingredients: ' + error.message));
+      */
   }
 }

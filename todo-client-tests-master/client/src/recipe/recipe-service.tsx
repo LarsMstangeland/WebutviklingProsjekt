@@ -7,7 +7,15 @@ export type Recipe = {
   name: string;
   description: string;
   region: string;
+  picture: string;
 };
+
+export type Ingredient = {
+  id: number;
+  name: string;
+  amount: number;
+  unit: string;
+}
 
 class RecipeService {
   /**
@@ -22,6 +30,10 @@ class RecipeService {
    */
   getAll() {
     return axios.get<Recipe[]>('/recipes').then((response) => response.data);
+  }
+
+  getRecipeIngredients(){
+    return axios.get<Ingredient[]>('/recipes/:id').then((response) => response.data);
   }
 }
 
