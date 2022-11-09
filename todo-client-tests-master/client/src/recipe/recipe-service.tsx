@@ -32,8 +32,8 @@ class RecipeService {
     return axios.get<Recipe[]>('/recipes').then((response) => response.data);
   }
 
-  getRecipeIngredients(){
-    return axios.get<Ingredient[]>('/recipes/:id').then((response) => response.data);
+  getRecipeIngredients(id: number){
+    return axios.get<Ingredient[]>('/recipes/' + id + '/ingredients').then((response) => response.data);
   }
 }
 

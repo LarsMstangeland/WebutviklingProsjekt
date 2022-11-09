@@ -1,4 +1,4 @@
-import express, { response } from 'express';
+import express from 'express';
 import recipeService from './recipe-service';
 
 /**
@@ -21,11 +21,11 @@ RecipeRouter.get('/recipes/:id', (request, response) => {
     .catch((error) => response.status(500).send(error));
 });
 
-RecipeRouter.get('recipies/:id/ingredients', (request, response) => {
+RecipeRouter.get('recipes/:id/ingredients', (request, response) => {
 
     const id = Number(request.params.id);
     recipeService
-    .get(id)
+    .getAllRecipeIngredients(id)
     .then((recipeList) => (recipeList? response.send(recipeList): response.status(404).send('Could not find ingridients')))
     .catch((error) => response.status(500).send(error))
     })
