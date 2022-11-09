@@ -16,14 +16,15 @@ export class RecipeList extends Component {
   render() {
     return (
       <>
+      {console.log(this.recipes)}
         <Card title="Recipes">
           {this.recipes.map((recipe) => (
-            <Row key={recipe.id}>
+            <Row key={recipe.recipe_id}>
               <Column>
-                <NavLink to={'/recipes/' + recipe.id}>{recipe.name}</NavLink>
+                <NavLink to={'/recipes/' + recipe.recipe_id}>{recipe.name}</NavLink>
+              
               </Column>
-            </Row>
-          ))}
+            </Row>))}
         </Card>
       </>
     );
@@ -41,11 +42,10 @@ export class RecipeList extends Component {
  * Renders a specific recipe.
  */
 export class RecipeDetails extends Component<{ match: { params: { id: number } } }> {
-  recipe: Recipe = { id: 0, name: '', description: '', region: '', picture: '' };
+  recipe: Recipe = { recipe_id: 0, name: '', description: '', region: '', picture: '' };
   ingredients: Ingredient[] = [];
 
   render() {
-    console.log(this.recipe);
     
     return (
       <>
@@ -67,7 +67,7 @@ export class RecipeDetails extends Component<{ match: { params: { id: number } }
            * <Row>
             <h3>Ingredients:</h3>
             {this.ingredients.map((ingredient) => {
-              <Row key={ingredient.id}>
+              <Row key={ingredient.ingredient_id}>
                 <Column>{ingredient.name}</Column>
                 <Column>{ingredient.amount}</Column>
                 <Column>{ingredient.unit}</Column>
