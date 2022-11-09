@@ -16,7 +16,6 @@ export class RecipeList extends Component {
   render() {
     return (
       <>
-      {console.log(this.recipes)}
         <Card title="Recipes">
           {this.recipes.map((recipe) => (
             <Row key={recipe.recipe_id}>
@@ -49,6 +48,7 @@ export class RecipeDetails extends Component<{ match: { params: { id: number } }
     
     return (
       <>
+        {console.log(this.recipe)}
         <Card title={this.recipe.name}>
           <Row>
             <picture>
@@ -63,22 +63,20 @@ export class RecipeDetails extends Component<{ match: { params: { id: number } }
             <Column width={2}>Description:</Column>
             <Column>{this.recipe.description}</Column>
           </Row>
-          {/* {console.log(this.ingredients)} */}
-            {/* {this.ingredients.map((ingredient) => {
-              <Row key={ingredient.ingredients_id}>hei
-                <Column>{ingredient.name}</Column>
-                <Column>{ingredient.amount}</Column>
-                <Column>{ingredient.unit}</Column>
-              </Row>
-            })} */}
-          
-          
+          {this.ingredients.map((ingredient) => (
+            <Row key={ingredient.ingredients_id}>
+              <Column>{ingredient.name}</Column>
+              <Column>{ingredient.amount}</Column>
+              <Column>{ingredient.unit}</Column>
+            </Row>
+            ))}
         </Card>
       </>
     );
   }
 
-  mounted() {
+  async mounted() {
+    /*
     recipeService
       .get(this.props.match.params.id)
       .then((recipe) => (this.recipe = recipe)).then(()=>{
@@ -88,8 +86,16 @@ export class RecipeDetails extends Component<{ match: { params: { id: number } }
         .catch((error) => Alert.danger('Error getting ingredients: ' + error.message));
       })
       .catch((error) => Alert.danger('Error getting recipe: ' + error.message));
+      */
+     try {
+      let recipe = await recipeService.get(this.props.match.params.id)
+      this.recipe = recipe;
+      let ingredients = await recipeService.getRecipeIngredients(this.props.match.params.id)
+      this.ingredients = ingredients;
 
-    
+     } catch (error: any) {
+      Alert.danger('Error getting recipe or ingredients: ' + error.message)
+     }
       
   }
 }
