@@ -6,7 +6,7 @@ export type Recipe = {
   name: string;
   description: number;
   region: string;
-
+  picture: string;
 };
 
 class RecipeService {
@@ -36,6 +36,7 @@ class RecipeService {
     });
   }
 
+  
 
 
 }
