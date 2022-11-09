@@ -1,4 +1,4 @@
-import pool from './mysql-pool';
+import pool from '../mysql-pool';
 import type { RowDataPacket, ResultSetHeader } from 'mysql2';
 
 export type Recipe = {
