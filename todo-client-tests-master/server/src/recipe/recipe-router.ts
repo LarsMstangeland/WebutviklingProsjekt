@@ -6,14 +6,14 @@ import RecipeService from './Recipe-service';
  */
 const RecipeRouter = express.Router();
 
-RecipeRouter.get('/recipies', (_request, response) => {
+RecipeRouter.get('/recipes', (_request, response) => {
   RecipeService
     .getAll()
     .then((rows) => response.send(rows))
     .catch((error) => response.status(500).send(error));
 });
 
-RecipeRouter.get('/recipies/:id', (request, response) => {
+RecipeRouter.get('/recipes/:id', (request, response) => {
   const id = Number(request.params.id);
   RecipeService
     .get(id)
