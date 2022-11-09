@@ -42,7 +42,7 @@ export class RecipeList extends Component {
  * Renders a specific recipe.
  */
 export class RecipeDetails extends Component<{ match: { params: { id: number } } }> {
-  recipe: Recipe = { recipe_id: 0, name: '', description: '', region: '', picture: '' };
+  recipe: Recipe = { recipe_id: 0, name: '', description: '', region: '', picture_url: '' };
   ingredients: Ingredient[] = [];
 
   render() {
@@ -52,7 +52,7 @@ export class RecipeDetails extends Component<{ match: { params: { id: number } }
         <Card title={this.recipe.name}>
           <Row>
             <picture>
-              <img src={this.recipe.picture} alt={this.recipe.name} />
+              <img src={this.recipe.picture_url} alt={this.recipe.name} />
             </picture>
           </Row>
           <Row>
@@ -63,15 +63,14 @@ export class RecipeDetails extends Component<{ match: { params: { id: number } }
             <Column width={2}>Description:</Column>
             <Column>{this.recipe.description}</Column>
           </Row>
-            <Row>
-            {this.ingredients.map((ingredient) => {
-              <Row key={ingredient.ingredient_id}>
+          {/* <Column>{this.ingredients[0].name}</Column> */}
+            {/* {this.ingredients.map((ingredient) => {
+              <Row key={ingredient.ingredient_id}>hei
                 <Column>{ingredient.name}</Column>
                 <Column>{ingredient.amount}</Column>
                 <Column>{ingredient.unit}</Column>
               </Row>
-            })}
-          </Row>
+            })} */}
           
           
         </Card>
@@ -82,14 +81,15 @@ export class RecipeDetails extends Component<{ match: { params: { id: number } }
   mounted() {
     recipeService
       .get(this.props.match.params.id)
-      .then((recipe) => (this.recipe = recipe))
+      .then((recipe) => (this.recipe = recipe)).then(()=>{
+        recipeService
+        .getRecipeIngredients(this.recipe.recipe_id)
+        .then((ingredients) => (this.ingredients = ingredients))
+        .catch((error) => Alert.danger('Error getting ingredients: ' + error.message));
+      })
       .catch((error) => Alert.danger('Error getting recipe: ' + error.message));
 
-      /** 
-      recipeService
-      .getRecipeIngredients()
-      .then((ingredients) => (this.ingredients = ingredients))
-      .catch((error) => Alert.danger('Error getting ingredients: ' + error.message));
-      */
+    
+      
   }
 }
