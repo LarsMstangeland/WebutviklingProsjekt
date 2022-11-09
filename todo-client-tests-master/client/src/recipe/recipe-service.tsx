@@ -3,7 +3,7 @@ import axios from 'axios';
 axios.defaults.baseURL = 'http://localhost:3000/api/v2';
 
 export type Recipe = {
-  id: number;
+  recipe_id: number;
   name: string;
   region: string;
   picture: string;
@@ -11,7 +11,7 @@ export type Recipe = {
 };
 
 export type Ingredient = {
-  id: number;
+  ingredient_id: number;
   name: string;
   amount: number;
   unit: string;

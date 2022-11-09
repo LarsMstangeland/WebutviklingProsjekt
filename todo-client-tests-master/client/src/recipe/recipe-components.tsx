@@ -63,9 +63,7 @@ export class RecipeDetails extends Component<{ match: { params: { id: number } }
             <Column width={2}>Description:</Column>
             <Column>{this.recipe.description}</Column>
           </Row>
-          {/**
-           * <Row>
-            <h3>Ingredients:</h3>
+            <Row>
             {this.ingredients.map((ingredient) => {
               <Row key={ingredient.ingredient_id}>
                 <Column>{ingredient.name}</Column>
@@ -74,7 +72,7 @@ export class RecipeDetails extends Component<{ match: { params: { id: number } }
               </Row>
             })}
           </Row>
-           */}
+          
           
         </Card>
       </>
