@@ -1,5 +1,5 @@
 import express from 'express';
-import RecipeService from './Recipe-service';
+import RecipeService from './recipe-service';
 
 /**
  * Express router containing task methods.
