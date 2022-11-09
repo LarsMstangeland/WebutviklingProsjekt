@@ -23,10 +23,13 @@ RecipeRouter.get('/recipies/:id', (request, response) => {
 
 // Example request body: { title: "Ny oppgave" }
 // Example response body: { id: 4 }
+
+/*
+
 RecipeRouter.post('/recipies', (request, response) => {
   const data = request.body;
   if (data && data.title && data.title.length != 0)
-    userService
+    RecipeService
       .create(data.title)
       .then((id) => response.send({ id: id }))
       .catch((error) => response.status(500).send(error));
@@ -39,5 +42,7 @@ RecipeRouter.delete('/recipies/:id', (request, response) => {
     .then((_result) => response.send())
     .catch((error) => response.status(500).send(error));
 });
+
+*/
 
 export default RecipeRouter;

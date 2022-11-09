@@ -14,7 +14,7 @@ class UserService {
    */
   get(id: number) {
     return new Promise<User | undefined>((resolve, reject) => {
-      pool.query('SELECT * FROM bruker WHERE id = ?', [id], (error, results: RowDataPacket[]) => {
+      pool.query('SELECT * FROM User WHERE id = ?', [id], (error, results: RowDataPacket[]) => {
         if (error) return reject(error);
 
         resolve(results[0] as User);
@@ -27,7 +27,7 @@ class UserService {
    */
   getAll() {
     return new Promise<User[]>((resolve, reject) => {
-      pool.query('SELECT * FROM Bruker', (error, results: RowDataPacket[]) => {
+      pool.query('SELECT * FROM User', (error, results: RowDataPacket[]) => {
         if (error) return reject(error);
 
         resolve(results as User[]);
@@ -42,7 +42,7 @@ class UserService {
    */
   create(title: string) {
     return new Promise<number>((resolve, reject) => {
-      pool.query('INSERT INTO Tasks SET title=?', [title], (error, results: ResultSetHeader) => {
+      pool.query('INSERT INTO User SET title=?', [title], (error, results: ResultSetHeader) => {
         if (error) return reject(error);
 
         resolve(results.insertId);
@@ -55,7 +55,7 @@ class UserService {
    */
   delete(id: number) {
     return new Promise<void>((resolve, reject) => {
-      pool.query('DELETE FROM Tasks WHERE id = ?', [id], (error, results: ResultSetHeader) => {
+      pool.query('DELETE FROM User WHERE id = ?', [id], (error, results: ResultSetHeader) => {
         if (error) return reject(error);
         if (results.affectedRows == 0) return reject(new Error('No row deleted'));
 
