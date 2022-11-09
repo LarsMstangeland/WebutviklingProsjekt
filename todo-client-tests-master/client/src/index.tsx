@@ -3,7 +3,7 @@ import * as React from 'react';
 import { Component } from 'react-simplified';
 import { HashRouter, Route } from 'react-router-dom';
 import { NavBar, Card, Alert } from './widgets';
-import { RecipeList, RecipeDetails } from './recipe-components';
+import { RecipeList, RecipeDetails } from './recipe/recipe-components';
 
 class Menu extends Component {
   render() {
