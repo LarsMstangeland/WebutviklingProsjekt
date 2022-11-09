@@ -1,14 +1,15 @@
 import pool from './mysql-pool';
 import type { RowDataPacket, ResultSetHeader } from 'mysql2';
 
-export type User = {
-  User_id: number;
+export type Recipe = {
+  id: number;
   name: string;
-  cart_id: number;
+  description: number;
+  region: string;
 
 };
 
-class UserService {
+class RecipeService {
   /**
    * Get task with given id.
    */
@@ -65,5 +66,5 @@ class UserService {
   }
 }
 
-const userService = new UserService();
-export default userService;
+const recipieService = new ();
+export default recipieService;
