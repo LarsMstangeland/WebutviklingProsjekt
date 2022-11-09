@@ -1,5 +1,5 @@
 import express from 'express';
-import RecipeService from './recipe-service';
+import recipeService from './recipe-service';
 
 /**
  * Express router containing task methods.
@@ -7,7 +7,7 @@ import RecipeService from './recipe-service';
 const RecipeRouter = express.Router();
 
 RecipeRouter.get('/recipes', (_request, response) => {
-  RecipeService
+  recipeService
     .getAll()
     .then((rows) => response.send(rows))
     .catch((error) => response.status(500).send(error));
@@ -15,16 +15,16 @@ RecipeRouter.get('/recipes', (_request, response) => {
 
 RecipeRouter.get('/recipes/:id', (request, response) => {
   const id = Number(request.params.id);
-  RecipeService
+  recipeService
     .get(id)
     .then((recipe) => (recipe ? response.send(recipe) : response.status(404).send('Recipe not found')))
     .catch((error) => response.status(500).send(error));
 });
 
-RecipeRouter.get('recipies/:id/ingredients', (request, response) => {
+RecipeRouter.get('recipes/:id/ingredients', (request, response) => {
 
     const id = Number(request.params.id);
-    RecipeService
+    recipeService
     .getAllRecipeIngredients(id)
     .then((recipeList) => (recipeList? response.send(recipeList): response.status(404).send('Could not find ingridients')))
     .catch((error) => response.status(500).send(error))
