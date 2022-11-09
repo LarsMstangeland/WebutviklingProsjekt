@@ -1,22 +1,22 @@
 import pool from './mysql-pool';
 import type { RowDataPacket, ResultSetHeader } from 'mysql2';
 
-export type Task = {
-  id: number;
-  title: string;
-  done: boolean;
+export type User = {
+  User_id: number;
+  name: string;
+  cart_id: number;
 };
 
-class TaskService {
+class UserService {
   /**
    * Get task with given id.
    */
   get(id: number) {
-    return new Promise<Task | undefined>((resolve, reject) => {
-      pool.query('SELECT * FROM Tasks WHERE id = ?', [id], (error, results: RowDataPacket[]) => {
+    return new Promise<User | undefined>((resolve, reject) => {
+      pool.query('SELECT * FROM bruker WHERE id = ?', [id], (error, results: RowDataPacket[]) => {
         if (error) return reject(error);
 
-        resolve(results[0] as Task);
+        resolve(results[0] as User);
       });
     });
   }
@@ -25,11 +25,11 @@ class TaskService {
    * Get all tasks.
    */
   getAll() {
-    return new Promise<Task[]>((resolve, reject) => {
-      pool.query('SELECT * FROM Tasks', (error, results: RowDataPacket[]) => {
+    return new Promise<User[]>((resolve, reject) => {
+      pool.query('SELECT * FROM Bruker', (error, results: RowDataPacket[]) => {
         if (error) return reject(error);
 
-        resolve(results as Task[]);
+        resolve(results as User[]);
       });
     });
   }
@@ -64,5 +64,5 @@ class TaskService {
   }
 }
 
-const taskService = new TaskService();
-export default taskService;
+const userService = new UserService();
+export default userService;
