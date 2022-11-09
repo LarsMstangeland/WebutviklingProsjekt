@@ -6,14 +6,14 @@ import userService from './User-service';
  */
 const User_router = express.Router();
 
-User_router.get('/tasks', (_request, response) => {
+User_router.get('/recipies', (_request, response) => {
   userService
     .getAll()
     .then((rows) => response.send(rows))
     .catch((error) => response.status(500).send(error));
 });
 
-User_router.get('/tasks/:id', (request, response) => {
+User_router.get('/recipies/:id', (request, response) => {
   const id = Number(request.params.id);
   userService
     .get(id)
@@ -23,7 +23,7 @@ User_router.get('/tasks/:id', (request, response) => {
 
 // Example request body: { title: "Ny oppgave" }
 // Example response body: { id: 4 }
-User_router.post('/tasks', (request, response) => {
+User_router.post('/recipies', (request, response) => {
   const data = request.body;
   if (data && data.title && data.title.length != 0)
     userService
@@ -33,7 +33,7 @@ User_router.post('/tasks', (request, response) => {
   else response.status(400).send('Missing task title');
 });
 
-User_router.delete('/tasks/:id', (request, response) => {
+User_router.delete('/recipies/:id', (request, response) => {
   userService
     .delete(Number(request.params.id))
     .then((_result) => response.send())
