@@ -10,7 +10,6 @@ export type Recipe = {
 };
 
 export type Ingredient = {
-
   ingredients_id: number;
   name: string;
   amount: number;
@@ -68,9 +67,27 @@ class RecipeService {
     })
   }
 
+  deleteIngredients(id: number, ingredients: Ingredient[]) {
+    return new Promise<void>((resolve, reject) => {
+      ingredients.map((ingredient) => {
+        pool.query(
+        'DELETE FROM ingredients_to_recipe WHERE recipe_id = ? AND ingredient_id = ?', 
+        [id, ingredient.ingredients_id], 
+        (error, results: ResultSetHeader) => {
+          if (error) return reject(error)
+          if(results.affectedRows == 0) return reject(new Error('No row deleted'));
+  
+        })  
+      })
+
+      resolve();
+
+    })
+  }
+
   updateRecipe(recipe: Recipe) {
     return new Promise<void>((resolve, reject) => {
-      pool.query('UPDATE recipes SET name = ?, region = ?, picture_url = ?, description = ? WHERE recipe_id = ?', 
+      pool.query('UPDATE recipes SET (name, region, picture_url, description) VALUES (?,?,?,?) WHERE recipe_id = ?', 
       [recipe.name, recipe.region, recipe.picture_url, recipe.description, recipe.recipe_id], 
       (error, results: ResultSetHeader) => {
         if (error) return reject(error);
@@ -84,7 +101,7 @@ class RecipeService {
   updateRecipeIngredients(id: number, ingredients: Ingredient[]) {
     return new Promise<void>((resolve, reject) => {
       ingredients.map((ingredient) => {
-      pool.query('UPDATE ingredients_to_recipe SET amount = ?, unit = ? WHERE recipe_id = ? AND ingredients_id = ?', 
+      pool.query('UPDATE ingredients_to_recipe SET (amount, unit) VALUES (?,?) WHERE recipe_id = ? AND ingredients_id = ?', 
       [ingredient.amount, ingredient.unit, id, ingredient.ingredients_id],
       (error, results: ResultSetHeader) => {
         if (error) return reject(error);
@@ -93,7 +110,7 @@ class RecipeService {
       })})
 
       resolve();
-      
+
     })
   }
 
