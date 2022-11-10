@@ -101,6 +101,7 @@ class RecipeService {
   updateRecipeIngredients(id: number, ingredients: Ingredient[]) {
     return new Promise<void>((resolve, reject) => {
       ingredients.map((ingredient) => {
+        console.log(ingredient, id)
       pool.query('UPDATE ingredients_to_recipe SET amount = ?, unit = ? WHERE recipe_id = ? AND ingredients_id = ?', 
       [ingredient.amount, ingredient.unit, id, ingredient.ingredients_id],
       (error, results: ResultSetHeader) => {
