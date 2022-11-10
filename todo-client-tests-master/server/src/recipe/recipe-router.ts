@@ -30,7 +30,7 @@ RecipeRouter.get('/recipes/:id/ingredients', (request, response) => {
     .catch((error) => response.status(500).send(error))
     })
 
-  RecipeRouter.delete('recipes/:id', (request, response) => {
+  RecipeRouter.delete('/recipes/:id', (request, response) => {
     recipeService
     .delete(Number(request.params.id))
     .then((_result) => response.send)
