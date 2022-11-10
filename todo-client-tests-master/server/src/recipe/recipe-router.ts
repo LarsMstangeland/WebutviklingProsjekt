@@ -40,7 +40,7 @@ RecipeRouter.get('/recipes/:id/ingredients', (request, response) => {
 // Example response body: { id: 4 }
 
 
-  RecipeRouter.patch('/recipies/edit/:id', (request, response) => {
+  RecipeRouter.patch('/recipes/:id/edit', (request, response) => {
     //hent ut de normale dataen og gjør det mulig å redigere
     //bruker patch for å være økonomiske med kjøretid
     const data = request.body
@@ -51,7 +51,7 @@ RecipeRouter.get('/recipes/:id/ingredients', (request, response) => {
   })
 
   
-  RecipeRouter.patch('/recipies/edit/:id/ingridients', (request,response) => {
+  RecipeRouter.patch('/recipes/:id/edit/ingredients', (request,response) => {
     //oppdaterer ingridients inn til en gitt recipie
     //bruker patch for å være økonomiske med kjøretid
     const data = request.body

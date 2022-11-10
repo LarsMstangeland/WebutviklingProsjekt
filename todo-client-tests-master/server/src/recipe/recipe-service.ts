@@ -44,6 +44,7 @@ class RecipeService {
     });
   }
 
+  // get all ingredients related to spesific recipe
   getAllRecipeIngredients(id: number) {
     return new Promise<Ingredient[]>((resolve, reject)=>{
       pool.query('SELECT i.ingredients_id, i.name, itr.amount, itr.unit FROM `ingredients_to_recipe` itr, `recipes` r, `ingredients` i WHERE r.recipe_id = itr.recipe_id AND i.ingredients_id = itr.ingredients_id AND r.recipe_id = ?', [id], (error: any, results: RowDataPacket[])=>{
@@ -54,6 +55,7 @@ class RecipeService {
     })
   }
 
+  //delete spesific recipe
   delete(id: number) {
     return new Promise<void>((resolve, reject) => {
       pool.query('DELETE a.*, b.* FROM ingredients_to_recipe as a, recipes as b WHERE a.recipe_id = b.recipe_id AND a.recipe_id = ?', 
@@ -67,6 +69,7 @@ class RecipeService {
     })
   }
 
+  //delete ingredients from recipe, not from table
   deleteIngredients(id: number, ingredients: Ingredient[]) {
     return new Promise<void>((resolve, reject) => {
       ingredients.map((ingredient) => {
@@ -85,6 +88,7 @@ class RecipeService {
     })
   }
 
+  //update recipe
   updateRecipe(recipe: Recipe) {
     return new Promise<void>((resolve, reject) => {
       pool.query('UPDATE recipes SET name = ?, region = ?, picture_url = ?, description = ? WHERE recipe_id = ?', 
@@ -98,6 +102,7 @@ class RecipeService {
     })
   }
 
+  //update ingredients amount and unit on spesific recipe
   updateRecipeIngredients(id: number, ingredients: Ingredient[]) {
     return new Promise<void>((resolve, reject) => {
       ingredients.map((ingredient) => {
