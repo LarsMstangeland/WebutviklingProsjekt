@@ -62,6 +62,17 @@ RecipeRouter.get('/recipes/:id/ingredients', (request, response) => {
     .catch((error) => response.status(500).send(error))
   })
 
+  RecipeRouter.patch('/recipes/:id/edit/ingredients', (request,response) => {
+    //oppdaterer ingridients inn til en gitt recipie
+    //bruker patch for å være økonomiske med kjøretid
+    const data = request.body
+    const id = Number(request.params.id)
+    console.log(id, data)
+    recipeService.deleteRecipeIngridients(id)
+    .then((_result) => response.send())
+    .catch((error) => response.status(500).send(error))
+  })
+
 
 
 
