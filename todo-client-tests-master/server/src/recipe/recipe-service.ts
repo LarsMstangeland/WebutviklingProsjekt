@@ -56,7 +56,9 @@ class RecipeService {
 
   delete(id: number) {
     return new Promise<void>((resolve, reject) => {
-      pool.query('DELETE FROM recipes WHERE id = ?', [id], (error, results: ResultSetHeader) =>{
+      pool.query('DELETE a.*, b.* FROM ingredients_to_recipe as a, recipes as b WHERE a.recipe_id = b.recipe_id AND a.recipe_id = ?', 
+      [id], 
+      (error, results: ResultSetHeader) =>{
         if (error) return reject(error)
         if(results.affectedRows == 0) return reject(new Error('No row deleted'));
 
@@ -64,8 +66,6 @@ class RecipeService {
       })
     })
   }
-
-
 
 }
 

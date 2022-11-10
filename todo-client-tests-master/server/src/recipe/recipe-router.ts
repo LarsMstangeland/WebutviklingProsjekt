@@ -33,7 +33,7 @@ RecipeRouter.get('/recipes/:id/ingredients', (request, response) => {
   RecipeRouter.delete('/recipes/:id', (request, response) => {
     recipeService
     .delete(Number(request.params.id))
-    .then((_result) => response.send)
+    .then((_result) => response.send())
     .catch((error) => response.status(500).send(error));
   })
 // Example request body: { title: "Ny oppgave" }
