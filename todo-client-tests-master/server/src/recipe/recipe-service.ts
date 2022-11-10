@@ -54,6 +54,18 @@ class RecipeService {
     })
   }
 
+  delete(id: number) {
+    return new Promise<void>((resolve, reject) => {
+      pool.query('DELETE FROM recipes WHERE id = ?', [id], (error, results: ResultSetHeader) =>{
+        if (error) return reject(error)
+        if(results.affectedRows == 0) return reject(new Error('No row deleted'));
+
+        resolve();
+      })
+    })
+  }
+
+
 
 }
 
