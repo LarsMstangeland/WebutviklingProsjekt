@@ -43,9 +43,8 @@ class UserService {
    */
   create(user : User) {
     return new Promise<number>((resolve, reject) => {
-      pool.query('INSERT INTO user SET (username, password, admin)', [title], (error, results: ResultSetHeader) => {
+      pool.query('INSERT INTO user SET (username, password, admin)', [user.username, user.password, user.admin], (error, results: ResultSetHeader) => {
         if (error) return reject(error);
-
         resolve(results.insertId);
       });
     });
