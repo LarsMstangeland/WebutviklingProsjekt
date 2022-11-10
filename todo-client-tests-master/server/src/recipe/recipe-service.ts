@@ -70,7 +70,7 @@ class RecipeService {
   }
 
   //delete ingredients from recipe, not from table
-  deleteIngredients(id: number, ingredients: Ingredient[]) {
+  deleteRecipeIngredients(id: number, ingredients: Ingredient[]) {
     return new Promise<void>((resolve, reject) => {
       ingredients.map((ingredient) => {
         pool.query(
