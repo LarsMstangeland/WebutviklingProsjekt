@@ -2,10 +2,11 @@ import pool from '../mysql-pool';
 import type { RowDataPacket, ResultSetHeader } from 'mysql2';
 
 export type User = {
-  id: number;
-  name: string;
+  user_id: number;
+  username: string;
   cart_id: number;
-
+  password: string;
+  admin: boolean;
 };
 
 class UserService {
@@ -40,9 +41,9 @@ class UserService {
    *
    * Resolves the newly created task id.
    */
-  create(title: string) {
+  create(user : User) {
     return new Promise<number>((resolve, reject) => {
-      pool.query('INSERT INTO User SET title=?', [title], (error, results: ResultSetHeader) => {
+      pool.query('INSERT INTO user SET (username, password, admin)', [title], (error, results: ResultSetHeader) => {
         if (error) return reject(error);
 
         resolve(results.insertId);
