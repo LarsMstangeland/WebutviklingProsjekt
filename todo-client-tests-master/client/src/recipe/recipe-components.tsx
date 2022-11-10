@@ -3,6 +3,7 @@ import { Component } from 'react-simplified';
 import { Alert, Card, Row, Column, Form, Button } from '../widgets';
 import { NavLink } from 'react-router-dom';
 import recipeService, { Recipe, Ingredient } from './recipe-service';
+import regionService, {Region} from './region-service';
 import { createHashHistory } from 'history';
 
 const history = createHashHistory(); // Use history.push(...) to programmatically change path, for instance after successfully saving a student
@@ -112,7 +113,7 @@ export class RecipeDetails extends Component<{ match: { params: { id: number } }
 export class RecipeEdit extends Component<{ match: { params: { id: number } } }> {
   recipe: Recipe = { recipe_id: 0, name: '', description: '', region: '', picture_url: '' };
   ingredients: Ingredient[] = [];
-  regions: any = ['Scandinavnia', 'America', 'Asia', 'Africa', 'Norway']
+  regions: Region[] = [];
 
   render() {
     return (
@@ -139,9 +140,9 @@ export class RecipeEdit extends Component<{ match: { params: { id: number } } }>
                 value={this.recipe.region} 
                 onChange={(event) => (this.recipe.region = event.currentTarget.value)}>
 
-                {this.regions.map((region: String) => (
-                  <option key={Math.random()*10} value={region}>
-                  {region}
+                {this.regions.map((region) => (
+                  <option key={region.id} value={region.name}>
+                  {region.name}
                 </option>
                 ))}
               </Form.Select>
@@ -207,6 +208,7 @@ export class RecipeEdit extends Component<{ match: { params: { id: number } } }>
             <Button.Success
               onClick={() =>
                 recipeService.update(this.recipe).then(() => {
+                  console.log(this.recipe);
                   history.push('/recipes/' + this.recipe.recipe_id);
                 })
               }
@@ -225,6 +227,8 @@ export class RecipeEdit extends Component<{ match: { params: { id: number } } }>
       this.recipe = recipe;
       let ingredients = await recipeService.getRecipeIngredients(this.props.match.params.id)
       this.ingredients = ingredients;
+      let regions = await regionService.getAll()
+      this.regions = regions;
 
      } catch (error: any) {
       Alert.danger('Error getting recipe or ingredients: ' + error.message)

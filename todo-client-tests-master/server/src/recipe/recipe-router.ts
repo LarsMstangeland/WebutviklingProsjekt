@@ -6,14 +6,14 @@ import recipeService, {Recipe, Ingredient} from './recipe-service';
  */
 const RecipeRouter = express.Router();
 
-RecipeRouter.get('/recipes', (_request, response) => {
+RecipeRouter.get('/', (_request, response) => {
   recipeService
     .getAll()
     .then((rows) => response.send(rows))
     .catch((error) => response.status(500).send(error));
 });
 
-RecipeRouter.get('/recipes/:id', (request, response) => {
+RecipeRouter.get('/:id', (request, response) => {
   const id = Number(request.params.id);
   recipeService
     .get(id)
@@ -21,7 +21,7 @@ RecipeRouter.get('/recipes/:id', (request, response) => {
     .catch((error) => response.status(500).send(error));
 });
 
-RecipeRouter.get('/recipes/:id/ingredients', (request, response) => {
+RecipeRouter.get('/:id/ingredients', (request, response) => {
 
     const id = Number(request.params.id);
     recipeService
@@ -30,7 +30,7 @@ RecipeRouter.get('/recipes/:id/ingredients', (request, response) => {
     .catch((error) => response.status(500).send(error))
     })
 
-  RecipeRouter.delete('/recipes/:id', (request, response) => {
+  RecipeRouter.delete('/:id', (request, response) => {
     recipeService
     .delete(Number(request.params.id))
     .then((_result) => response.send())
@@ -40,7 +40,7 @@ RecipeRouter.get('/recipes/:id/ingredients', (request, response) => {
 // Example response body: { id: 4 }
 
 
-  RecipeRouter.patch('/recipes/:id/edit', (request, response) => {
+  RecipeRouter.put('/:id/edit', (request, response) => {
     //hent ut de normale dataen og gjør det mulig å redigere
     //bruker patch for å være økonomiske med kjøretid
 
@@ -51,7 +51,7 @@ RecipeRouter.get('/recipes/:id/ingredients', (request, response) => {
   })
 
   
-  RecipeRouter.patch('/recipes/:id/edit/ingredients', (request,response) => {
+  RecipeRouter.put('/:id/edit/ingredients', (request,response) => {
     //oppdaterer ingridients inn til en gitt recipie
     //bruker patch for å være økonomiske med kjøretid
     const data = request.body
@@ -62,7 +62,7 @@ RecipeRouter.get('/recipes/:id/ingredients', (request, response) => {
     .catch((error) => response.status(500).send(error))
   })
 
-  RecipeRouter.patch('/recipes/:id/edit/ingredients', (request,response) => {
+  RecipeRouter.put('/:id/edit/ingredients', (request,response) => {
     //oppdaterer ingridients inn til en gitt recipie
     //bruker patch for å være økonomiske med kjøretid
     const data = request.body
