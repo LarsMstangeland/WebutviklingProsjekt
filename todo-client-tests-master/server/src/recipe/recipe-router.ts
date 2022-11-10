@@ -39,6 +39,30 @@ RecipeRouter.get('/recipes/:id/ingredients', (request, response) => {
 // Example request body: { title: "Ny oppgave" }
 // Example response body: { id: 4 }
 
+
+  RecipeRouter.patch('/recipies/edit/:id', (request, response) => {
+    //hent ut de normale dataen og gjør det mulig å redigere
+    //bruker patch for å være økonomiske med kjøretid
+    const data = request.body
+    console.info(data)
+    recipeService.updateRecipe(data)
+    .then((result) => response.send)
+    .catch((error) => response.status(500).send(error))
+  })
+
+  
+  RecipeRouter.patch('/recipies/edit/:id/ingridients', (request,response) => {
+    //oppdaterer ingridients inn til en gitt recipie
+    //bruker patch for å være økonomiske med kjøretid
+    const data = request.body
+    recipeService.updateRecipeIngredients(Number(request.params.id), data)
+    .then((result) => response.send)
+    .catch((error) => response.status(500).send(error))
+  })
+
+
+
+
 /*
 
 RecipeRouter.post('/recipies', (request, response) => {
