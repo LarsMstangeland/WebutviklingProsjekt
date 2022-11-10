@@ -6,14 +6,14 @@ import userService from './user-service';
  */
 const UserRouter = express.Router();
 
-UserRouter.get('/users', (_request, response) => {
+UserRouter.get('', (_request, response) => {
   userService
     .getAll()
     .then((rows) => response.send(rows))
     .catch((error) => response.status(500).send(error));
 });
 
-UserRouter.get('/users/:id', (request, response) => {
+UserRouter.get('/:id', (request, response) => {
   const id = Number(request.params.id);
   userService
     .get(id)
@@ -23,7 +23,7 @@ UserRouter.get('/users/:id', (request, response) => {
 
 // Example request body: { title: "Ny oppgave" }
 // Example response body: { id: 4 }
-UserRouter.post('/users', (request, response) => {
+UserRouter.post('', (request, response) => {
   const data = request.body;
   if (data && data.title && data.title.length != 0)
     userService
@@ -33,7 +33,7 @@ UserRouter.post('/users', (request, response) => {
   else response.status(400).send('Missing recipies');
 });
 
-UserRouter.delete('/users/:id', (request, response) => {
+UserRouter.delete('/:id', (request, response) => {
   userService
     .delete(Number(request.params.id))
     .then((_result) => response.send())
