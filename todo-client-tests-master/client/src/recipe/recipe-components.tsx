@@ -70,6 +70,16 @@ export class RecipeDetails extends Component<{ match: { params: { id: number } }
               <Column>{ingredient.unit}</Column>
             </Row>
             ))}
+          <Row>
+            <Column><Button.Danger onClick={() => {
+                recipeService.delete(this.recipe.recipe_id).then(() => {
+                  history.push('/recipes');
+            })
+            }}>Delete</Button.Danger></Column>
+            <Column><Button.Success onClick={() => {
+              history.push('/recipe/' + this.props.match.params.id + '/edit')
+            }}>Edit</Button.Success></Column>
+          </Row>
         </Card>
       </>
     );
@@ -97,5 +107,85 @@ export class RecipeDetails extends Component<{ match: { params: { id: number } }
       Alert.danger('Error getting recipe or ingredients: ' + error.message)
      }
       
+  }
+}
+
+export class RecipeEdit extends Component<{ match: { params: { id: number } } }> {
+  recipe: Recipe = { recipe_id: 0, name: '', description: '', region: '', picture_url: '' };
+  ingredients: Ingredient[] = [];
+
+  render() {
+    return (
+      <>
+        <Card title="Edit task">
+          <Row>
+            <Column width={2}>
+              <Form.Label>Name:</Form.Label>
+            </Column>
+            <Column>
+              <Form.Input
+                type="text"
+                value={this.recipe.name}
+                onChange={(event) => (this.recipe.name = event.currentTarget.value)}
+              />
+            </Column>
+          </Row>
+          <Row>
+            <Column width={2}>
+              <Form.Label>Description:</Form.Label>
+            </Column>
+            <Column>
+              <Form.Textarea
+                value={this.task.description}
+                onChange={(event) => {
+                  this.task.description = event.currentTarget.value;
+                }}
+                rows={10}
+              />
+            </Column>
+          </Row>
+          <Row>
+            <Column width={2}>Done:</Column>
+            <Column>
+              <Form.Checkbox
+                checked={this.task.done}
+                onChange={(event) => (this.task.done = event.currentTarget.checked)}
+              />
+            </Column>
+          </Row>
+        </Card>
+        <Row>
+          <Column>
+            <Button.Success
+              onClick={() =>
+                taskService.update(this.task).then(() => {
+                  history.push('/tasks/' + this.task.id);
+                })
+              }
+            >
+              Save
+            </Button.Success>
+          </Column>
+          <Column right>
+            <Button.Danger
+              onClick={() =>
+                taskService.delete(this.task.id).then(() => {
+                  history.push('/tasks');
+                })
+              }
+            >
+              Delete
+            </Button.Danger>
+          </Column>
+        </Row>
+      </>
+    );
+  }
+
+  mounted() {
+    taskService
+      .get(this.props.match.params.id)
+      .then((task) => (this.task = task))
+      .catch((error) => Alert.danger('Error getting task: ' + error.message));
   }
 }

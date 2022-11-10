@@ -32,8 +32,20 @@ class RecipeService {
     return axios.get<Recipe[]>('/recipes').then((response) => response.data);
   }
 
+  /**
+   * Gets all ingredients for a recipe
+   */
   getRecipeIngredients(id: number){
     return axios.get<Ingredient[]>('/recipes/' + id + '/ingredients').then((response) => response.data);
+  }
+
+  /**
+   * Deletes a recipe
+   */
+  delete(id: number){
+    return axios.delete<Recipe>('/recipes/' + id)
+    .then((response) => response.data)
+    .catch((error) => console.error(error));
   }
 }
 
