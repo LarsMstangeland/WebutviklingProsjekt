@@ -47,6 +47,18 @@ class RecipeService {
     .then((response) => response.data)
     .catch((error) => console.error(error));
   }
+
+  update(recipe: Recipe){
+    return axios
+      .put('/recipes/' + recipe.recipe_id + '/edit', {
+        recipe_id: recipe.recipe_id,
+        name: recipe.name,
+        picture_url: recipe.picture_url,
+        description: recipe.description,
+        region: recipe.region
+      })
+      .then((response) => response.data.id);
+  }
 }
 
 const recipeService = new RecipeService();
