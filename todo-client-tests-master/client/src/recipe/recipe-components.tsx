@@ -45,7 +45,6 @@ export class RecipeDetails extends Component<{ match: { params: { id: number } }
   ingredients: Ingredient[] = [];
 
   render() {
-    
     return (
       <>
         {console.log(this.recipe)}
@@ -77,7 +76,7 @@ export class RecipeDetails extends Component<{ match: { params: { id: number } }
             })
             }}>Delete</Button.Danger></Column>
             <Column><Button.Success onClick={() => {
-              history.push('/recipe/' + this.props.match.params.id + '/edit')
+              history.push('/recipes/' + this.props.match.params.id + '/edit')
             }}>Edit</Button.Success></Column>
           </Row>
         </Card>
@@ -113,6 +112,7 @@ export class RecipeDetails extends Component<{ match: { params: { id: number } }
 export class RecipeEdit extends Component<{ match: { params: { id: number } } }> {
   recipe: Recipe = { recipe_id: 0, name: '', description: '', region: '', picture_url: '' };
   ingredients: Ingredient[] = [];
+  regions: any = ['Scandinavnia', 'America', 'Asia', 'Africa', 'Norway']
 
   render() {
     return (
@@ -132,60 +132,102 @@ export class RecipeEdit extends Component<{ match: { params: { id: number } } }>
           </Row>
           <Row>
             <Column width={2}>
+              <Form.Label>Region:</Form.Label>
+            </Column>
+            <Column>
+              <Form.Select 
+                value={this.recipe.region} 
+                onChange={(event) => (this.recipe.region = event.currentTarget.value)}>
+
+                {this.regions.map((region: String) => (
+                  <option key={Math.random()*10} value={region}>
+                  {region}
+                </option>
+                ))}
+              </Form.Select>
+            </Column>
+          </Row>
+          <Row>
+            <Column width={2}>
               <Form.Label>Description:</Form.Label>
             </Column>
             <Column>
               <Form.Textarea
-                value={this.task.description}
+                value={this.recipe.description}
                 onChange={(event) => {
-                  this.task.description = event.currentTarget.value;
+                  this.recipe.description = event.currentTarget.value;
                 }}
                 rows={10}
               />
             </Column>
           </Row>
           <Row>
-            <Column width={2}>Done:</Column>
+            <Column width={2}>Image URL:</Column>
             <Column>
-              <Form.Checkbox
-                checked={this.task.done}
-                onChange={(event) => (this.task.done = event.currentTarget.checked)}
-              />
+                <Form.Input
+                  type='text'
+                  value={this.recipe.picture_url}
+                  onChange={(event) => (this.recipe.picture_url = event.currentTarget.value)}
+                ></Form.Input>
             </Column>
           </Row>
         </Card>
+        {/**
+         * {this.ingredients.map((ingredient) => (
+            <Row key={ingredient.ingredients_id}>
+              <Column><Form.Input
+                type="text"
+                value={ingredient.name}
+                onChange={(event) => (ingredient.name = event.currentTarget.value)}
+              /></Column>
+              <Column><Form.Input
+                type="number"
+                value={ingredient.amount}
+                onChange={(event) => (ingredient.amount = Number(event.currentTarget.value))}
+              /></Column>
+              <Column><Form.Select 
+              value={ingredient.unit} 
+              onChange={(event) => (ingredient.unit = event.currentTarget.value)} 
+              /></Column>
+              <Column><Button.Danger small onClick={() => {
+               
+                let a = this.ingredients.findIndex(ing => ing.ingredients_id == ingredient.ingredients_id)
+                this.ingredients.slice(a)
+                console.log(this.ingredients);
+                console.log(a);
+                
+                
+             }}>X</Button.Danger></Column>
+            </Row>
+            ))}
+         */}
+        
         <Row>
           <Column>
             <Button.Success
               onClick={() =>
-                taskService.update(this.task).then(() => {
-                  history.push('/tasks/' + this.task.id);
+                recipeService.update(this.recipe).then(() => {
+                  history.push('/recipes/' + this.recipe.recipe_id);
                 })
               }
             >
               Save
             </Button.Success>
           </Column>
-          <Column right>
-            <Button.Danger
-              onClick={() =>
-                taskService.delete(this.task.id).then(() => {
-                  history.push('/tasks');
-                })
-              }
-            >
-              Delete
-            </Button.Danger>
-          </Column>
         </Row>
       </>
     );
   }
 
-  mounted() {
-    taskService
-      .get(this.props.match.params.id)
-      .then((task) => (this.task = task))
-      .catch((error) => Alert.danger('Error getting task: ' + error.message));
+ async mounted() {
+    try {
+      let recipe = await recipeService.get(this.props.match.params.id)
+      this.recipe = recipe;
+      let ingredients = await recipeService.getRecipeIngredients(this.props.match.params.id)
+      this.ingredients = ingredients;
+
+     } catch (error: any) {
+      Alert.danger('Error getting recipe or ingredients: ' + error.message)
+     }
   }
 }
