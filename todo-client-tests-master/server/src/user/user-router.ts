@@ -30,7 +30,7 @@ UserRouter.post('', (request, response) => {
       .create(data.title)
       .then((id) => response.send({ id: id }))
       .catch((error) => response.status(500).send(error));
-  else response.status(400).send('Missing recipies');
+  else response.status(400).send('Missing recipes');
 });
 
 UserRouter.delete('/:id', (request, response) => {

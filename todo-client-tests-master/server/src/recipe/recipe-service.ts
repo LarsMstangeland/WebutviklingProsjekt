@@ -44,6 +44,7 @@ class RecipeService {
     });
   }
 
+  
   getAllRecipeIngredients(id: number) {
     return new Promise<Ingredient[]>((resolve, reject)=>{
       pool.query('SELECT i.ingredients_id, i.name, itr.amount, itr.unit FROM `ingredients_to_recipe` itr, `recipes` r, `ingredients` i WHERE r.recipe_id = itr.recipe_id AND i.ingredients_id = itr.ingredients_id AND r.recipe_id = ?', [id], (error: any, results: RowDataPacket[])=>{
@@ -85,6 +86,25 @@ class RecipeService {
 
     })
   }
+
+  createRecipe(recipe: Recipe) {
+    return new Promise<number>((resolve, reject) => {
+      pool.query(
+        'INSERT INTO recipes (name, region, picture_url, description) VALUES (?,?,?,?)', 
+        [recipe.name, recipe.region, recipe.picture_url, recipe.description],
+        (error, results : ResultSetHeader) => {
+          if (error) {
+            console.log(error);
+            return reject(error);
+          }
+          console.log('Result: ', results);
+          resolve(results.insertId);
+        }
+      )
+    })
+  }
+
+  
 
   updateRecipe(recipe: Recipe) {
     return new Promise<void>((resolve, reject) => {
