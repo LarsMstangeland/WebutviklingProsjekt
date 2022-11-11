@@ -21,6 +21,32 @@ export class Card extends Component<{ title: ReactNode }> {
   }
 }
 
+
+export class PreviewCard extends Component<{ title1: ReactNode, title2:ReactNode, image2: string, image1: string }> {
+
+  render() {
+    return (
+    <div style={{display: "flex"}}>
+
+      <div style={{border: "2px solid black", padding: "10px", margin: "20px", flexBasis:"30%", flexGrow:"1", height: "200px"}}>
+        <img alt='DETTE ER ET BILDE' src={this.props.image1} style={{height:"200px", width:"auto"}}></img>
+        <b>{this.props.title1}</b>
+
+      </div>
+      
+      <div style={{border: "2px solid black", padding: "10px", margin: "20px", flexBasis:"30%", flexGrow:"1", height: "200px"}}>
+        <img alt='DETTE ER ET BILDE' src={this.props.image2} style={{height:"200px", width:"auto"}}></img>
+        <b>{this.props.title2}</b>
+
+      </div>
+
+    </div>
+    )
+      
+  }
+
+}
+
 /**
  * Renders a row using Bootstrap classes.
  */
