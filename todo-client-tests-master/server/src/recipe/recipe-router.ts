@@ -1,4 +1,4 @@
-import express, { response } from 'express';
+import express, { request, response } from 'express';
 import recipeService, {Recipe, Ingredient} from './recipe-service';
 
 /**
@@ -51,7 +51,7 @@ RecipeRouter.get('/:id/ingredients', (request, response) => {
   })
 
   
-  RecipeRouter.put('/:id/edit/ingredients', (request,response) => {
+  RecipeRouter.put('/:id/edit', (request,response) => {
     //oppdaterer ingridients inn til en gitt recipie
     //bruker patch for å være økonomiske med kjøretid
     const data = request.body
@@ -62,7 +62,7 @@ RecipeRouter.get('/:id/ingredients', (request, response) => {
     .catch((error) => response.status(500).send(error))
   })
 
-  RecipeRouter.put('/:id/edit/ingredients', (request,response) => {
+  RecipeRouter.delete('/:id/edit', (request,response) => {
     //oppdaterer ingridients inn til en gitt recipie
     //bruker patch for å være økonomiske med kjøretid
     const data = request.body
