@@ -106,9 +106,9 @@ class RecipeService {
       )
     })
   }
-
   
 
+  
   updateRecipe(recipe: Recipe) {
     return new Promise<void>((resolve, reject) => {
       pool.query('UPDATE recipes SET name = ?, region = ?, picture_url = ?, description = ? WHERE recipe_id = ?', 
