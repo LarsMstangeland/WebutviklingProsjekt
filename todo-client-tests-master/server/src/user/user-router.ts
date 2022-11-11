@@ -24,10 +24,11 @@ UserRouter.get('/:id', (request, response) => {
 // Example request body: { title: "Ny oppgave" }
 // Example response body: { id: 4 }
 UserRouter.post('', (request, response) => {
-  const data = request.body;
-  if (data && data.title && data.title.length != 0)
+
+  const newuser = request.body;
+  if (newuser && newuser.username && newuser.password && newuser.cart_id.length != 0)
     userService
-      .create(data.title)
+      .create(newuser)
       .then((id) => response.send({ id: id }))
       .catch((error) => response.status(500).send(error));
   else response.status(400).send('Missing recipes');
