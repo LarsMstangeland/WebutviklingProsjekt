@@ -3,7 +3,7 @@ import { Component } from 'react-simplified';
 import { Alert, Card, Row, Column, Form, Button } from '../widgets';
 import { NavLink } from 'react-router-dom';
 import recipeService, { Recipe, Ingredient } from './recipe-service';
-import regionService, {Region} from './region-service';
+import regionAndUnitService, {Region, Unit} from './regionAndUnit-service';
 import { createHashHistory } from 'history';
 
 const history = createHashHistory(); // Use history.push(...) to programmatically change path, for instance after successfully saving a student
@@ -114,6 +114,7 @@ export class RecipeEdit extends Component<{ match: { params: { id: number } } }>
   ingredients: Ingredient[] = [];
   ingredientsToDelete: Ingredient[] = [];
   regions: Region[] = [];
+  units: Unit[] = [];
 
   render() {
     return (
@@ -172,24 +173,32 @@ export class RecipeEdit extends Component<{ match: { params: { id: number } } }>
                 ></Form.Input>
             </Column>
           </Row>
+          <Row>
+            <Column>Ingredients name:</Column>
+            <Column>Amount:</Column>
+            <Column>Unit:</Column>
+            <Column></Column>
+          </Row>
           {this.ingredients.map((ingredient) => (
-            
             <Row key={ingredient.ingredients_id}>
-              <Column><Form.Input
-                type="text"
-                value={ingredient.name}
-                onChange={(event) => (ingredient.name = event.currentTarget.value)}
-              /></Column>
+              <Column>{ingredient.name}</Column>
               <Column><Form.Input
                 type="number"
                 max='1000'
                 value={ingredient.amount}
                 onChange={(event) => (ingredient.amount = Number(event.currentTarget.value))}
               /></Column>
-              <Column><Form.Select 
-              value={ingredient.unit} 
-              onChange={(event) => (ingredient.unit = event.currentTarget.value)} 
-              /></Column>
+              <Column>
+                <Form.Select 
+                  value={ingredient.unit} 
+                  onChange={(event) => (ingredient.unit = event.currentTarget.value)} >
+                
+                  {this.units.map((unit) => (
+                    <option key={unit.id} value={unit.unit}>
+                    {unit.unit}
+                    </option>
+                  ))}
+                </Form.Select></Column>
               <Column>
              {this.ingredientsToDelete.findIndex(ing => ing.ingredients_id == ingredient.ingredients_id) == -1 ? 
               <Button.Danger small onClick={() => {
@@ -232,8 +241,10 @@ export class RecipeEdit extends Component<{ match: { params: { id: number } } }>
       this.recipe = recipe;
       let ingredients = await recipeService.getRecipeIngredients(this.props.match.params.id)
       this.ingredients = ingredients;
-      let regions = await regionService.getAll()
+      let regions = await regionAndUnitService.getAllRegions()
       this.regions = regions;
+      let units = await regionAndUnitService.getAllUnits()
+      this.units = units;
 
      } catch (error: any) {
       Alert.danger('Error getting recipe or ingredients: ' + error.message)
