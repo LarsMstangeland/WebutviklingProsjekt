@@ -2,7 +2,7 @@ import * as React from 'react';
 import { Component } from 'react-simplified';
 import { Alert, Card, Row, Column, Form, Button } from '../widgets';
 import { NavLink } from 'react-router-dom';
-import recipeService, { Recipe, Ingredient } from './recipe-service';
+import recipeService, { Recipe, Ingredient, IngredientName } from './recipe-service';
 import regionAndUnitService, {Region, Unit} from './regionAndUnit-service';
 import { createHashHistory } from 'history';
 
@@ -22,7 +22,6 @@ export class RecipeList extends Component {
             <Row key={recipe.recipe_id}>
               <Column>
                 <NavLink to={'/recipes/' + recipe.recipe_id}>{recipe.name}</NavLink>
-              
               </Column>
             </Row>))}
         </Card>
@@ -111,10 +110,12 @@ export class RecipeDetails extends Component<{ match: { params: { id: number } }
 
 export class RecipeEdit extends Component<{ match: { params: { id: number } } }> {
   recipe: Recipe = { recipe_id: 0, name: '', description: '', region: '', picture_url: '' };
-  ingredients: Ingredient[] = [];
+  recipeIngredients: Ingredient[] = [];
   ingredientsToDelete: Ingredient[] = [];
   regions: Region[] = [];
   units: Unit[] = [];
+  newIngredient: Ingredient = {ingredients_id: 0, name: '', amount: 0, unit: ''}
+  ingredients: IngredientName[] = [];
 
   render() {
     return (
@@ -179,7 +180,7 @@ export class RecipeEdit extends Component<{ match: { params: { id: number } } }>
             <Column>Unit:</Column>
             <Column></Column>
           </Row>
-          {this.ingredients.map((ingredient) => (
+          {this.recipeIngredients.map((ingredient) => (
             <Row key={ingredient.ingredients_id}>
               <Column>{ingredient.name}</Column>
               <Column><Form.Input
@@ -212,16 +213,63 @@ export class RecipeEdit extends Component<{ match: { params: { id: number } } }>
               }}>Add</Button.Success>}</Column>
             </Row>
             ))}
+            <h4>Add ingredient</h4>
+            <Row>
+            <Column>{
+              this.ingredients ? <Form.Select 
+              value={this.newIngredient.name} 
+              onChange={(event) => (this.newIngredient.name = event.currentTarget.value)} >
+              
+              {this.ingredients.map((ingredient) => (
+                <option key={ingredient.ingredients_id} value={ingredient.name}>
+                {ingredient.name}
+                </option>
+              ))}
+            </Form.Select> :
+            'Couldn´t load ingredients'
+            }
+              
+            {/*<Form.Input
+                type="text"
+                placeholder='Ingredient Name'
+                value={this.newIngredient.name}
+                onChange={(event) => (this.newIngredient.name = event.currentTarget.value)}
+            />*/}</Column>
+              <Column><Form.Input
+                type="number"
+                max='1000'
+                value={this.newIngredient.amount}
+                onChange={(event) => (this.newIngredient.amount = Number(event.currentTarget.value))}
+              /></Column>
+              <Column>
+                <Form.Select 
+                  value={this.newIngredient.unit} 
+                  onChange={(event) => (this.newIngredient.unit = event.currentTarget.value)} >
+                
+                  {this.units.map((unit) => (
+                    <option key={unit.id} value={unit.unit}>
+                    {unit.unit}
+                    </option>
+                  ))}
+                </Form.Select></Column>
+              <Column>
+                  <Button.Light small onClick={() => {
+                    let id = Number(this.ingredients.find(ing => ing.name == this.newIngredient.name)?.ingredients_id)
+                    this.newIngredient.ingredients_id = id;
+                    this.recipeIngredients.push(this.newIngredient);
+                  }}>Add</Button.Light>
+              </Column>
+            </Row>
         </Card>
         <Row>
           <Column>
             <Button.Success
               onClick={() => 
                 {if(this.ingredientsToDelete.length > 0){
-                  this.ingredients = this.ingredients.filter((ingredient) => !this.ingredientsToDelete.includes(ingredient))
+                  this.recipeIngredients = this.recipeIngredients.filter((ingredient) => !this.ingredientsToDelete.includes(ingredient))
                   recipeService.deleteRecipeIngredients(this.ingredientsToDelete, this.recipe.recipe_id)
                 }
-                 recipeService.updateRecipeIngredients(this.ingredients, this.recipe.recipe_id)
+                 recipeService.updateRecipeIngredients(this.recipeIngredients, this.recipe.recipe_id)
                   recipeService.update(this.recipe).then(() => {
                   history.push('/recipes/' + this.recipe.recipe_id);
                 })}
@@ -239,12 +287,14 @@ export class RecipeEdit extends Component<{ match: { params: { id: number } } }>
     try {
       let recipe = await recipeService.get(this.props.match.params.id)
       this.recipe = recipe;
-      let ingredients = await recipeService.getRecipeIngredients(this.props.match.params.id)
-      this.ingredients = ingredients;
+      let recipeIngredients = await recipeService.getRecipeIngredients(this.props.match.params.id)
+      this.recipeIngredients = recipeIngredients;
       let regions = await regionAndUnitService.getAllRegions()
       this.regions = regions;
       let units = await regionAndUnitService.getAllUnits()
       this.units = units;
+      let ingredients = await recipeService.getAllIngredients(this.props.match.params.id)
+      this.ingredients = ingredients;
 
      } catch (error: any) {
       Alert.danger('Error getting recipe or ingredients: ' + error.message)
