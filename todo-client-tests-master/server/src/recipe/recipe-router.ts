@@ -43,7 +43,6 @@ RecipeRouter.get('/:id/ingredients', (request, response) => {
   RecipeRouter.put('/:id/edit', (request, response) => {
     //hent ut de normale dataen og gjør det mulig å redigere
     //bruker patch for å være økonomiske med kjøretid
-
     const data = request.body
     recipeService.updateRecipe(data)
     .then((_result) => response.send())
@@ -51,23 +50,21 @@ RecipeRouter.get('/:id/ingredients', (request, response) => {
   })
 
   
-  RecipeRouter.put('/:id/edit', (request,response) => {
-    //oppdaterer ingridients inn til en gitt recipie
+  RecipeRouter.put('/:id/edit/ingredients', (request,response) => {
+    //oppdaterer ingredients inn til en gitt recipie
     //bruker patch for å være økonomiske med kjøretid
-    const data = request.body
+    const ingredients = request.body.ingredients
     const id = Number(request.params.id)
-    console.log(id, data)
-    recipeService.updateRecipeIngredients(id, data)
+    recipeService.updateRecipeIngredients(id, ingredients)
     .then((_result) => response.send())
     .catch((error) => response.status(500).send(error))
   })
 
   RecipeRouter.delete('/:id/edit', (request,response) => {
-    //oppdaterer ingridients inn til en gitt recipie
+    //oppdaterer ingredients inn til en gitt recipie
     //bruker patch for å være økonomiske med kjøretid
-    const data = request.body
+    const data = request.body.ingredientsToDelete
     const id = Number(request.params.id)
-    console.log(id, data)
     recipeService.deleteRecipeIngredients(id, data)
     .then((_result) => response.send())
     .catch((error) => response.status(500).send(error))

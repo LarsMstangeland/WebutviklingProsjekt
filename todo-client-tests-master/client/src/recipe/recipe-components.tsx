@@ -48,7 +48,6 @@ export class RecipeDetails extends Component<{ match: { params: { id: number } }
   render() {
     return (
       <>
-        {console.log(this.recipe)}
         <Card title={this.recipe.name}>
           <Row>
             <picture>
@@ -113,12 +112,13 @@ export class RecipeDetails extends Component<{ match: { params: { id: number } }
 export class RecipeEdit extends Component<{ match: { params: { id: number } } }> {
   recipe: Recipe = { recipe_id: 0, name: '', description: '', region: '', picture_url: '' };
   ingredients: Ingredient[] = [];
+  ingredientsToDelete: Ingredient[] = [];
   regions: Region[] = [];
 
   render() {
     return (
       <>
-        <Card title="Edit task">
+        <Card title="Edit recipe">
           <Row>
             <Column width={2}>
               <Form.Label>Name:</Form.Label>
@@ -172,9 +172,8 @@ export class RecipeEdit extends Component<{ match: { params: { id: number } } }>
                 ></Form.Input>
             </Column>
           </Row>
-        </Card>
-        {/**
-         * {this.ingredients.map((ingredient) => (
+          {this.ingredients.map((ingredient) => (
+            
             <Row key={ingredient.ingredients_id}>
               <Column><Form.Input
                 type="text"
@@ -183,6 +182,7 @@ export class RecipeEdit extends Component<{ match: { params: { id: number } } }>
               /></Column>
               <Column><Form.Input
                 type="number"
+                max='1000'
                 value={ingredient.amount}
                 onChange={(event) => (ingredient.amount = Number(event.currentTarget.value))}
               /></Column>
@@ -190,27 +190,32 @@ export class RecipeEdit extends Component<{ match: { params: { id: number } } }>
               value={ingredient.unit} 
               onChange={(event) => (ingredient.unit = event.currentTarget.value)} 
               /></Column>
-              <Column><Button.Danger small onClick={() => {
-               
-                let a = this.ingredients.findIndex(ing => ing.ingredients_id == ingredient.ingredients_id)
-                this.ingredients.slice(a)
-                console.log(this.ingredients);
-                console.log(a);
-                
-                
-             }}>X</Button.Danger></Column>
+              <Column>
+             {this.ingredientsToDelete.findIndex(ing => ing.ingredients_id == ingredient.ingredients_id) == -1 ? 
+              <Button.Danger small onClick={() => {
+               this.ingredientsToDelete.push(ingredient)
+              }}>X</Button.Danger> : 
+              <Button.Success small onClick={()=>{
+                const index = this.ingredientsToDelete.indexOf(ingredient);
+                  if (index > -1) { // only splice array when item is found
+                this.ingredientsToDelete.splice(index, 1); // 2nd parameter means remove one item only
+                }
+              }}>Add</Button.Success>}</Column>
             </Row>
             ))}
-         */}
-        
+        </Card>
         <Row>
           <Column>
             <Button.Success
-              onClick={() =>
-                recipeService.update(this.recipe).then(() => {
-                  console.log(this.recipe);
+              onClick={() => 
+                {if(this.ingredientsToDelete.length > 0){
+                  this.ingredients = this.ingredients.filter((ingredient) => !this.ingredientsToDelete.includes(ingredient))
+                  recipeService.deleteRecipeIngredients(this.ingredientsToDelete, this.recipe.recipe_id)
+                }
+                 recipeService.updateRecipeIngredients(this.ingredients, this.recipe.recipe_id)
+                  recipeService.update(this.recipe).then(() => {
                   history.push('/recipes/' + this.recipe.recipe_id);
-                })
+                })}
               }
             >
               Save

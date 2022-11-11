@@ -48,6 +48,9 @@ class RecipeService {
     .catch((error) => console.error(error));
   }
 
+  /**
+   * Updates a recipe
+   */
   update(recipe: Recipe){
     return axios
       .put('/recipes/' + recipe.recipe_id + '/edit', {
@@ -58,6 +61,24 @@ class RecipeService {
         region: recipe.region
       })
       .then((response) => response.data.id);
+  }
+
+  deleteRecipeIngredients(ingredientsToDelete: Ingredient[], id: number){
+    return axios
+      .delete('/recipes/' + id + '/edit', {
+        data: {ingredientsToDelete}
+      })
+      .then((response) => response.data)
+      .catch((error) => console.log(error))
+  }
+
+  updateRecipeIngredients(ingredients: Ingredient[], id: number){
+    return axios
+      .put('/recipes/' + id + '/edit/ingredients', {
+        ingredients
+      })
+      .then((response) => response.data)
+      .catch((error) => console.log(error))
   }
 }
 

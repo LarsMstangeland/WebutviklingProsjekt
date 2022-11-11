@@ -70,10 +70,13 @@ class RecipeService {
 
   //delete ingredients from recipe, not from table
   deleteRecipeIngredients(id: number, ingredients: Ingredient[]) {
+    console.log("delete service")
+    console.log(id, ingredients[0].ingredients_id)
     return new Promise<void>((resolve, reject) => {
       ingredients.map((ingredient) => {
+        console.log(id, ingredient.ingredients_id)
         pool.query(
-        'DELETE FROM ingredients_to_recipe WHERE recipe_id = ? AND ingredient_id = ?', 
+        'DELETE FROM ingredients_to_recipe WHERE recipe_id = ? AND ingredients_id = ?', 
         [id, ingredient.ingredients_id], 
         (error, results: ResultSetHeader) => {
           if (error) return reject(error)
@@ -119,10 +122,9 @@ class RecipeService {
     })
   }
 
-  updateRecipeIngredients(id: number, ingredients: Ingredient[]) {
+  updateRecipeIngredients(id: number, ingredients: any) {
     return new Promise<void>((resolve, reject) => {
-      ingredients.map((ingredient) => {
-        console.log(ingredient, id)
+      ingredients.map((ingredient: Ingredient) => {
       pool.query('UPDATE ingredients_to_recipe SET amount = ?, unit = ? WHERE recipe_id = ? AND ingredients_id = ?', 
       [ingredient.amount, ingredient.unit, id, ingredient.ingredients_id],
       (error, results: ResultSetHeader) => {
@@ -130,9 +132,8 @@ class RecipeService {
         if (results.affectedRows == 0) return reject(new Error('No row updated'));
 
       })})
-
+      
       resolve();
-
     })
   }
 
