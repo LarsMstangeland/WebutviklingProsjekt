@@ -79,17 +79,15 @@ RecipeRouter.get('/:id/ingredients', (request, response) => {
 
 
   RecipeRouter.post('/:id/edit/ingredients', (request, response) => {
-    const data = request.body;
+    const data = request.body.ingredients;
     const id = Number(request.params.id);
   
-    if (data && data.amount && data.ingredients_id && id != 0)
       recipeService
         .addRecipeIngredient(id, data)
         .then(() => {
           response.send();
         })
         .catch((error) => response.status(500).send(error));
-    else response.status(400).send('Missing amount and/or ingredient');
   });
 
 /*
