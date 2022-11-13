@@ -16,6 +16,11 @@ export type Ingredient = {
   unit: string;
 }
 
+export type IngredientName = {
+  ingredients_id: number;
+  name: string;
+}
+
 
 class RecipeService {
   /**
@@ -53,6 +58,16 @@ class RecipeService {
         resolve(results as Ingredient[]);
       })
     })
+  }
+
+  getAllIngredients() {
+    return new Promise<IngredientName[]>((resolve, reject) => {
+      pool.query('SELECT * FROM ingredients', (error: any, results: RowDataPacket[]) => {
+        if (error) return reject(error);
+
+        resolve(results as IngredientName[]);
+      });
+    });
   }
 
   delete(id: number) {

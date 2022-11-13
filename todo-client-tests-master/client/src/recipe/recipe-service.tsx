@@ -17,6 +17,11 @@ export type Ingredient = {
   unit: string;
 }
 
+export type IngredientName = {
+  ingredients_id: number;
+  name: string;
+}
+
 class RecipeService {
   /**
    * Get recipe with given id.
@@ -37,6 +42,15 @@ class RecipeService {
    */
   getRecipeIngredients(id: number){
     return axios.get<Ingredient[]>('/recipes/' + id + '/ingredients').then((response) => response.data);
+  }
+
+  /**
+   * Get all ingredients.
+   */
+   getAllIngredients(id: number) {  
+    return axios.get<IngredientName[]>('/recipes/' + id + '/edit/ingredients')
+    .then((response) => response.data)
+    .catch((error) => console.log(error))
   }
 
   /**

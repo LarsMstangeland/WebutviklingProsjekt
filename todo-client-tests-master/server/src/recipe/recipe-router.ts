@@ -1,5 +1,5 @@
 import express, { request, response } from 'express';
-import recipeService, {Recipe, Ingredient} from './recipe-service';
+import recipeService, {Recipe, Ingredient, IngredientName} from './recipe-service';
 
 /**
  * Express router containing task methods.
@@ -70,6 +70,12 @@ RecipeRouter.get('/:id/ingredients', (request, response) => {
     .catch((error) => response.status(500).send(error))
   })
 
+  RecipeRouter.get('/:id/edit/ingredients', (_request, response) => {    
+    recipeService
+      .getAllIngredients()
+      .then((rows) => response.send(rows))
+      .catch((error) => response.status(500).send(error));
+  });
 
 
 
