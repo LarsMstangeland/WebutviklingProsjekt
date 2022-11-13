@@ -94,6 +94,15 @@ class RecipeService {
       .then((response) => response.data)
       .catch((error) => console.log(error))
   }
+
+  addRecipeIngredient(ingredients: Ingredient[], id: number){
+    console.log(ingredients)
+    
+    return axios
+      .post('/recipes/' + id + '/edit/ingredients', {ingredients})
+      .then((response) => response.data.id)
+      .catch((error) => console.log(error))
+  }
 }
 
 const recipeService = new RecipeService();
