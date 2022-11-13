@@ -2,8 +2,8 @@ import * as React from 'react';
 import { Component } from 'react-simplified';
 import { Alert, Card, Row, Column, Form, Button } from '../widgets';
 import { NavLink } from 'react-router-dom';
-import recipeService, { Recipe, Ingredient, IngredientName } from './recipe-service';
-import regionAndUnitService, {Region, Unit} from './regionAndUnit-service';
+import recipeService, { Recipe, Ingredient, IngredientName } from '../service-files/recipe-service';
+import regionAndUnitService, {Region, Unit} from '../service-files/regionAndUnit-service';
 import { createHashHistory } from 'history';
 
 const history = createHashHistory(); // Use history.push(...) to programmatically change path, for instance after successfully saving a student

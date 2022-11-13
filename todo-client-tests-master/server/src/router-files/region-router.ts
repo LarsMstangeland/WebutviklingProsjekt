@@ -1,5 +1,5 @@
 import express, { response } from 'express';
-import regionService, {Region} from './region-service';
+import regionService, {Region} from '../service-files/region-service';
 
 const RegionRouter = express.Router();
 

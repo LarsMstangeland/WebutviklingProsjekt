@@ -1,7 +1,7 @@
 import axios from 'axios';
 import pool from '../src/mysql-pool';
 import app from '../src/app';
-import taskService, { User } from '../src/user/user-service';
+import taskService, { User } from '../src/service-files/user-service';
 
 const testTasks: User[] = [
   { User_id: 1, name: 'Les leksjon', cart_id: 1 },

@@ -1,5 +1,5 @@
 import express, { request, response } from 'express';
-import recipeService, {Recipe, Ingredient, IngredientName} from './recipe-service';
+import recipeService, {Recipe, Ingredient, IngredientName} from '../service-files/recipe-service';
 
 /**
  * Express router containing task methods.

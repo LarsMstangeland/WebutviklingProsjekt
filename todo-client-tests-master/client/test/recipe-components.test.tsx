@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { RecipeList, RecipeDetails } from '../src/recipe/recipe-components';
+import { RecipeList, RecipeDetails } from '../src/component-files/recipe-components';
 import { shallow } from 'enzyme';
 import { Form, Button } from '../src/widgets';
 import { NavLink } from 'react-router-dom';

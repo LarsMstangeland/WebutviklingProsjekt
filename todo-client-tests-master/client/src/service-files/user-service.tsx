@@ -8,7 +8,7 @@ export type User = {
   cart: number;
 };
 
-class RecipeService {
+class UserService {
   /**
    * Get recipe with given id.
    */
@@ -24,5 +24,5 @@ class RecipeService {
   }
 }
 
-const recipeService = new RecipeService();
-export default recipeService;
+const userService = new UserService();
+export default userService;
