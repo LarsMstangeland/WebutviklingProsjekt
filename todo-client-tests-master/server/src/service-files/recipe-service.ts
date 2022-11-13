@@ -134,7 +134,7 @@ class RecipeService {
     })
   }
 
-  updateRecipeIngredients(id: number, ingredients: any) {
+  updateRecipeIngredients(id: number, ingredients: Ingredient[]) {
     return new Promise<void>((resolve, reject) => {
       ingredients.map((ingredient: Ingredient) => {
       pool.query('UPDATE ingredients_to_recipe SET amount = ?, unit = ? WHERE recipe_id = ? AND ingredients_id = ?', 
@@ -146,6 +146,25 @@ class RecipeService {
       })})
       
       resolve();
+    })
+  }
+
+  addRecipeIngredient(id: number, ingredients : Ingredient[]) {
+    return new Promise<Ingredient[]>((resolve, reject) => {
+      ingredients.map((ingredient: Ingredient) => {
+        pool.query(
+          'INSERT INTO ingredients_to_recipe (amount, unit, ingredients_id, recipe_id) VALUES (?,?,?,?)', 
+          [ingredient.amount, ingredient.unit, ingredient.ingredients_id, id],
+          (error, results : RowDataPacket[]) => {
+            if (error) {
+              console.log(error);
+              return reject(error);
+            }
+            console.log('Result: ', results);
+            resolve(results as Ingredient[]);
+          }
+          )
+        })
     })
   }
 

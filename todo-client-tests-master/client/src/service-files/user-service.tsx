@@ -3,9 +3,11 @@ import axios from 'axios';
 axios.defaults.baseURL = 'http://localhost:3000/api/v2';
 
 export type User = {
-  id: number;
-  name: string;
-  cart: number;
+  user_id: number;
+  username: string;
+  cart_id: number;
+  password: string;
+  admin: boolean;
 };
 
 class UserService {
@@ -13,14 +15,29 @@ class UserService {
    * Get recipe with given id.
    */
   get(id: number) {
-    return axios.get<User>('/recipes/' + id).then((response) => response.data);
+    return axios.get<User>('/users/' + id).then((response) => response.data);
   }
 
   /**
    * Get all recipes.
    */
   getAll() {
-    return axios.get<User[]>('/recipes').then((response) => response.data);
+    return axios.get<User[]>('/users').then((response) => response.data);
+  }
+
+  delete(id: number){
+    return axios.delete<User>('/users/' + id)
+    .then((response) => response.data)
+    .catch((error) => console.error(error));
+  }
+
+  create(password: string, username: string, admin: boolean) {
+    return axios
+      .post<{ id: number }>('/users', { password : password, username : username, admin : admin })
+      .then((response) => {
+        response.data.id;
+      })
+      .catch((error) => console.log(error));
   }
 }
 
