@@ -12,6 +12,7 @@ const history = createHashHistory(); // Use history.push(...) to programmaticall
  * Renders recipe list.
  */
 export class RecipeList extends Component {
+  //Array to store all recipes
   recipes: Recipe[] = [];
 
   render() {
@@ -20,7 +21,7 @@ export class RecipeList extends Component {
         <Card title="Recipes">
 
           {this.recipes.map((recipe) => (
-            //Maps all the different recipes and renders them as links to 
+            //Maps all the different recipes and renders them as links to their respective recipe details
             <Row key={recipe.recipe_id}>
               <Column>
                 <NavLink to={'/recipes/' + recipe.recipe_id}>{recipe.name}</NavLink>
@@ -31,11 +32,14 @@ export class RecipeList extends Component {
     );
   }
 
-  mounted() {
-    recipeService
-      .getAll()
-      .then((recipes) => (this.recipes = recipes))
-      .catch((error) => Alert.danger('Error getting recipes: ' + error.message));
+  async mounted() {
+    //Gets all recipes and pass them to recipe array
+    try{
+      let recipes = await recipeService.getAll()
+      this.recipes = recipes
+    } catch (error: any){
+      Alert.danger('Error getting recipes: ' + error.message)
+    }
   }
 }
 
@@ -43,6 +47,7 @@ export class RecipeList extends Component {
  * Renders a specific recipe.
  */
 export class RecipeDetails extends Component<{ match: { params: { id: number } } }> {
+  //Objects to store recipe and recipe ingredient details
   recipe: Recipe = { recipe_id: 0, name: '', description: '', region: '', picture_url: '' };
   ingredients: Ingredient[] = [];
 
@@ -64,6 +69,7 @@ export class RecipeDetails extends Component<{ match: { params: { id: number } }
             <Column>{this.recipe.description}</Column>
           </Row>
           {this.ingredients.map((ingredient) => (
+            //Maps the different ingredients of a recipe and renders their respective values
             <Row key={ingredient.ingredients_id}>
               <Column>{ingredient.name}</Column>
               <Column>{ingredient.amount}</Column>
@@ -72,11 +78,13 @@ export class RecipeDetails extends Component<{ match: { params: { id: number } }
             ))}
           <Row>
             <Column><Button.Danger onClick={() => {
+              //Deletes the recipe and pushes the path back to all recipes
                 recipeService.delete(this.recipe.recipe_id).then(() => {
                   history.push('/recipes');
             })
             }}>Delete</Button.Danger></Column>
             <Column><Button.Success onClick={() => {
+              //Pushes the path to edit page of recipe
               history.push('/recipes/' + this.props.match.params.id + '/edit')
             }}>Edit</Button.Success></Column>
           </Row>
@@ -87,6 +95,7 @@ export class RecipeDetails extends Component<{ match: { params: { id: number } }
 
   async mounted() {
      try {
+
       let recipe = await recipeService.get(this.props.match.params.id)
       this.recipe = recipe;
       let ingredients = await recipeService.getRecipeIngredients(this.props.match.params.id)
@@ -243,6 +252,8 @@ export class RecipeEdit extends Component<{ match: { params: { id: number } } }>
                 </Form.Select></Column>
               <Column>
                   <Button.Light small onClick={() => {
+                    let duplicat = this.recipeIngredients.find(ingredient => ingredient.name == this.newIngredient.name);
+                    
                     if(this.newIngredient.name == 'Select Name' || 
                     this.newIngredient.unit == 'Select Unit' || 
                     this.newIngredient.name == '' || 
@@ -250,6 +261,8 @@ export class RecipeEdit extends Component<{ match: { params: { id: number } } }>
                     this.newIngredient.amount > 1000 ||
                     this.newIngredient.amount < 0){
                       return Alert.danger('Unvalid value in new ingredient')
+                    }else if(duplicat){
+                      return Alert.danger('This ingredient is already in use')
                     } else{
                       let id = Number(this.ingredients.find(ing => ing.name == this.newIngredient.name)?.ingredients_id)
                       this.newIngredient.ingredients_id = id;
