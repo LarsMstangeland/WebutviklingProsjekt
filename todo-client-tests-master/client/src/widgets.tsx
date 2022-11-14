@@ -22,30 +22,49 @@ export class Card extends Component<{ title: ReactNode }> {
 }
 
 
-export class PreviewCard extends Component<{ title1: ReactNode, title2:ReactNode, image2: string, image1: string }> {
+export class PreviewCard extends Component<{ title1: ReactNode, title2:ReactNode, image2: string, image1: string, link1: string, link2: string }> {
 
   render() {
     return (
     <div style={{display: "flex"}}>
 
-      <div style={{border: "2px solid black", padding: "10px", margin: "20px", flexBasis:"30%", flexGrow:"1", height: "200px"}}>
-        <img alt='DETTE ER ET BILDE' src={this.props.image1} style={{height:"200px", width:"auto"}}></img>
-        <b>{this.props.title1}</b>
+      <div style={{padding: "10px", margin: "20px", flexBasis:"20%", flexGrow:"1", height: "400px"}}>
+        <NavLink to={this.props.link1}>
+          <b style={{position:"absolute", left: "10%", right:"0" , width:"20%",  color: "black"}}>{this.props.title1}</b>
+          <img alt='DETTE ER ET BILDE' src={this.props.image1} style={{height:"100%", width:"auto", marginLeft: "50px", boxShadow: "rgba(0, 0, 0, 0.1) 0px 4px 12px", borderRadius: "10px"}}></img>
+          </NavLink>
 
       </div>
       
-      <div style={{border: "2px solid black", padding: "10px", margin: "20px", flexBasis:"30%", flexGrow:"1", height: "200px"}}>
-        <img alt='DETTE ER ET BILDE' src={this.props.image2} style={{height:"200px", width:"auto"}}></img>
-        <b>{this.props.title2}</b>
-
+      <div style={{padding: "10px", margin: "20px", flexBasis:"20%", flexGrow:"1", height: "400px"}}>
+        <NavLink to={this.props.link2}>
+          <img alt='DETTE ER ET BILDE' src={this.props.image2} style={{height:"100%", width:"auto", marginLeft: "50px", boxShadow:"rgba(0, 0, 0, 0.1) 0px 4px 12px", borderRadius: "10px"}}></img>
+          <b style={{position:"absolute", width:"20%", left: "60%", right:"0", color: "black"}}>{this.props.title2}</b>
+        </NavLink>
       </div>
-
     </div>
-    )
-      
+    )   
   }
 
 }
+
+export class BootstrapPreviewCard extends Component <{ }>{
+  render() {
+    return (
+      <div className="card" style={{width: "18rem;"}}>
+        <img src="https://i.guim.co.uk/img/media/26392d05302e02f7bf4eb143bb84c8097d09144b/446_167_3683_2210/master/3683.jpg?width=1200&quality=85&auto=format&fit=max&s=a52bbe202f57ac0f5ff7f47166906403" className="card-img-top" alt="..."></img>
+        <div className="card-body">
+          <h5 className="card-title">Card title</h5>
+          <p className="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+          <a href="#" className="btn btn-primary">Go somewhere</a>
+        </div>
+      </div>
+    )
+
+
+  }
+}
+
 
 /**
  * Renders a row using Bootstrap classes.
