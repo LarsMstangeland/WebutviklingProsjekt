@@ -179,8 +179,6 @@ class ButtonLight extends Component<{
 
               }
           }
-
-        
         onClick={this.props.onClick}
       >
         {this.props.children}
@@ -205,10 +203,11 @@ export class Button {
  *
  * Properties: to
  */
-class NavBarLink extends Component<{ to: string }> {
+class NavBarLink extends Component<{ to: string, left: boolean }> {
+  left?: boolean;
   render() {
     return (
-      <NavLink className="nav-link" activeClassName="active" to={this.props.to}>
+      <NavLink style={this.props.left ? {position:"relative" , left:"70vw"}: {}} className="nav-link" activeClassName="active" to={this.props.to}>
         {this.props.children}
       </NavLink>
     );
@@ -220,9 +219,8 @@ class NavBarLink extends Component<{ to: string }> {
  *
  * Properties: brand
  */
-export class NavBar extends Component<{ brand: ReactNode, left:boolean}> {
+export class NavBar extends Component<{ brand: ReactNode}> {
   static Link = NavBarLink;
-  left?: boolean;
 
   render() {
     return (
@@ -231,7 +229,7 @@ export class NavBar extends Component<{ brand: ReactNode, left:boolean}> {
           <NavLink className="navbar-brand" activeClassName="active" exact to="/">
             {this.props.brand}
           </NavLink>
-          <div className="navbar-nav" style={ this.left? {left:"100%"} :{}}>{this.props.children}</div>
+          <div className='navbar-nav' style={{width:"100%"}}>{this.props.children}</div>
         </div>
       </nav>
     );

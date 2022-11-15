@@ -5,7 +5,6 @@ axios.defaults.baseURL = 'http://localhost:3000/api/v2';
 export type User = {
   user_id: number;
   username: string;
-  cart_id: number;
   password: string;
   admin: boolean;
 };
@@ -14,8 +13,8 @@ class UserService {
   /**
    * Get recipe with given id.
    */
-  get(id: number) {
-    return axios.get<User>('/users/' + id).then((response) => response.data);
+  get(username : string) {
+    return axios.get<User>('/users/' + username).then((response) => response.data);
   }
 
   /**
@@ -25,7 +24,9 @@ class UserService {
     return axios.get<User[]>('/users').then((response) => response.data);
   }
 
-  delete(id: number){
+
+
+  delete(id : number){
     return axios.delete<User>('/users/' + id)
     .then((response) => response.data)
     .catch((error) => console.error(error));

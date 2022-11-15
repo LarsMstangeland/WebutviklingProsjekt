@@ -13,9 +13,9 @@ class UserService {
   /**
    * Get task with given id.
    */
-  get(id: number) {
+  get(username : string) {
     return new Promise<User | undefined>((resolve, reject) => {
-      pool.query('SELECT * FROM user WHERE user_id = ?', [id], (error, results: RowDataPacket[]) => {
+      pool.query('SELECT * FROM user WHERE username = ?', [username], (error, results: RowDataPacket[]) => {
         if (error) return reject(error);
 
         resolve(results[0] as User);
@@ -41,9 +41,9 @@ class UserService {
    *
    * Resolves the newly created task id.
    */
-  create( user : User) {
+  create( password : string, username : string, admin : boolean) {
     return new Promise<number>((resolve, reject) => {
-      pool.query('INSERT INTO user SET (username, password, admin) VALUES (?,?,?)', [user.username, user.password, user.admin], (error, results: ResultSetHeader) => {
+      pool.query('INSERT INTO user (username, password, admin) VALUES (?,?,?)', [username, password, admin], (error, results: ResultSetHeader) => {
         if (error) return reject(error);
         resolve(results.insertId);
       });

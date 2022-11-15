@@ -13,11 +13,11 @@ UserRouter.get('', (_request, response) => {
     .catch((error) => response.status(500).send(error));
 });
 
-UserRouter.get('/:id', (request, response) => {
-  const id = Number(request.params.id);
+UserRouter.get('/:username', (request, response) => {
+  const username = request.params.username;
   userService
-    .get(id)
-    .then((task) => (task ? response.send(task) : response.status(404).send('Recipie not found')))
+    .get(username)
+    .then((task) => (task ? response.send(task) : response.status(404).send('User not found')))
     .catch((error) => response.status(500).send(error));
 });
 
@@ -25,13 +25,13 @@ UserRouter.get('/:id', (request, response) => {
 // Example response body: { id: 4 }
 UserRouter.post('', (request, response) => {
 
-  const newuser = request.body;
-  if (newuser && newuser.username && newuser.password && newuser.cart_id.length != 0)
+  const password = request.body.password;
+  const username = request.body.username;
+  const admin = request.body.admin;
     userService
-      .create(newuser)
-      .then((id) => response.send({ id: id }))
+      .create(password, username, admin)
+      .then((id) => response.send(id))
       .catch((error) => response.status(500).send(error));
-  else response.status(400).send('Missing recipes');
 });
 
 UserRouter.delete('/:id', (request, response) => {

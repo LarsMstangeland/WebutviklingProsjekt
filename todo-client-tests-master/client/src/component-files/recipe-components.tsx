@@ -3,11 +3,13 @@ import { Component } from 'react-simplified';
 import { Alert, Card, Row, Column, Form, Button } from '../widgets';
 import { NavLink } from 'react-router-dom';
 import recipeService, { Recipe, Ingredient, IngredientName } from '../service-files/recipe-service';
+import cartService, {CartItem} from 'src/service-files/cart-service';
 import regionAndUnitService, {Region, Unit} from '../service-files/regionAndUnit-service';
 import { createHashHistory } from 'history';
 
 const history = createHashHistory(); // Use history.push(...) to programmatically change path, for instance after successfully saving a student
-
+//@ts-ignore
+const userData = JSON.parse(sessionStorage.getItem('user'));
 /**
  * Renders recipe list.
  */
@@ -38,10 +40,10 @@ export class RecipeList extends Component {
             type='search'
             placeholder='Search for recipes'
             ></Form.Input></Column>
-            <Column><Button.Success onClick={() => {
+            <Column>{userData.admin ? <Button.Success onClick={() => {
               history.push('/recipes/' + this.userId + '/addRecipes')
             }
-            }>Add Recipe</Button.Success></Column>
+            }>Add Recipe</Button.Success> : <></>}</Column>
           </Row>
           {this.recipesToShow.map((recipe) => (
             //Maps all the different recipes and renders them as links to their respective recipe details
@@ -96,7 +98,11 @@ export class RecipeDetails extends Component<{ match: { params: { id: number } }
             <Column>{this.recipe.description}</Column>
           </Row>
           <Row>
-            <Column><Button.Success onClick={}>Add ingredients to cart</Button.Success></Column> 
+            <Column><Button.Success onClick={() => {
+              userData ? {
+                cartService.addAllRecipeIngredientsToCart();
+              } : Alert.info('Log in to add ingredients to cart')
+            }}>Add ingredients to cart</Button.Success></Column> 
             <Column><Button.Light onClick={() => {window.open(`mailto:example@mail.com?subject=${this.emailSubject}&body=${this.emailBody}`)}}>Share</Button.Light></Column>
           </Row>
         </Card>
@@ -124,7 +130,7 @@ export class RecipeDetails extends Component<{ match: { params: { id: number } }
             </Row>
             ))}
         </Card>
-        <Row>
+        {userData.admin ? <Row>
             <Column><Button.Danger onClick={() => {
               //Deletes the recipe and pushes the path back to all recipes
                 recipeService.delete(this.recipe.recipe_id).then(() => {
@@ -135,7 +141,7 @@ export class RecipeDetails extends Component<{ match: { params: { id: number } }
               //Pushes the path to edit page of recipe
               history.push('/recipes/' + this.props.match.params.id + '/edit')
             }}>Edit</Button.Success></Column>
-          </Row>
+          </Row> : <Row/>}
       </>
     );
   }
