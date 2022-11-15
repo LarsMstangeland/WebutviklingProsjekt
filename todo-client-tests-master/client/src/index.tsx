@@ -4,7 +4,9 @@ import { Component } from 'react-simplified';
 import { HashRouter, Route } from 'react-router-dom';
 import { NavBar, Card, Alert, PreviewCard, BootstrapPreviewCard, Button } from './widgets';
 import { RecipeList, RecipeDetails, RecipeEdit } from './component-files/recipe-components';
-import {UserLogin, UserProfile} from './component-files/user-components';
+import {UserLogin} from './component-files/user-components';
+
+
 
 class Menu extends Component {
   render() {
@@ -12,7 +14,7 @@ class Menu extends Component {
       <div>
         <NavBar left={true} brand="Food Junkies">
           <NavBar.Link to="/recipes">Recipes</NavBar.Link>
-          <NavBar.Link to="/login">My Profile</NavBar.Link>
+          <NavBar.Link to="/user/login">My Profile</NavBar.Link>
           <NavBar left={true} brand="">
           <NavBar.Link to="/cart"><Button.Light left={true} small={true} onClick={() => {}}>Jeg vil være et icon</Button.Light></NavBar.Link>
 
@@ -68,8 +70,7 @@ ReactDOM.render(
       <Route exact path="/recipes" component={RecipeList} />
       <Route exact path="/recipes/:id(\d+)" component={RecipeDetails} /> {/* id must be number */}
       <Route exact path='/recipes/:id(\d+)/edit' component={RecipeEdit} />
-      <Route exact path='/login' component={UserLogin}/>
-      <Route exact path='/users/:id(\d+)' component={UserProfile}/>
+      <Route exact path='/user/login' component={UserLogin}/>
     </div>
   </HashRouter>,
   document.getElementById('root')
