@@ -16,6 +16,7 @@ export class RecipeList extends Component {
   recipes: Recipe[] = [];
   recipesToShow: Recipe[] = [];
   searchBar: string = '';
+  userId: number | undefined = 0;
 
   render() {
     return (
@@ -37,6 +38,10 @@ export class RecipeList extends Component {
             type='search'
             placeholder='Search for recipes'
             ></Form.Input></Column>
+            <Column><Button.Success onClick={() => {
+              history.push('/recipes/' + this.userId + '/addRecipes')
+            }
+            }>Add Recipe</Button.Success></Column>
           </Row>
           {this.recipesToShow.map((recipe) => (
             //Maps all the different recipes and renders them as links to their respective recipe details
