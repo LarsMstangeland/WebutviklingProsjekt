@@ -2,17 +2,24 @@ import ReactDOM from 'react-dom';
 import * as React from 'react';
 import { Component } from 'react-simplified';
 import { HashRouter, Route } from 'react-router-dom';
-import { NavBar, Card, Alert, PreviewCard, BootstrapPreviewCard } from './widgets';
+import { NavBar, Card, Alert, PreviewCard, BootstrapPreviewCard, Button } from './widgets';
 import { RecipeList, RecipeDetails, RecipeEdit } from './component-files/recipe-components';
 import {UserLogin, UserProfile} from './component-files/user-components';
 
 class Menu extends Component {
   render() {
     return (
-      <NavBar brand="Food Junkies">
-        <NavBar.Link to="/recipes">Recipes</NavBar.Link>
-        <NavBar.Link to="/login">My Profile</NavBar.Link>
-      </NavBar>
+      <div>
+        <NavBar left={true} brand="Food Junkies">
+          <NavBar.Link to="/recipes">Recipes</NavBar.Link>
+          <NavBar.Link to="/login">My Profile</NavBar.Link>
+          <NavBar left={true} brand="">
+          <NavBar.Link to="/cart"><Button.Light left={true} small={true} onClick={() => {}}>Jeg vil være et icon</Button.Light></NavBar.Link>
+
+        </NavBar>
+        </NavBar>
+      </div>
+      
     );
   }
 }

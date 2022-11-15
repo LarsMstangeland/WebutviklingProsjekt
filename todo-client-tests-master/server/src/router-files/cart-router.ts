@@ -16,12 +16,13 @@ CartRouter.get('/:id', (request, response) => {
     .catch((error) => response.status(500).send(error));
 });
 
-CartRouter.get('/:id', (request, response) => {
+CartRouter.delete('/:id/:ingredient', (request, response) => {
 
     const id = Number(request.params.id)
+    const ingredient = request.params.ingredient
 
   cartService
-    .get(id)
+    .delete(ingredient, id)
     .then((_result) => response.send())
     .catch((error) => response.status(500).send(error));
 });

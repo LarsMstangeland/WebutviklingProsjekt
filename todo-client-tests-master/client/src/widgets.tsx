@@ -112,6 +112,7 @@ class ButtonSuccess extends Component<{
                 lineHeight: '0.7',
               }
             : {}
+
         }
         onClick={this.props.onClick}
       >
@@ -160,6 +161,7 @@ class ButtonDanger extends Component<{
 class ButtonLight extends Component<{
   small?: boolean;
   onClick: () => void;
+  left?: boolean;
 }> {
   render() {
     return (
@@ -172,9 +174,13 @@ class ButtonLight extends Component<{
                 padding: '5px 5px',
                 fontSize: '16px',
                 lineHeight: '0.7',
+              } 
+            : {
+
               }
-            : {}
-        }
+          }
+
+        
         onClick={this.props.onClick}
       >
         {this.props.children}
@@ -214,8 +220,9 @@ class NavBarLink extends Component<{ to: string }> {
  *
  * Properties: brand
  */
-export class NavBar extends Component<{ brand: ReactNode }> {
+export class NavBar extends Component<{ brand: ReactNode, left:boolean}> {
   static Link = NavBarLink;
+  left?: boolean;
 
   render() {
     return (
@@ -224,7 +231,7 @@ export class NavBar extends Component<{ brand: ReactNode }> {
           <NavLink className="navbar-brand" activeClassName="active" exact to="/">
             {this.props.brand}
           </NavLink>
-          <div className="navbar-nav">{this.props.children}</div>
+          <div className="navbar-nav" style={ this.left? {left:"100%"} :{}}>{this.props.children}</div>
         </div>
       </nav>
     );

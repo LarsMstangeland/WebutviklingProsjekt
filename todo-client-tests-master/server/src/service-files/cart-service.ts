@@ -19,6 +19,8 @@ class Cartservice{
         });
     }
 
+
+    //burde vi bruke ingredient objekt?
     delete(ingrediens: string, id: number) {
         return new Promise<void>((resolve, reject) => {
           pool.query('DELETE * FROM cart WHERE ingredients = ? AND cart_id = ?', [ingrediens, id], (error: any, results: RowDataPacket[]) => {
