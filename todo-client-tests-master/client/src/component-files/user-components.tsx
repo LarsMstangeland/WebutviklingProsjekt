@@ -112,11 +112,8 @@ export class UserLogin extends Component  {
 export class NewUser extends Component {
     users : User[] = [];
     user : User = {user_id : 0, username : '', password : '', admin : false};
-    user_id : number = 0;
-    username : string = '';
-    password : string = '';
+    newUser : User = {user_id : 0, username : '', password : '', admin : false};
     passwordCheck : string = '';
-    admin : boolean = false;
 
     render () {
         return (
@@ -166,15 +163,13 @@ export class NewUser extends Component {
                         </Row>
                         <Row>
                             <Column>
-                            <Button.Success onClick={()=>{
+                            <Button.Success onClick={async ()=>{
                                 if(this.user.password == this.passwordCheck && this.user.password != '' && this.user.username != ''){
-                                    userService.create(this.user.password, this.user.username, this.user.admin).then(()=> {
-                                        let id = this.users.filter((user) => user.username == this.user.username).find(u => u.username == this.user.username)?.user_id
-                                        this.user.user_id == id;
-                                        sessionStorage.setItem('user', JSON.stringify(this.user));
-
-                                        history.push('/user/login')
-                                    })
+                                   await userService.create(this.user.password, this.user.username, this.user.admin) 
+                                    let u = await userService.get(this.user.username)
+                                    this.user = u       
+                                    sessionStorage.setItem('user', JSON.stringify(this.user));
+                                    history.push('/user/login')                                    
                                 }
                             }}>Create user</Button.Success>
                             </Column>

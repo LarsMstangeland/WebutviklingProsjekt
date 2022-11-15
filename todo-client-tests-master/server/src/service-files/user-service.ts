@@ -13,9 +13,9 @@ class UserService {
   /**
    * Get task with given id.
    */
-  get(id: number) {
+  get(username : string) {
     return new Promise<User | undefined>((resolve, reject) => {
-      pool.query('SELECT * FROM user WHERE user_id = ?', [id], (error, results: RowDataPacket[]) => {
+      pool.query('SELECT * FROM user WHERE username = ?', [username], (error, results: RowDataPacket[]) => {
         if (error) return reject(error);
 
         resolve(results[0] as User);

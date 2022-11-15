@@ -13,11 +13,11 @@ UserRouter.get('', (_request, response) => {
     .catch((error) => response.status(500).send(error));
 });
 
-UserRouter.get('/:id', (request, response) => {
-  const id = Number(request.params.id);
+UserRouter.get('/:username', (request, response) => {
+  const username = request.params.username;
   userService
-    .get(id)
-    .then((task) => (task ? response.send(task) : response.status(404).send('Recipie not found')))
+    .get(username)
+    .then((task) => (task ? response.send(task) : response.status(404).send('User not found')))
     .catch((error) => response.status(500).send(error));
 });
 
@@ -30,7 +30,7 @@ UserRouter.post('', (request, response) => {
   const admin = request.body.admin;
     userService
       .create(password, username, admin)
-      .then((id) => response.send({ id: id }))
+      .then((id) => response.send(id))
       .catch((error) => response.status(500).send(error));
 });
 
