@@ -124,7 +124,7 @@ export class NewUser extends Component {
             <Card title="Create new user">
             <Row>
                             <Column>
-                                Brukernavn: 
+                                Username: 
                                 <Form.Input 
                                 type="text" 
                                 value={this.user.username} 
@@ -135,7 +135,7 @@ export class NewUser extends Component {
                         </Row>
                         <Row>
                             <Column>
-                                Passord:
+                                Password:
                                 <Form.Input 
                                 type="password" 
                                 value={this.user.password} 
@@ -146,7 +146,7 @@ export class NewUser extends Component {
                         </Row>
                         <Row>
                             <Column>
-                                Bekreft passord:
+                                Confirm password:
                                 <Form.Input 
                                 type="password" 
                                 value={this.passwordCheck} 
