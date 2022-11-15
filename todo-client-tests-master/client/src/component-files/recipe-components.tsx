@@ -7,7 +7,8 @@ import regionAndUnitService, {Region, Unit} from '../service-files/regionAndUnit
 import { createHashHistory } from 'history';
 
 const history = createHashHistory(); // Use history.push(...) to programmatically change path, for instance after successfully saving a student
-
+//@ts-ignore
+const userData = JSON.parse(sessionStorage.getItem('user'));
 /**
  * Renders recipe list.
  */
@@ -38,10 +39,10 @@ export class RecipeList extends Component {
             type='search'
             placeholder='Search for recipes'
             ></Form.Input></Column>
-            <Column><Button.Success onClick={() => {
+            <Column>{userData.admin ? <Button.Success onClick={() => {
               history.push('/recipes/' + this.userId + '/addRecipes')
             }
-            }>Add Recipe</Button.Success></Column>
+            }>Add Recipe</Button.Success> : <></>}</Column>
           </Row>
           {this.recipesToShow.map((recipe) => (
             //Maps all the different recipes and renders them as links to their respective recipe details
@@ -118,7 +119,7 @@ export class RecipeDetails extends Component<{ match: { params: { id: number } }
             </Row>
             ))}
         </Card>
-        <Row>
+        {userData.admin ? <Row>
             <Column><Button.Danger onClick={() => {
               //Deletes the recipe and pushes the path back to all recipes
                 recipeService.delete(this.recipe.recipe_id).then(() => {
@@ -129,7 +130,7 @@ export class RecipeDetails extends Component<{ match: { params: { id: number } }
               //Pushes the path to edit page of recipe
               history.push('/recipes/' + this.props.match.params.id + '/edit')
             }}>Edit</Button.Success></Column>
-          </Row>
+          </Row> : <Row/>}
       </>
     );
   }

@@ -13,6 +13,7 @@ const history = createHashHistory(); // Use history.push(...) to programmaticall
 const userData = JSON.parse(sessionStorage.getItem('user'));
 
 export class UserLogin extends Component  {
+    
     users : User[] = [];
     loggedIn : boolean = false;
     user: User = {user_id : 0, username : '', password : '', admin : false};
@@ -36,7 +37,10 @@ export class UserLogin extends Component  {
                 </Column>
             </Row>
             <Row>
-                <Column></Column>
+                <Column><Button.Danger onClick={()=> {
+                    sessionStorage.clear();
+                    location.reload();
+                }}>Log out</Button.Danger></Column>
             </Row>
 
             </Card>
