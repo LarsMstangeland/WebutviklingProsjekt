@@ -173,8 +173,9 @@ class RecipeService {
   AddIngredientsToCartFromRecipe(ingredients: Ingredient[], user_id: number){
     return new Promise<void>((resolve, reject) => {
         ingredients.map((ingredient) => {
+          console.log(ingredient, user_id)
           pool.query(
-            'INSERT INTO cart (ingrediens, user_id) VALUES (?,?)', [ingredient.name, user_id], (error) => {
+            'INSERT INTO cart (ingredients, user_id) VALUES (?,?)', [ingredient.name, user_id], (error) => {
               if (error) return reject(error);
               resolve();
             }
