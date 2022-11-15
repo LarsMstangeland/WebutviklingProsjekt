@@ -17,7 +17,19 @@ class Cartservice{
             resolve(results as CartItem[]);
           });
         });
-    }
+      }
+
+    post(ingrediens: string, user_id: number){
+
+      return new Promise<void>((resolve, reject) => {
+        pool.query(
+          'INSERT INTO cart (ingrediens, user_id) VALUES (?,?)', [ingrediens, user_id], (error) => {
+            if (error) return reject(error);
+            resolve();
+          }
+        )      
+      })
+    }  
 
     //burde vi bruke ingredient objekt?
     delete(ingrediens: string, id: number) {
