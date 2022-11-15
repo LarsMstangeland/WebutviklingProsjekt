@@ -20,40 +20,75 @@ export class RecipeList extends Component {
   userId: number | undefined = 0;
 
   render() {
-    return (
-      <>
-        <Card title="Recipes">
-          <Row>
-            <Column><Form.Input 
-            onChange={(event) => {
-              this.searchBar = event.currentTarget.value;
-              this.recipesToShow = [];
-              for(let i = 0; i < this.recipes.length; i++){
-                const name = this.recipes[i].name.toUpperCase();
-                if(name.indexOf(this.searchBar.toUpperCase()) > -1){
-                  this.recipesToShow.push(this.recipes[i]);
+    if(userData != null) {
+      return (
+        <>
+          <Card title="Recipes">
+            <Row>
+              <Column><Form.Input 
+              onChange={(event) => {
+                this.searchBar = event.currentTarget.value;
+                this.recipesToShow = [];
+                for(let i = 0; i < this.recipes.length; i++){
+                  const name = this.recipes[i].name.toUpperCase();
+                  if(name.indexOf(this.searchBar.toUpperCase()) > -1){
+                    this.recipesToShow.push(this.recipes[i]);
+                  }
                 }
+              }} 
+              value={this.searchBar}
+              type='search'
+              placeholder='Search for recipes'
+              ></Form.Input></Column>
+              <Column>{userData.admin ? <Button.Success onClick={() => {
+                history.push('/recipes/' + this.userId + '/addRecipes')
               }
-            }} 
-            value={this.searchBar}
-            type='search'
-            placeholder='Search for recipes'
-            ></Form.Input></Column>
-            <Column>{userData.admin ? <Button.Success onClick={() => {
-              history.push('/recipes/' + this.userId + '/addRecipes')
-            }
-            }>Add Recipe</Button.Success> : <></>}</Column>
-          </Row>
-          {this.recipesToShow.map((recipe) => (
-            //Maps all the different recipes and renders them as links to their respective recipe details
-            <Row key={recipe.recipe_id}>
+              }>Add Recipe</Button.Success> : <></>}</Column>
+            </Row>
+            {this.recipesToShow.map((recipe) => (
+              //Maps all the different recipes and renders them as links to their respective recipe details
+              <Row key={recipe.recipe_id}>
+                <Column>
+                  <NavLink to={'/recipes/' + recipe.recipe_id}>{recipe.name}</NavLink>
+                </Column>
+              </Row>))}
+          </Card>
+        </>
+      );
+    }
+    else {
+      return (
+        <>
+          <Card title="Recipes">
+            <Row>
               <Column>
-                <NavLink to={'/recipes/' + recipe.recipe_id}>{recipe.name}</NavLink>
-              </Column>
-            </Row>))}
-        </Card>
-      </>
-    );
+              <Form.Input 
+              onChange={(event) => {
+                this.searchBar = event.currentTarget.value;
+                this.recipesToShow = [];
+                for(let i = 0; i < this.recipes.length; i++){
+                  const name = this.recipes[i].name.toUpperCase();
+                  if(name.indexOf(this.searchBar.toUpperCase()) > -1){
+                    this.recipesToShow.push(this.recipes[i]);
+                  }
+                }
+              }} 
+              value={this.searchBar}
+              type='search'
+              placeholder='Search for recipes'
+              ></Form.Input></Column>
+            </Row>
+            {this.recipesToShow.map((recipe) => (
+              //Maps all the different recipes and renders them as links to their respective recipe details
+              <Row key={recipe.recipe_id}>
+                <Column>
+                  <NavLink to={'/recipes/' + recipe.recipe_id}>{recipe.name}</NavLink>
+                </Column>
+              </Row>))}
+          </Card>
+        </>
+      );
+    }
   }
 
   async mounted() {
@@ -80,23 +115,24 @@ export class RecipeDetails extends Component<{ match: { params: { id: number } }
   emailBody: string = '';
 
   render() {
-    return (
-      <>
-        <Card title={this.recipe.name}>
-          <Row>
-            <picture>
-              <img src={this.recipe.picture_url} alt={this.recipe.name} />
-            </picture>
-          </Row>
-          <Row>
-            <Column width={2}>Region:</Column>
-            <Column>{this.recipe.region}</Column>
-          </Row>
-          <Row>
-            <Column width={2}>Description:</Column>
-            <Column>{this.recipe.description}</Column>
-          </Row>
-          <Row>
+  if(userData != null){
+      return (
+        <>
+          <Card title={this.recipe.name}>
+            <Row>
+              <picture>
+                <img src={this.recipe.picture_url} alt={this.recipe.name} />
+              </picture>
+            </Row>
+            <Row>
+              <Column width={2}>Region:</Column>
+              <Column>{this.recipe.region}</Column>
+            </Row>
+            <Row>
+              <Column width={2}>Description:</Column>
+              <Column>{this.recipe.description}</Column>
+            </Row>
+            <Row>
             <Column><Button.Success onClick={() => {
               userData ? 
                 recipeService.addRecipeIngredientsToCart(this.ingredients, this.recipe.recipe_id, userData.user_id)
@@ -105,44 +141,111 @@ export class RecipeDetails extends Component<{ match: { params: { id: number } }
             <Column><Button.Light onClick={() => {window.open(`mailto:example@mail.com?subject=${this.emailSubject}&body=${this.emailBody}`)}}>Share</Button.Light></Column>
           </Row>
         </Card>
-        <Card title='Ingredients'>
-          <Row>
-            <Column>Portions:</Column>
-            <Column><Form.Input 
-            type='number' 
-            max='50'
-            min='1'
-            value={this.portions}
-            onChange={(event) => (Number(event.currentTarget.value) <= 50 ? this.portions = Number(event.currentTarget.value) : '')} ></Form.Input></Column>
-          </Row>
-          <Row>
-            <Column>Ingredients name:</Column>
-            <Column>Amount:</Column>
-            <Column>Unit:</Column>
-          </Row>
-          {this.ingredients.map((ingredient) => (
-            //Maps the different ingredients of a recipe and renders their respective values
-            <Row key={ingredient.ingredients_id}>
-              <Column>{ingredient.name}</Column>
-              <Column>{ingredient.amount * this.portions / 4}</Column>
-              <Column>{ingredient.unit}</Column>
+          <Card title='Ingredients'>
+            <Row>
+              <Column>Portions:</Column>
+              <Column><Form.Input 
+              type='number' 
+              max='50'
+              min='1'
+              value={this.portions}
+              onChange={(event) => (Number(event.currentTarget.value) <= 50 ? this.portions = Number(event.currentTarget.value) : '')} ></Form.Input></Column>
             </Row>
-            ))}
-        </Card>
-        {userData.admin ? <Row>
-            <Column><Button.Danger onClick={() => {
-              //Deletes the recipe and pushes the path back to all recipes
-                recipeService.delete(this.recipe.recipe_id).then(() => {
-                  history.push('/recipes');
-            })
-            }}>Delete</Button.Danger></Column>
-            <Column><Button.Success onClick={() => {
-              //Pushes the path to edit page of recipe
-              history.push('/recipes/' + this.props.match.params.id + '/edit')
-            }}>Edit</Button.Success></Column>
-          </Row> : <Row/>}
-      </>
-    );
+            <Row>
+              <Column>Ingredients name:</Column>
+              <Column>Amount:</Column>
+              <Column>Unit:</Column>
+            </Row>
+            {this.ingredients.map((ingredient) => (
+              //Maps the different ingredients of a recipe and renders their respective values
+              <Row key={ingredient.ingredients_id}>
+                <Column>{ingredient.name}</Column>
+                <Column>{ingredient.amount * this.portions / 4}</Column>
+                <Column>{ingredient.unit}</Column>
+              </Row>
+              ))}
+              <Row>
+                  <Column>
+                    <Button.Success onClick={()=> {
+
+                      }}>Like recipe
+                    </Button.Success>
+                  </Column>
+              </Row>
+          </Card>
+          {userData.admin ? <Row>
+              <Column><Button.Danger onClick={() => {
+                //Deletes the recipe and pushes the path back to all recipes
+                  recipeService.delete(this.recipe.recipe_id).then(() => {
+                    history.push('/recipes');
+              })
+              }}>Delete</Button.Danger></Column>
+              <Column><Button.Success onClick={() => {
+                //Pushes the path to edit page of recipe
+                history.push('/recipes/' + this.props.match.params.id + '/edit')
+              }}>Edit</Button.Success></Column>
+            </Row> : <Row/>}
+        </>
+      )
+    
+  }
+    else {
+
+      return (
+        <>
+          <Card title={this.recipe.name}>
+            <Row>
+              <picture>
+                <img src={this.recipe.picture_url} alt={this.recipe.name} />
+              </picture>
+            </Row>
+            <Row>
+              <Column width={2}>Region:</Column>
+              <Column>{this.recipe.region}</Column>
+            </Row>
+            <Row>
+              <Column width={2}>Description:</Column>
+              <Column>{this.recipe.description}</Column>
+            </Row>
+          </Card>
+          <Card title='Ingredients'>
+            <Row>
+              <Column>Portions:</Column>
+              <Column><Form.Input 
+              type='number' 
+              max='50'
+              min='1'
+              value={this.portions}
+              onChange={(event) => (Number(event.currentTarget.value) <= 50 ? this.portions = Number(event.currentTarget.value) : '')} ></Form.Input></Column>
+            </Row>
+            <Row>
+              <Column>Ingredients name:</Column>
+              <Column>Amount:</Column>
+              <Column>Unit:</Column>
+            </Row>
+            {this.ingredients.map((ingredient) => (
+              //Maps the different ingredients of a recipe and renders their respective values
+              <Row key={ingredient.ingredients_id}>
+                <Column>{ingredient.name}</Column>
+                <Column>{ingredient.amount * this.portions / 4}</Column>
+                <Column>{ingredient.unit}</Column>
+              </Row>
+              ))}
+            <Row>
+              <Column>
+                <Button.Success onClick={()=> {
+                    Alert.danger('You have to log in to like a recipe');
+                  }}>Like recipe
+                </Button.Success>
+                </Column>
+            </Row>
+
+          </Card>
+          
+        </>
+      )
+    }
+  
   }
 
   async mounted() {
@@ -174,6 +277,9 @@ export class RecipeEdit extends Component<{ match: { params: { id: number } } }>
   newIngredients: Ingredient[] = [];
   newIngredientsToDelete: Ingredient[] = [];
   ingredients: IngredientName[] = [];
+  searchBar : string = '';
+  ingredientsToShow: IngredientName[] = [];
+
 
   render() {
     return (
@@ -279,6 +385,22 @@ export class RecipeEdit extends Component<{ match: { params: { id: number } } }>
             ))}
             <h4>Add ingredient</h4>
             <Row>
+              <Column>
+              <Form.Input 
+              type="search" 
+              value={this.searchBar} 
+              placeholder="Seacrh for ingredient"
+              onChange={(event)=> { 
+                  this.searchBar = event.currentTarget.value;
+                  this.ingredientsToShow = [];
+                  for(let i = 0; i < this.ingredients.length; i++){
+                  const name = this.ingredients[i].name.toUpperCase();
+                  if(name.indexOf(this.searchBar.toUpperCase()) > -1){
+                    this.ingredientsToShow.push(this.ingredients[i]);
+                  }
+                }
+              }}></Form.Input>
+              </Column>
               <Column>
                 <Form.Select 
                 value={this.newIngredient.name} 
