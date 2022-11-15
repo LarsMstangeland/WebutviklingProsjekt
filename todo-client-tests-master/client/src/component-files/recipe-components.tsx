@@ -134,6 +134,7 @@ export class RecipeDetails extends Component<{ match: { params: { id: number } }
             </Row>
             <Row>
             <Column><Button.Success onClick={() => {
+              console.log(userData.user_id)
               userData ? 
                 recipeService.addRecipeIngredientsToCart(this.ingredients, this.recipe.recipe_id, userData.user_id)
                : Alert.info('Log in to add ingredients to cart')

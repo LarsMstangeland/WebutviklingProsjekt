@@ -105,9 +105,10 @@ class RecipeService {
   /**
    * Adds all ingredients of a spesific recipe to the cart of the current logged in user
    */
-  addRecipeIngredientsToCart(ingredients: Ingredient[], id: number, userId: number){
+  addRecipeIngredientsToCart(ingredients: Ingredient[], id: number, user_id: number){
+    console.log(user_id)
     return axios
-      .post('/recipes/' + id + '/ingredients', {ingredients, userId})
+      .post('/recipes/' + id + '/ingredients', {ingredients, user_id})
       .then((response) => response.data.id)
       .catch((error) => console.log(error))
   }
