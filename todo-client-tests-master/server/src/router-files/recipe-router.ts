@@ -95,7 +95,6 @@ RecipeRouter.get('/:id/ingredients', (request, response) => {
 
     const id = Number(request.params.id)
     const user_id = request.body.user_id
-    console.log(user_id)
     const ingredients = request.body.ingredients
     
     recipeService

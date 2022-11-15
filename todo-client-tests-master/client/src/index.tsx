@@ -16,7 +16,7 @@ class Menu extends Component {
         <NavBar brand="Food Junkies">
           <NavBar.Link left={false} to="/recipes">Recipes</NavBar.Link>
           <NavBar.Link left={false} to="/user/login">My Profile</NavBar.Link>
-          <NavBar.Link left={true} to="/user/cart"><Button.Light left={true} small={true} onClick={() => {}}>Jeg vil være et icon</Button.Light></NavBar.Link>
+          <NavBar.Link left={true} to="/cart"><Button.Light left={true} small={true} onClick={() => {}}>Jeg vil være et icon</Button.Light></NavBar.Link>
         </NavBar>
       </div>
       
@@ -70,7 +70,7 @@ ReactDOM.render(
       <Route exact path='/recipes/:id(\d+)/edit' component={RecipeEdit} />
       <Route exact path='/user/login' component={UserLogin}/>
       <Route exact path='/user/create' component={NewUser}/>
-      <Route exact path='/user/cart' component={CartContent}/>
+      <Route exact path='/cart' component={CartContent}/>
 
     </div>
   </HashRouter>,

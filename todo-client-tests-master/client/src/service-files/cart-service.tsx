@@ -25,6 +25,13 @@ class CartService {
     .then((response) => response.data)
     .catch((error) => console.log(error))
   }
+
+  deleteIngredientFromCart(id: number){
+    return axios.delete('/cart/'+id)
+    .then((response) => response.data)
+    .catch((error) => console.error(error));
+  }
+
 }
 
 

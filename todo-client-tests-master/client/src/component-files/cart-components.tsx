@@ -23,12 +23,26 @@ export class CartContent extends Component {
     return (
       <>
         <Card title="Your Cart">
+
+          <Button.Danger onClick={() => {
+            this.CartItemsToShow.map((cartitem) => {
+              cartService.deleteIngredientFromCart(cartitem.cart_id)
+            })
+            this.mounted()
+          }}>Clear All</Button.Danger>
+
           {this.CartItemsToShow.map((cart: CartItem) => (
             //Maps all the different cart and renders them as links to their respective cart details
             <Row key={cart.cart_id}>
               <Column>
                 {cart.ingredients}
               </Column>
+              <Column><Button.Danger onClick={() => {
+
+                cartService.deleteIngredientFromCart(cart.cart_id).then(() => {
+                  this.mounted();
+                })
+              }}>X</Button.Danger></Column>
             </Row>))}
         </Card>
       </>
@@ -41,11 +55,6 @@ export class CartContent extends Component {
       let cart = await cartService.get(userData.user_id);
       this.cart = cart;
       this.CartItemsToShow = cart;
-      let ingredients = await cartService.getAllIngredients()
-      //@ts-ignore
-      this.ingredients = ingredients;
-
-      console.log(this.CartItemsToShow)
 
     } catch (error: any){
       Alert.danger('Error getting cart: ' + error.message)
