@@ -7,6 +7,11 @@ export type CartItem = {
   ingredients: string;
 };
 
+export type Ingredient = {
+  cart_id: number;
+  ingredients: string;
+};
+
 class CartService {
   /**
    * Get recipe with given id.
@@ -15,6 +20,11 @@ class CartService {
     return axios.get<CartItem[]>('/cart/' + id).then((response) => response.data);
   }
 
+  getAllIngredients() {  
+    return axios.get<Ingredient[]>('/cart/addIngredients')
+    .then((response) => response.data)
+    .catch((error) => console.log(error))
+  }
 }
 
 

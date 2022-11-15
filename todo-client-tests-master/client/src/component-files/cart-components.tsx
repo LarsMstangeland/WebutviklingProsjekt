@@ -4,6 +4,7 @@ import { Alert, Card, Row, Column, Form, Button } from '../widgets';
 import { createHashHistory } from 'history';
 import cartService, {CartItem} from '../service-files/cart-service';
 import { NavLink } from 'react-router-dom';
+import recipeService from 'src/service-files/recipe-service';
 
 const history = createHashHistory(); // Use history.push(...) to programmatically change path, for instance after successfully saving a student
 //@ts-ignore
@@ -22,24 +23,6 @@ export class CartContent extends Component {
     return (
       <>
         <Card title="Your Cart">
-          <Row>
-            <Column><Form.Input 
-            onChange={(event) => {
-              this.searchBar = event.currentTarget.value;
-              this.CartItemsToShow = [];
-              for(let i = 0; i < this.cart.length; i++){
-                const name = this.cart[i].ingredients.toUpperCase();
-                if(name.indexOf(this.searchBar.toUpperCase()) > -1){
-                  this.CartItemsToShow.push(this.cart[i]);
-                }
-              }
-            }} 
-            value={this.searchBar}
-            type='search'
-            placeholder='Search for cart'
-            ></Form.Input></Column>
-          </Row>
-          
           {this.CartItemsToShow.map((cart: CartItem) => (
             //Maps all the different cart and renders them as links to their respective cart details
             <Row key={cart.cart_id}>
@@ -57,9 +40,10 @@ export class CartContent extends Component {
     try{
       let cart = await cartService.get(userData.user_id);
       this.cart = cart;
-      console.log(cart)
-      console.log(userData.user_id)
       this.CartItemsToShow = cart;
+      let ingredients = await cartService.getAllIngredients()
+      //@ts-ignore
+      this.ingredients = ingredients;
 
       console.log(this.CartItemsToShow)
 

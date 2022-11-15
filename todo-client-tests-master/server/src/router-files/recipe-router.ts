@@ -76,6 +76,8 @@ RecipeRouter.get('/:id/ingredients', (request, response) => {
       .catch((error) => response.status(500).send(error));
   });
 
+  
+
 
   RecipeRouter.post('/:id/edit/ingredients', (request, response) => {
     const data = request.body.ingredients;

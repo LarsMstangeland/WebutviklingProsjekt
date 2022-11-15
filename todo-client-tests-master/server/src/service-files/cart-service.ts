@@ -20,7 +20,6 @@ class Cartservice{
       }
 
     post(ingrediens: string, user_id: number){
-
       return new Promise<void>((resolve, reject) => {
         pool.query(
           'INSERT INTO cart (ingrediens, user_id) VALUES (?,?)', [ingrediens, user_id], (error) => {
