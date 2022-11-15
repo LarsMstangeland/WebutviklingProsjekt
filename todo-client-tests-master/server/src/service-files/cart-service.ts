@@ -1,5 +1,6 @@
 import pool from '../mysql-pool';
 import type { RowDataPacket, ResultSetHeader } from 'mysql2';
+import { Ingredient } from './recipe-service';
 
 export type CartItem = {
   cart_id: number;
@@ -19,16 +20,6 @@ class Cartservice{
         });
       }
 
-    post(ingrediens: string, user_id: number){
-      return new Promise<void>((resolve, reject) => {
-        pool.query(
-          'INSERT INTO cart (ingrediens, user_id) VALUES (?,?)', [ingrediens, user_id], (error) => {
-            if (error) return reject(error);
-            resolve();
-          }
-        )      
-      })
-    }  
 
     //burde vi bruke ingredient objekt?
     delete(ingrediens: string, id: number) {
