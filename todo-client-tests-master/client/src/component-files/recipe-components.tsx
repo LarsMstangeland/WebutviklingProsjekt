@@ -75,6 +75,8 @@ export class RecipeDetails extends Component<{ match: { params: { id: number } }
   recipe: Recipe = { recipe_id: 0, name: '', description: '', region: '', picture_url: '' };
   ingredients: Ingredient[] = [];
   portions: number = 4;
+  emailSubject: string = '';
+  emailBody: string = '';
 
   render() {
     return (
@@ -92,6 +94,10 @@ export class RecipeDetails extends Component<{ match: { params: { id: number } }
           <Row>
             <Column width={2}>Description:</Column>
             <Column>{this.recipe.description}</Column>
+          </Row>
+          <Row>
+            <Column><Button.Success onClick={}>Add ingredients to cart</Button.Success></Column> 
+            <Column><Button.Light onClick={() => {window.open(`mailto:example@mail.com?subject=${this.emailSubject}&body=${this.emailBody}`)}}>Share</Button.Light></Column>
           </Row>
         </Card>
         <Card title='Ingredients'>
@@ -141,6 +147,8 @@ export class RecipeDetails extends Component<{ match: { params: { id: number } }
       this.recipe = recipe;
       let ingredients = await recipeService.getRecipeIngredients(this.props.match.params.id)
       this.ingredients = ingredients;
+      this.emailSubject = 'Recipe for ' + this.recipe.name;
+      this.emailBody = 'Description: %0D%0A' + this.recipe.description + '%0D%0A %0D%0A Ingredients:  %0D%0A' + this.ingredients.map(ing => `${ing.name + ' - ' + ing.amount + ' ' + ing.unit} %0D%0A`)
      } catch (error: any) {
       Alert.danger('Error getting recipe or ingredients: ' + error.message)
      }
