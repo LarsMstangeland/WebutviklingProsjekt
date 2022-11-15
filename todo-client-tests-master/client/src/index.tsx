@@ -4,7 +4,7 @@ import { Component } from 'react-simplified';
 import { HashRouter, Route } from 'react-router-dom';
 import { NavBar, Card, Alert, PreviewCard, BootstrapPreviewCard } from './widgets';
 import { RecipeList, RecipeDetails, RecipeEdit } from './component-files/recipe-components';
-import {UserLogin} from './component-files/user-components';
+import {NewUser, UserLogin} from './component-files/user-components';
 
 
 
@@ -64,6 +64,7 @@ ReactDOM.render(
       <Route exact path="/recipes/:id(\d+)" component={RecipeDetails} /> {/* id must be number */}
       <Route exact path='/recipes/:id(\d+)/edit' component={RecipeEdit} />
       <Route exact path='/user/login' component={UserLogin}/>
+      <Route exact path='/user/create' component={NewUser}/>
     </div>
   </HashRouter>,
   document.getElementById('root')

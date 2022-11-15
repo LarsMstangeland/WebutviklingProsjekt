@@ -41,9 +41,9 @@ class UserService {
    *
    * Resolves the newly created task id.
    */
-  create( user : User) {
+  create( password : string, username : string, admin : boolean) {
     return new Promise<number>((resolve, reject) => {
-      pool.query('INSERT INTO user SET (username, password, admin) VALUES (?,?,?)', [user.username, user.password, user.admin], (error, results: ResultSetHeader) => {
+      pool.query('INSERT INTO user (username, password, admin) VALUES (?,?,?)', [username, password, admin], (error, results: ResultSetHeader) => {
         if (error) return reject(error);
         resolve(results.insertId);
       });
