@@ -8,23 +8,43 @@ import { createHashHistory } from 'history';
 
 const history = createHashHistory(); // Use history.push(...) to programmatically change path, for instance after successfully saving a student
 // const user : User = {user_id : 0, username : '', cart_id : 0, password : '', admin : false};
+// export const loggedIn : boolean = false;
+//@ts-ignore
+const userData = JSON.parse(sessionStorage.getItem('user'));
 
-
-export class UserLogin extends Component {
+export class UserLogin extends Component <{match: {params: {id: number}}}> {
     users : User[] = [];
-    loggedIn : boolean = false;
     user: User = {user_id : 0, username : '', cart_id : 0, password : '', admin : false};
-    loggedInUser : User = {user_id : 0, username : '', cart_id : 0, password : '', admin : false};
-     
-
-
+        
     render() {
-        if(this.loggedIn){
+        //@ts-ignore
+        if(userData != null) {
+            return (
+                <>
+            <Card title="Your user information">
+            <Row>
+                <Column>
+                {/*@ts-ignore*/}
+                Brukernavn: {userData.username}
+                </Column>
+            </Row>
+            <Row>
+                <Column>
+                 {/*@ts-ignore*/}
+                {userData.admin ? 'Du er admin' : 'Du er ikke admin'}
+                </Column>
+            </Row>
+            <Row>
+                <Column></Column>
+            </Row>
 
+            </Card>
+                </>
+            )
         }
         else{
             return (
-                <>
+                <>  
                     <Card title="Log in">
                         <Row>
                             <Column>
@@ -41,7 +61,7 @@ export class UserLogin extends Component {
                             <Column>
                                 Passord:
                                 <Form.Input 
-                                type="text" 
+                                type="password" 
                                 value={this.user.password} 
                                 onChange={(event)=>{
                                     this.user.password = event.currentTarget.value;
@@ -52,19 +72,12 @@ export class UserLogin extends Component {
                             <Column>
                                 <Button.Success onClick={()=>{
                                     let loggedInUser = this.users.filter(u => u.username == this.user.username).find( pw => pw.password == this.user.password);
-                                    console.log(loggedInUser);
-                                    if(loggedInUser)
-                                        userService.get(loggedInUser.user_id)
-                                        .then(()=>{
-                                            history.push('/users/' + loggedInUser?.user_id);
-                                            // this.loggedInUser == loggedInUser;
-                                            // this.loggedIn == true
-                                        })
-                                    // console.log(this.users.filter(u => u.username == this.user.username).find( pw => pw.password == this.user.password))
-                                    // this.users.filter(u => u.username == this.user.username).find( pw => pw.password == this.user.password) ?
-                                    // history.push('/user_profile')
-                                    //  :
-                                    // Alert.danger('Wrong username or password. Try again')
+                                    if(loggedInUser){
+                                        let userData = JSON.stringify(loggedInUser)
+                                        sessionStorage.setItem('user', userData)
+                                        location.reload();
+                                    } 
+                                    else Alert.danger('Wrong username or password. Try again')
                                 }}>Log in</Button.Success>
                             </Column>
                         </Row>
@@ -76,6 +89,8 @@ export class UserLogin extends Component {
             )
 
         }
+
+        
     }
 
     async mounted() {
@@ -84,44 +99,8 @@ export class UserLogin extends Component {
             this.users = users 
         }
         catch{
-            Alert.danger('Could not fetch existing users')
+            Alert.danger('Could not fetch existing users from database')
         }
     }
 }
 
-export class UserProfile extends Component <{ match: { params: { id: number } } }>{
-    user : User = {user_id : 0, username : '', cart_id : 0, password : '', admin : false};
-
-    render() {
-        return(
-            <>
-            <Card title="Your user information">
-            <Row>
-                <Column>
-                Brukernavn: {this.user.username}
-                </Column>
-            </Row>
-            <Row>
-                <Column>
-                {this.user.admin ? 'Du er admin' : 'Du er ikke admin'}
-                </Column>
-            </Row>
-            <Row>
-                <Column></Column>
-            </Row>
-
-            </Card>
-            </>
-        )
-    }
-
-    async mounted() {
-        try{
-            let user = await userService.get(this.props.match.params.id)
-            this.user = user
-        }
-        catch {
-            Alert.danger('Could not fetch your user at the moment')
-        }
-    }
-}
