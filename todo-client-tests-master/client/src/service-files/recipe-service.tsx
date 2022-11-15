@@ -95,11 +95,19 @@ class RecipeService {
       .catch((error) => console.log(error))
   }
 
-  addRecipeIngredient(ingredients: Ingredient[], id: number){
-    console.log(ingredients)
-    
+  addRecipeIngredient(ingredients: Ingredient[], id: number){ 
     return axios
       .post('/recipes/' + id + '/edit/ingredients', {ingredients})
+      .then((response) => response.data.id)
+      .catch((error) => console.log(error))
+  }
+
+  /**
+   * Adds all ingredients of a spesific recipe to the cart of the current logged in user
+   */
+  addRecipeIngredientsToCart(ingredients: Ingredient[], id: number, userId: number){
+    return axios
+      .post('/recipes/' + id + '/ingredients', {ingredients, userId})
       .then((response) => response.data.id)
       .catch((error) => console.log(error))
   }

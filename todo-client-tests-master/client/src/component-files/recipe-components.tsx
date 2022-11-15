@@ -3,7 +3,6 @@ import { Component } from 'react-simplified';
 import { Alert, Card, Row, Column, Form, Button } from '../widgets';
 import { NavLink } from 'react-router-dom';
 import recipeService, { Recipe, Ingredient, IngredientName } from '../service-files/recipe-service';
-import cartService, {CartItem} from 'src/service-files/cart-service';
 import regionAndUnitService, {Region, Unit} from '../service-files/regionAndUnit-service';
 import { createHashHistory } from 'history';
 
@@ -99,9 +98,9 @@ export class RecipeDetails extends Component<{ match: { params: { id: number } }
           </Row>
           <Row>
             <Column><Button.Success onClick={() => {
-              userData ? {
-                
-              } : Alert.info('Log in to add ingredients to cart')
+              userData ? 
+                recipeService.addRecipeIngredientsToCart(this.ingredients, this.recipe.recipe_id, userData.user_id)
+               : Alert.info('Log in to add ingredients to cart')
             }}>Add ingredients to cart</Button.Success></Column> 
             <Column><Button.Light onClick={() => {window.open(`mailto:example@mail.com?subject=${this.emailSubject}&body=${this.emailBody}`)}}>Share</Button.Light></Column>
           </Row>
