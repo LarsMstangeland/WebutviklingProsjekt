@@ -100,7 +100,7 @@ export class RecipeDetails extends Component<{ match: { params: { id: number } }
           <Row>
             <Column><Button.Success onClick={() => {
               userData ? {
-                cartService.addAllRecipeIngredientsToCart();
+                
               } : Alert.info('Log in to add ingredients to cart')
             }}>Add ingredients to cart</Button.Success></Column> 
             <Column><Button.Light onClick={() => {window.open(`mailto:example@mail.com?subject=${this.emailSubject}&body=${this.emailBody}`)}}>Share</Button.Light></Column>
