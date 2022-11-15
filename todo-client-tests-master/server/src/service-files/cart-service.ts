@@ -10,15 +10,14 @@ export type Cart = {
 class Cartservice{
 
     get(id: number) {
-        return new Promise<Cart | undefined>((resolve, reject) => {
+        return new Promise<Cart[] | undefined>((resolve, reject) => {
           pool.query('SELECT * FROM cart WHERE cart_id = ?', [id], (error: any, results: RowDataPacket[]) => {
             if (error) return reject(error);
     
-            resolve(results[0] as Cart);
+            resolve(results as Cart[]);
           });
         });
     }
-
 
     //burde vi bruke ingredient objekt?
     delete(ingrediens: string, id: number) {

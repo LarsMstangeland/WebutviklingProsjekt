@@ -5,6 +5,7 @@ import { HashRouter, Route } from 'react-router-dom';
 import { NavBar, Card, Alert, PreviewCard, BootstrapPreviewCard, Button } from './widgets';
 import { RecipeList, RecipeDetails, RecipeEdit } from './component-files/recipe-components';
 import {NewUser, UserLogin} from './component-files/user-components';
+import { CartContent } from './component-files/cart-components';
 
 
 
@@ -12,13 +13,10 @@ class Menu extends Component {
   render() {
     return (
       <div>
-        <NavBar left={true} brand="Food Junkies">
-          <NavBar.Link to="/recipes">Recipes</NavBar.Link>
-          <NavBar.Link to="/user/login">My Profile</NavBar.Link>
-          <NavBar left={true} brand="">
-          <NavBar.Link to="/cart"><Button.Light left={true} small={true} onClick={() => {}}>Jeg vil være et icon</Button.Light></NavBar.Link>
-
-        </NavBar>
+        <NavBar brand="Food Junkies">
+          <NavBar.Link left={false} to="/recipes">Recipes</NavBar.Link>
+          <NavBar.Link left={false} to="/user/login">My Profile</NavBar.Link>
+          <NavBar.Link left={true} to="/user/cart"><Button.Light left={true} small={true} onClick={() => {}}>Jeg vil være et icon</Button.Light></NavBar.Link>
         </NavBar>
       </div>
       
@@ -72,6 +70,8 @@ ReactDOM.render(
       <Route exact path='/recipes/:id(\d+)/edit' component={RecipeEdit} />
       <Route exact path='/user/login' component={UserLogin}/>
       <Route exact path='/user/create' component={NewUser}/>
+      <Route exact path='/user/cart' component={CartContent}/>
+
     </div>
   </HashRouter>,
   document.getElementById('root')

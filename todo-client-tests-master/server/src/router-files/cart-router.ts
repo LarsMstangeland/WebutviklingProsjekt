@@ -1,5 +1,5 @@
 import express, { request, response } from 'express';
-import cartService, { Cart } from '../service-files/cart-service';
+import cartService from '../service-files/cart-service';
 
 /**
  * Express router containing task methods.
