@@ -3,6 +3,7 @@ import { Component } from 'react-simplified';
 import { Alert, Card, Row, Column, Form, Button } from '../widgets';
 import { NavLink } from 'react-router-dom';
 import recipeService, { Recipe, Ingredient, IngredientName } from '../service-files/recipe-service';
+import cartService, {CartItem} from 'src/service-files/cart-service';
 import regionAndUnitService, {Region, Unit} from '../service-files/regionAndUnit-service';
 import { createHashHistory } from 'history';
 
@@ -111,6 +112,8 @@ export class RecipeDetails extends Component<{ match: { params: { id: number } }
   recipe: Recipe = { recipe_id: 0, name: '', description: '', region: '', picture_url: '' };
   ingredients: Ingredient[] = [];
   portions: number = 4;
+  emailSubject: string = '';
+  emailBody: string = '';
 
   render() {
   if(userData != null){
@@ -130,7 +133,15 @@ export class RecipeDetails extends Component<{ match: { params: { id: number } }
               <Column width={2}>Description:</Column>
               <Column>{this.recipe.description}</Column>
             </Row>
-          </Card>
+            <Row>
+            <Column><Button.Success onClick={() => {
+              userData ? {
+                
+              } : Alert.info('Log in to add ingredients to cart')
+            }}>Add ingredients to cart</Button.Success></Column> 
+            <Column><Button.Light onClick={() => {window.open(`mailto:example@mail.com?subject=${this.emailSubject}&body=${this.emailBody}`)}}>Share</Button.Light></Column>
+          </Row>
+        </Card>
           <Card title='Ingredients'>
             <Row>
               <Column>Portions:</Column>
@@ -245,6 +256,8 @@ export class RecipeDetails extends Component<{ match: { params: { id: number } }
       this.recipe = recipe;
       let ingredients = await recipeService.getRecipeIngredients(this.props.match.params.id)
       this.ingredients = ingredients;
+      this.emailSubject = 'Recipe for ' + this.recipe.name;
+      this.emailBody = 'Description: %0D%0A' + this.recipe.description + '%0D%0A %0D%0A Ingredients:  %0D%0A' + this.ingredients.map(ing => `${ing.name + ' - ' + ing.amount + ' ' + ing.unit} %0D%0A`)
      } catch (error: any) {
       Alert.danger('Error getting recipe or ingredients: ' + error.message)
      }
