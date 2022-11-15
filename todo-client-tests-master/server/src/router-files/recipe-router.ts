@@ -39,6 +39,16 @@ RecipeRouter.get('/:id/ingredients', (request, response) => {
 // Example request body: { title: "Ny oppgave" }
 // Example response body: { id: 4 }
 
+  RecipeRouter.post('/add', (request, response) => {
+    const name = request.body.name;
+    const description = request.body.description;
+    const picture_url = request.body.picture_url;
+    const region = request.body.region;
+    // console.log(recipe)
+    recipeService.createRecipe(name, description, picture_url, region)
+    .then((id) => response.send({id:id}))
+    .catch((error) => response.status(500).send(error));
+  })
 
   RecipeRouter.put('/:id/edit', (request, response) => {
     //hent ut de normale dataen og gjør det mulig å redigere
@@ -76,7 +86,12 @@ RecipeRouter.get('/:id/ingredients', (request, response) => {
       .catch((error) => response.status(500).send(error));
   });
 
-
+  RecipeRouter.get('/ingredients', (_request, response) => {
+    recipeService
+      .getIngredients()
+      .then((rows) => response.send(rows))
+      .catch((error) => response.status(500).send(error));
+  })
   RecipeRouter.post('/:id/edit/ingredients', (request, response) => {
     const data = request.body.ingredients;
     const id = Number(request.params.id);

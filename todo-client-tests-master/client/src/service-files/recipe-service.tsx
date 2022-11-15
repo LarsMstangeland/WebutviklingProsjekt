@@ -1,4 +1,5 @@
 import axios from 'axios';
+import regionAndUnitsService from './regionAndUnit-service';
 
 axios.defaults.baseURL = 'http://localhost:3000/api/v2';
 
@@ -53,6 +54,11 @@ class RecipeService {
     .catch((error) => console.log(error))
   }
 
+  getIngredients(){
+    return axios.get<Ingredient[]>('/recipes/ingredients')
+    .then((response) => response.data)
+    .catch((error) => console.log(error))
+  }
   /**
    * Deletes a recipe
    */
@@ -96,12 +102,23 @@ class RecipeService {
   }
 
   addRecipeIngredient(ingredients: Ingredient[], id: number){
-    console.log(ingredients)
     
     return axios
       .post('/recipes/' + id + '/edit/ingredients', {ingredients})
       .then((response) => response.data.id)
       .catch((error) => console.log(error))
+  }
+
+  addRecipe(name : string, description : string, picture_url : string, region : string){
+
+    console.log("dette er service ", name, description, picture_url, region);
+    return axios.post<{id: number}>('/recipes/add', {name : name, description : description, picture_url : picture_url, region : region})
+    .then((response) => {
+      response.data.id
+      console.log(response.data.id)
+    })
+    .catch((error) => console.log(error));
+
   }
 }
 

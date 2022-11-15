@@ -70,6 +70,17 @@ class RecipeService {
     });
   }
 
+
+  getIngredients() {
+    return new Promise<Ingredient[]>((resolve, reject) => {
+      pool.query('SELECT * FROM ingredients', (error: any, results: RowDataPacket[]) => {
+        if (error) return reject(error);
+
+        resolve(results as Ingredient[]);
+      });
+    });
+  }  
+
   delete(id: number) {
     return new Promise<void>((resolve, reject) => {
       pool.query('DELETE a.*, b.* FROM ingredients_to_recipe as a, recipes as b WHERE a.recipe_id = b.recipe_id AND a.recipe_id = ?', 
@@ -102,11 +113,11 @@ class RecipeService {
     })
   }
 
-  createRecipe(recipe: Recipe) {
+  createRecipe(name : string, description : string, picture_url : string, region : string) {
     return new Promise<number>((resolve, reject) => {
       pool.query(
         'INSERT INTO recipes (name, region, picture_url, description) VALUES (?,?,?,?)', 
-        [recipe.name, recipe.region, recipe.picture_url, recipe.description],
+        [name, region, picture_url, description],
         (error, results : ResultSetHeader) => {
           if (error) {
             console.log(error);

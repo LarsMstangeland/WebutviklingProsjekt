@@ -42,7 +42,7 @@ export class RecipeList extends Component {
               placeholder='Search for recipes'
               ></Form.Input></Column>
               <Column>{userData.admin ? <Button.Success onClick={() => {
-                history.push('/recipes/' + this.userId + '/addRecipes')
+                history.push('/recipes/add')
               }
               }>Add Recipe</Button.Success> : <></>}</Column>
             </Row>
@@ -500,5 +500,103 @@ export class RecipeEdit extends Component<{ match: { params: { id: number } } }>
      } catch (error: any) {
       Alert.danger('Error getting recipe or ingredients: ' + error.message)
      }
+  }
+}
+
+export class RecipeAdd extends Component {
+  recipe : Recipe = { recipe_id: 0, name: '', description: '', region: '', picture_url: '' };
+  ingredients : void | Ingredient[] = [];
+  regions : Region[] = [];
+  ingredient : Ingredient = {ingredients_id: 0, name: '', amount: 0, unit: ''}
+
+  render() {
+    return(
+      <>
+        <Card title="Create new recipe">
+          <Row>
+            <Column width={1}>
+            <Form.Label>Name:</Form.Label>
+              </Column> 
+            <Column>
+            <Form.Input 
+            value={this.recipe.name} 
+            type="string" 
+            onChange={(event)=>{
+              this.recipe.name = event.currentTarget.value;
+            }}>
+
+            </Form.Input>
+            </Column>
+          </Row>
+          <Row>
+            <Column width={1}><Form.Label>Description:</Form.Label> </Column>
+            <Column>
+            <Form.Textarea 
+            value={this.recipe.description} 
+            type="string" 
+            onChange={(event)=>{
+              this.recipe.description = event.currentTarget.value;
+            }}>
+            </Form.Textarea>
+            </Column>
+          </Row>
+          <Row>
+          <Column width={1}>
+            <Form.Label>Select region: {' '}</Form.Label>
+            </Column>
+          <Column>
+          <Form.Select
+          value={this.recipe.region} 
+          onChange={(event) => (this.recipe.region = event.currentTarget.value)} >
+        
+          <option>Select Region</option>
+          {this.regions.map((region) => (
+            <option key={region.id} value={region.name}>
+            {region.name}
+            </option>
+          ))}
+          </Form.Select>
+          </Column>
+          </Row>
+          <Row>
+            <Column width={1}>
+            <Form.Label>Picture-url: </Form.Label>
+            </Column>
+            <Column><Form.Input 
+            value={this.recipe.picture_url} 
+            type="string" 
+            onChange={(event)=>{
+              this.recipe.picture_url = event.currentTarget.value;
+            }}>
+
+            </Form.Input>
+            </Column>
+            
+          </Row>
+          
+          <Button.Success onClick={async() => {
+            if(this.recipe.name.length > 1){
+              if(this.recipe.region != '' && this.recipe.region != 'Select Region') {
+                console.log(this.recipe)
+                await recipeService.addRecipe(this.recipe.name, this.recipe.description, this.recipe.picture_url, this.recipe.region)
+                history.push('/recipes/' + this.recipe.recipe_id + '/edit')
+              }
+              else {
+                Alert.danger('You need to select a region for your recipe')
+              }
+            } 
+            else{
+              Alert.danger('You need a name for your recipe')
+            }
+          }}>Create recipe</Button.Success>
+          <Button.Light onClick={()=>{ history.push('/recipes')}}>Cancel</Button.Light>
+        </Card>
+      </>
+    )
+  }
+
+  async mounted() {
+    let regions = await regionAndUnitService.getAllRegions()
+    this.regions = regions
   }
 }
