@@ -149,6 +149,8 @@ class RecipeService {
     })
   }
 
+
+
   addRecipeIngredient(id: number, ingredients : Ingredient[]) {
     return new Promise<Ingredient[]>((resolve, reject) => {
       ingredients.map((ingredient: Ingredient) => {
@@ -167,6 +169,20 @@ class RecipeService {
         })
     })
   }
+
+  AddIngredientsToCartFromRecipe(ingredients: Ingredient[], user_id: number){
+    return new Promise<void>((resolve, reject) => {
+        ingredients.map((ingredient) => {
+          pool.query(
+            'INSERT INTO cart (ingrediens, user_id) VALUES (?,?)', [ingredient.name, user_id], (error) => {
+              if (error) return reject(error);
+              resolve();
+            }
+          )
+        })      
+      })
+    }  
+
 
 }
 

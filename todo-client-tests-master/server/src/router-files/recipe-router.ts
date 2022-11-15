@@ -91,6 +91,19 @@ RecipeRouter.get('/:id/ingredients', (request, response) => {
         .catch((error) => response.status(500).send(error));
   });
 
+  RecipeRouter.post('/:id/ingredients', (request, response) => {
+
+    const id = Number(request.params.id)
+    const user_id = request.body.user_Id
+    const ingredients = request.body.ingredients
+    
+    recipeService
+    .AddIngredientsToCartFromRecipe(ingredients,user_id)
+    .then((rows) => response.send(rows))
+    .catch((error) => response.status(500).send(error));
+  
+  })
+
 
   /*
 RecipeRouter.post('/recipies/addRecipe', (request, response) => {
