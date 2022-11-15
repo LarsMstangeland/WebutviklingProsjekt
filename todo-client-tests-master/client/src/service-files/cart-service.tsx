@@ -2,9 +2,9 @@ import axios from 'axios';
 
 axios.defaults.baseURL = 'http://localhost:3000/api/v2';
 
-export type Cart = {
+export type CartItem = {
   cart_id: number;
-  ingredient: string;
+  ingredients: string;
 };
 
 class CartService {
@@ -12,7 +12,7 @@ class CartService {
    * Get recipe with given id.
    */
   get(id: number) {
-    return axios.get<Cart[]>('/cart/' + id).then((response) => response.data);
+    return axios.get<CartItem[]>('/cart/' + id).then((response) => response.data);
   }
 
 }

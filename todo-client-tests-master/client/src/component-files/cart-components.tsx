@@ -2,7 +2,7 @@ import * as React from 'react';
 import { Component } from 'react-simplified';
 import { Alert, Card, Row, Column, Form, Button } from '../widgets';
 import { createHashHistory } from 'history';
-import cartService, {Cart} from '../service-files/cart-service';
+import cartService, {CartItem} from '../service-files/cart-service';
 import { NavLink } from 'react-router-dom';
 
 const history = createHashHistory(); // Use history.push(...) to programmatically change path, for instance after successfully saving a student
@@ -14,8 +14,8 @@ const userData = JSON.parse(sessionStorage.getItem('user'));
  */
 export class CartContent extends Component {
   //Array to store all cart
-  cart:Cart[] = [];
-  CartItemsToShow:Cart[] = [];
+  cart:CartItem[] = [];
+  CartItemsToShow:CartItem[] = [];
   searchBar: string = '';
 
   render() {
@@ -28,7 +28,7 @@ export class CartContent extends Component {
               this.searchBar = event.currentTarget.value;
               this.CartItemsToShow = [];
               for(let i = 0; i < this.cart.length; i++){
-                const name = this.cart[i].ingredient.toUpperCase();
+                const name = this.cart[i].ingredients.toUpperCase();
                 if(name.indexOf(this.searchBar.toUpperCase()) > -1){
                   this.CartItemsToShow.push(this.cart[i]);
                 }
@@ -40,11 +40,11 @@ export class CartContent extends Component {
             ></Form.Input></Column>
           </Row>
           
-          {this.CartItemsToShow.map((cart: Cart) => (
+          {this.CartItemsToShow.map((cart: CartItem) => (
             //Maps all the different cart and renders them as links to their respective cart details
             <Row key={cart.cart_id}>
               <Column>
-                {cart.ingredient}
+                {cart.ingredients}
               </Column>
             </Row>))}
         </Card>
@@ -57,7 +57,12 @@ export class CartContent extends Component {
     try{
       let cart = await cartService.get(userData.user_id);
       this.cart = cart;
+      console.log(cart)
+      console.log(userData.user_id)
       this.CartItemsToShow = cart;
+
+      console.log(this.CartItemsToShow)
+
     } catch (error: any){
       Alert.danger('Error getting cart: ' + error.message)
     }
