@@ -112,7 +112,6 @@ export class UserLogin extends Component  {
 export class NewUser extends Component {
     users : User[] = [];
     user : User = {user_id : 0, username : '', password : '', admin : false};
-    newUser : User = {user_id : 0, username : '', password : '', admin : false};
     passwordCheck : string = '';
 
     render () {
@@ -164,13 +163,34 @@ export class NewUser extends Component {
                         <Row>
                             <Column>
                             <Button.Success onClick={async ()=>{
-                                if(this.user.password == this.passwordCheck && this.user.password != '' && this.user.username != ''){
-                                   await userService.create(this.user.password, this.user.username, this.user.admin) 
-                                    let u = await userService.get(this.user.username)
-                                    this.user = u       
-                                    sessionStorage.setItem('user', JSON.stringify(this.user));
-                                    history.push('/user/login')                                    
+                                if(!this.users.find(u => u.username == this.user.username)){
+                                    if(this.user.password == this.passwordCheck){
+                                        if(this.user.password != ''){
+                                            if(this.user.username != ''){
+                                                await userService.create(this.user.password, this.user.username, this.user.admin) 
+                                                 let u = await userService.get(this.user.username)
+                                                 this.user = u       
+                                                 sessionStorage.setItem('user', JSON.stringify(this.user));
+                                                 history.push('/user/login')                                   
+    
+                                            }
+                                            else{
+                                                Alert.danger("Username can't be null")
+                                            }
+                                        }
+                                        else{
+                                            Alert.danger('Password cant be null')
+                                        }
+                                    } 
+                                    else {
+                                        Alert.danger("Passwords don't match")
+                                    }
+
                                 }
+                                else {
+                                    Alert.danger('Username already exists. Try another one')
+                                }
+                                
                             }}>Create user</Button.Success>
                             </Column>
                         </Row>
