@@ -3,6 +3,7 @@ import { Component } from 'react-simplified';
 import { Alert, Card, Row, Column, Form, Button } from '../widgets';
 import { NavLink } from 'react-router-dom';
 import recipeService, { Recipe, Ingredient, IngredientName } from '../service-files/recipe-service';
+import userService, { LikedRecipe } from '../service-files/user-service';
 import cartService, {CartItem} from 'src/service-files/cart-service';
 import regionAndUnitService, {Region, Unit} from '../service-files/regionAndUnit-service';
 import { createHashHistory } from 'history';
@@ -109,6 +110,7 @@ export class RecipeList extends Component {
  */
 export class RecipeDetails extends Component<{ match: { params: { id: number } } }> {
   //Objects to store recipe and recipe ingredient details
+  likedRecipes : LikedRecipe[] = [];
   recipe: Recipe = { recipe_id: 0, name: '', description: '', region: '', picture_url: '' };
   ingredients: Ingredient[] = [];
   portions: number = 4;
@@ -167,10 +169,20 @@ export class RecipeDetails extends Component<{ match: { params: { id: number } }
               ))}
               <Row>
                   <Column>
-                    <Button.Success onClick={()=> {
-
-                      }}>Like recipe
-                    </Button.Success>
+                  {
+                  this.likedRecipes.some((r) => (this.recipe.recipe_id == r.recipe_id)) ?
+                  <Button.Danger onClick={async ()=>{
+                    await userService.removeLikedRecipe(userData.user_id, this.recipe.recipe_id)
+                    location.reload();
+                  console.log('nei')
+                    }}>Unlike</Button.Danger>  
+                    :
+                   <Button.Success onClick={async ()=> {
+                    await recipeService.likeRecipe(userData.user_id, this.props.match.params.id);
+                    location.reload();
+                    }}>Like recipe
+                  </Button.Success>
+                  }
                   </Column>
               </Row>
           </Card>
@@ -258,7 +270,13 @@ export class RecipeDetails extends Component<{ match: { params: { id: number } }
       this.ingredients = ingredients;
       this.emailSubject = 'Recipe for ' + this.recipe.name;
       this.emailBody = 'Description: %0D%0A' + this.recipe.description + '%0D%0A %0D%0A Ingredients:  %0D%0A' + this.ingredients.map(ing => `${ing.name + ' - ' + ing.amount + ' ' + ing.unit} %0D%0A`)
-     } catch (error: any) {
+      
+      if(userData) {
+        let likedRecipes = await userService.getLikedRecipes(userData.user_id)
+        this.likedRecipes = likedRecipes
+      }
+
+    } catch (error: any) {
       Alert.danger('Error getting recipe or ingredients: ' + error.message)
      }
       

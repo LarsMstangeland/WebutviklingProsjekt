@@ -89,7 +89,7 @@ class RecipeService {
         data: {ingredientsToDelete}
       })
       .then((response) => response.data)
-      .catch((error) => console.log(error))
+      .catch((error) => console.log(error))  
   }
 
   updateRecipeIngredients(ingredients: Ingredient[], id: number){
@@ -119,6 +119,12 @@ class RecipeService {
     })
     .catch((error) => console.log(error));
 
+  }
+
+  likeRecipe(userId : number, recipeId : number){
+    return axios.post('recipes/' + recipeId +'/like', {userId : userId})
+    .then((response) => response.data)
+    .catch(error => console.log(error))
   }
 }
 

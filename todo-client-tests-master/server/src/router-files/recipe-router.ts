@@ -104,6 +104,16 @@ RecipeRouter.get('/:id/ingredients', (request, response) => {
         .catch((error) => response.status(500).send(error));
   });
 
+  RecipeRouter.post('/:id/like', (request, response) => {
+
+    const userId = request.body.userId;
+    const recipeId = Number(request.params.id);
+
+    recipeService.likeRecipe(userId, recipeId)
+    .then(() => {
+      response.send();
+    }).catch((error)=> response.status(500).send(error))
+  })
 
   /*
 RecipeRouter.post('/recipies/addRecipe', (request, response) => {

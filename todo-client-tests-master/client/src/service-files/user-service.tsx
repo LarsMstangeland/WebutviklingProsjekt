@@ -9,6 +9,11 @@ export type User = {
   admin: boolean;
 };
 
+export type LikedRecipe = {
+  recipe_id : number;
+  name : string;
+}
+
 class UserService {
   /**
    * Get recipe with given id.
@@ -25,7 +30,6 @@ class UserService {
   }
 
 
-
   delete(id : number){
     return axios.delete<User>('/users/' + id)
     .then((response) => response.data)
@@ -39,6 +43,16 @@ class UserService {
         response.data.id;
       })
       .catch((error) => console.log(error));
+  }
+
+  getLikedRecipes(userId : number) {
+    return axios.get<LikedRecipe[]>('/users/recipes/' + userId).then(response => response.data);
+  }
+
+  removeLikedRecipe(userId : number, recipeId : number) {
+    return axios.delete('/users/' + userId + '/recipes/' + recipeId)
+    .then((response)=> response.data)
+    .catch((error) => console.error(error))
   }
 }
 

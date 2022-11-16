@@ -41,4 +41,19 @@ UserRouter.delete('/:id', (request, response) => {
     .catch((error) => response.status(500).send(error));
 });
 
+UserRouter.get('/recipes/:userId', (request, response)=> {
+  const userId = Number(request.params.userId)
+  userService.getLikedRecipes(userId)
+  .then((rows) => response.send(rows))
+  .catch((error) => response.status(500).send(error));
+})
+
+UserRouter.delete('/:userId/recipes/:recipeId', (request, response) => {
+
+  const userId = Number(request.params.userId)
+  const recipeId = Number(request.params.recipeId)
+  userService.removeLikedRecipe(userId, recipeId)
+  .then((_result) => response.send())
+  .catch((error) => response.status(500).send(error))
+})
 export default UserRouter;

@@ -2,15 +2,14 @@ import * as React from 'react';
 import { Component } from 'react-simplified';
 import { Alert, Card, Row, Column, Form, Button } from '../widgets';
 import { NavLink } from 'react-router-dom';
-import userService, {User} from '../service-files/user-service';
+import userService, {User, LikedRecipe} from '../service-files/user-service';
 import regionAndUnitService, {Region, Unit} from '../service-files/regionAndUnit-service';
 import { createHashHistory } from 'history';
 import bcrypt from 'bcryptjs';
 
 const history = createHashHistory(); // Use history.push(...) to programmatically change path, for instance after successfully saving a student
-// const user : User = {user_id : 0, username : '', cart_id : 0, password : '', admin : false};
-// export const loggedIn : boolean = false;
-//@ts-ignore
+
+//@ts-ignore This is the userdata that gets added to sessionstorage if you log in. Ts-ignore because it can be empty
 const userData = JSON.parse(sessionStorage.getItem('user')); 
 
 //function to hash password. To be done before adding password to database
@@ -26,27 +25,32 @@ export async function compareHash(password : string, hashed : string){
 }
 
 export class UserLogin extends Component  {
-    
+    likedRecipes : LikedRecipe[] = [];
     users : User[] = [];
     loggedIn : boolean = false;
     user: User = {user_id : 0, username : '', password : '', admin : false};
-        
     render() {
-        //@ts-ignore
-        if(userData != null) {
+        // if userdata exists the page that renders is the one with your information
+        if(userData) {
             return ( 
                 <>
             <Card title="Your user information">
             <Row>
                 <Column>
-                {/*@ts-ignore*/}
                 Brukernavn: {userData.username}
                 </Column>
             </Row>
             <Row>
                 <Column>
-                 {/*@ts-ignore*/}
-                {userData.admin ? 'Du er admin' : 'Du er ikke admin'}
+                 Your liked recipes:
+                </Column>
+            </Row>
+            {this.likedRecipes.length > 0 ? this.likedRecipes.map((recipe) => (
+                <Row key={recipe.recipe_id}><NavLink to={"/recipes/" + recipe.recipe_id}><Column>{recipe.name}</Column></NavLink></Row>
+            )) : 'You have no liked recipes'}
+            <Row>
+                <Column>
+                {userData.admin ? 'You are admin' : 'You are not admin'}
                 </Column>
             </Row>
             <Row>
@@ -60,7 +64,8 @@ export class UserLogin extends Component  {
                 </>
             )
         }
-        else{
+        //if userdata does not exist, the page that renders is a login-page
+        else{ 
             return (
                 <>  
                     <Card title="Log in">
@@ -89,15 +94,17 @@ export class UserLogin extends Component  {
                         <Row>
                             <Column>
                                 <Button.Success onClick={async ()=>{
-                                    console.log(generateHash('vetleek'))
                                 if(this.users.find(u => u.username == this.user.username)){
                                     let hashPass = this.users.find(u => u.username == this.user.username)?.password                                    
                                     //@ts-ignore because hashpass can be undefined if the username typed in is not already an user
                                     let hashCheck = await compareHash(this.user.password, hashPass);
                                     if(hashCheck){
+                                        //if the password is correct, pushes the info on a user to the sessionstorage.
+                                        //we decided to use the sessionstorage instead of creating unique apis for each user so that you cant type in the correct url and be taken to the page for a user, without actually logging in
                                         let loggedInUser = this.users.find(u => u.username == this.user.username)
                                         let userData = JSON.stringify(loggedInUser)
                                         sessionStorage.setItem('user', userData)
+                                        //location.reload so that the page is drawn again, and the userinfo is portrayed instead of the login page                                        location.reload(); 
                                         location.reload();
                                     } 
                                     else Alert.danger('Wrong username or password. Try again')
@@ -129,6 +136,11 @@ export class UserLogin extends Component  {
         try{
             let users = await userService.getAll()
             this.users = users 
+
+            if(userData){
+                let likedRecipes = await userService.getLikedRecipes(userData.user_id)
+                this.likedRecipes = likedRecipes
+            }
         }
         catch{
             Alert.danger('Could not fetch existing users from database')
@@ -199,7 +211,7 @@ export class NewUser extends Component {
                                                  let u = await userService.get(this.user.username)
                                                  this.user = u       
                                                  sessionStorage.setItem('user', JSON.stringify(this.user));
-                                                 history.push('/user/login')                                   
+                                                 history.push('/user/login')                                  
     
                                             }
                                             else{
