@@ -14,13 +14,12 @@ export type Ingredient = {
   name: string;
   amount: number;
   unit: string;
-}
+};
 
 export type IngredientName = {
   ingredients_id: number;
   name: string;
-}
-
+};
 
 class RecipeService {
   /**
@@ -28,11 +27,15 @@ class RecipeService {
    */
   get(id: number) {
     return new Promise<Recipe | undefined>((resolve, reject) => {
-      pool.query('SELECT * FROM recipes WHERE recipe_id = ?', [id], (error: any, results: RowDataPacket[]) => {
-        if (error) return reject(error);
+      pool.query(
+        'SELECT * FROM recipes WHERE recipe_id = ?',
+        [id],
+        (error: any, results: RowDataPacket[]) => {
+          if (error) return reject(error);
 
-        resolve(results[0] as Recipe);
-      });
+          resolve(results[0] as Recipe);
+        }
+      );
     });
   }
 
@@ -49,15 +52,18 @@ class RecipeService {
     });
   }
 
-  
   getAllRecipeIngredients(id: number) {
-    return new Promise<Ingredient[]>((resolve, reject)=>{
-      pool.query('SELECT i.ingredients_id, i.name, itr.amount, itr.unit FROM `ingredients_to_recipe` itr, `recipes` r, `ingredients` i WHERE r.recipe_id = itr.recipe_id AND i.ingredients_id = itr.ingredients_id AND r.recipe_id = ?', [id], (error: any, results: RowDataPacket[])=>{
-        if(error) return reject(error);
+    return new Promise<Ingredient[]>((resolve, reject) => {
+      pool.query(
+        'SELECT i.ingredients_id, i.name, itr.amount, itr.unit FROM `ingredients_to_recipe` itr, `recipes` r, `ingredients` i WHERE r.recipe_id = itr.recipe_id AND i.ingredients_id = itr.ingredients_id AND r.recipe_id = ?',
+        [id],
+        (error: any, results: RowDataPacket[]) => {
+          if (error) return reject(error);
 
-        resolve(results as Ingredient[]);
-      })
-    })
+          resolve(results as Ingredient[]);
+        }
+      );
+    });
   }
 
   getAllIngredients() {
@@ -70,7 +76,6 @@ class RecipeService {
     });
   }
 
-
   getIngredients() {
     return new Promise<Ingredient[]>((resolve, reject) => {
       pool.query('SELECT * FROM ingredients', (error: any, results: RowDataPacket[]) => {
@@ -79,19 +84,21 @@ class RecipeService {
         resolve(results as Ingredient[]);
       });
     });
-  }  
+  }
 
   delete(id: number) {
     return new Promise<void>((resolve, reject) => {
-      pool.query('DELETE a.*, b.* FROM ingredients_to_recipe as a, recipes as b WHERE a.recipe_id = b.recipe_id AND a.recipe_id = ?', 
-      [id], 
-      (error, results: ResultSetHeader) =>{
-        if (error) return reject(error)
-        if(results.affectedRows == 0) return reject(new Error('No row deleted'));
+      pool.query(
+        'DELETE a.*, b.* FROM ingredients_to_recipe as a, recipes as b WHERE a.recipe_id = b.recipe_id AND a.recipe_id = ?',
+        [id],
+        (error, results: ResultSetHeader) => {
+          if (error) return reject(error);
+          if (results.affectedRows == 0) return reject(new Error('No row deleted'));
 
-        resolve();
-      })
-    })
+          resolve();
+        }
+      );
+    });
   }
 
   //delete ingredients from recipe, not from table
@@ -99,26 +106,25 @@ class RecipeService {
     return new Promise<void>((resolve, reject) => {
       ingredients.map((ingredient) => {
         pool.query(
-        'DELETE FROM ingredients_to_recipe WHERE recipe_id = ? AND ingredients_id = ?', 
-        [id, ingredient.ingredients_id], 
-        (error, results: ResultSetHeader) => {
-          if (error) return reject(error)
-          if(results.affectedRows == 0) return reject(new Error('No row deleted'));
-  
-        })  
-      })
+          'DELETE FROM ingredients_to_recipe WHERE recipe_id = ? AND ingredients_id = ?',
+          [id, ingredient.ingredients_id],
+          (error, results: ResultSetHeader) => {
+            if (error) return reject(error);
+            if (results.affectedRows == 0) return reject(new Error('No row deleted'));
+          }
+        );
+      });
 
       resolve();
-
-    })
+    });
   }
 
-  createRecipe(name : string, description : string, picture_url : string, region : string) {
+  createRecipe(name: string, description: string, picture_url: string, region: string) {
     return new Promise<number>((resolve, reject) => {
       pool.query(
-        'INSERT INTO recipes (name, region, picture_url, description) VALUES (?,?,?,?)', 
+        'INSERT INTO recipes (name, region, picture_url, description) VALUES (?,?,?,?)',
         [name, region, picture_url, description],
-        (error, results : ResultSetHeader) => {
+        (error, results: ResultSetHeader) => {
           if (error) {
             console.log(error);
             return reject(error);
@@ -126,57 +132,58 @@ class RecipeService {
           console.log('Result: ', results);
           resolve(results.insertId);
         }
-      )
-    })
+      );
+    });
   }
-  
 
-  
   updateRecipe(recipe: Recipe) {
     return new Promise<void>((resolve, reject) => {
-      pool.query('UPDATE recipes SET name = ?, region = ?, picture_url = ?, description = ? WHERE recipe_id = ?', 
-      [recipe.name, recipe.region, recipe.picture_url, recipe.description, recipe.recipe_id], 
-      (error, results: ResultSetHeader) => {
-        if (error) return reject(error);
-        if (results.affectedRows == 0) return reject(new Error('No row updated'));
+      pool.query(
+        'UPDATE recipes SET name = ?, region = ?, picture_url = ?, description = ? WHERE recipe_id = ?',
+        [recipe.name, recipe.region, recipe.picture_url, recipe.description, recipe.recipe_id],
+        (error, results: ResultSetHeader) => {
+          if (error) return reject(error);
+          if (results.affectedRows == 0) return reject(new Error('No row updated'));
 
-        resolve();
-      })
-    })
+          resolve();
+        }
+      );
+    });
   }
 
   updateRecipeIngredients(id: number, ingredients: Ingredient[]) {
     return new Promise<void>((resolve, reject) => {
       ingredients.map((ingredient: Ingredient) => {
-      pool.query('UPDATE ingredients_to_recipe SET amount = ?, unit = ? WHERE recipe_id = ? AND ingredients_id = ?', 
-      [ingredient.amount, ingredient.unit, id, ingredient.ingredients_id],
-      (error, results: ResultSetHeader) => {
-        if (error) return reject(error);
-        if (results.affectedRows == 0) return reject(new Error('No row updated'));
+        pool.query(
+          'UPDATE ingredients_to_recipe SET amount = ?, unit = ? WHERE recipe_id = ? AND ingredients_id = ?',
+          [ingredient.amount, ingredient.unit, id, ingredient.ingredients_id],
+          (error, results: ResultSetHeader) => {
+            if (error) return reject(error);
+            if (results.affectedRows == 0) return reject(new Error('No row updated'));
+          }
+        );
+      });
 
-      })})
-      
       resolve();
-    })
+    });
   }
 
-  addRecipeIngredient(id: number, ingredients : Ingredient[]) {
+  addRecipeIngredient(id: number, ingredients: Ingredient[]) {
     return new Promise<Ingredient[]>((resolve, reject) => {
       ingredients.map((ingredient: Ingredient) => {
         pool.query(
-          'INSERT INTO ingredients_to_recipe (amount, unit, ingredients_id, recipe_id) VALUES (?,?,?,?)', 
+          'INSERT INTO ingredients_to_recipe (amount, unit, ingredients_id, recipe_id) VALUES (?,?,?,?)',
           [ingredient.amount, ingredient.unit, ingredient.ingredients_id, id],
-          (error, results : RowDataPacket[]) => {
+          (error, results: RowDataPacket[]) => {
             if (error) {
               console.log(error);
               return reject(error);
             }
-            console.log('Result: ', results);
             resolve(results as Ingredient[]);
           }
-          )
-        })
-    })
+        );
+      });
+    });
   }
 
   likeRecipe(userId : number, recipeId : number) {
