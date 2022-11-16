@@ -12,7 +12,7 @@ const path = require('path');
 module.exports = {
   entry: './src/index.tsx', // Initial file to bundle
   resolve: {
-    extensions: ['.js', '.jsx', '.ts', '.tsx'],
+    extensions: ['.js', '.jsx', '.ts', '.tsx', 'css'   ],
   },
   output: {
     // Output file: ./public/bundle.js
@@ -23,6 +23,10 @@ module.exports = {
   devtool: 'source-map',
   module: {
     rules: [
+      {
+        test: /\.css$/i,
+        use: ["style-loader", "css-loader"],
+      },
       {
         // Use babel to parse .tsx files in the src folder
         test: /\.tsx$/,

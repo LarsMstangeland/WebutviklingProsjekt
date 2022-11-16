@@ -5,6 +5,7 @@ import { NavLink } from 'react-router-dom';
 import recipeService, { Recipe, Ingredient, IngredientName } from '../service-files/recipe-service';
 import regionAndUnitService, {Region, Unit} from '../service-files/regionAndUnit-service';
 import { createHashHistory } from 'history';
+import "./recipe-components.css"
 
 const history = createHashHistory(); // Use history.push(...) to programmatically change path, for instance after successfully saving a student
 //@ts-ignore
@@ -167,10 +168,10 @@ export class RecipeDetails extends Component<{ match: { params: { id: number } }
               ))}
               <Row>
                   <Column>
-                    <Button.Success onClick={()=> {
+                    <button className='btn btndanger' onClick={()=> {
 
-                      }}>Like recipe
-                    </Button.Success>
+                      }}>Like recipe1
+                    </button>
                   </Column>
               </Row>
           </Card>
@@ -234,10 +235,10 @@ export class RecipeDetails extends Component<{ match: { params: { id: number } }
               ))}
             <Row>
               <Column>
-                <Button.Success onClick={()=> {
+                <button className='btn btn-success' onClick={()=> {
                     Alert.danger('You have to log in to like a recipe');
                   }}>Like recipe
-                </Button.Success>
+                </button>
                 </Column>
             </Row>
 
