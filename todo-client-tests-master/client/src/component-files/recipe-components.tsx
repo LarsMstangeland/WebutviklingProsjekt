@@ -3,7 +3,7 @@ import { Component } from 'react-simplified';
 import { Alert, Card, Row, Column, Form, Button } from '../widgets';
 import { NavLink } from 'react-router-dom';
 import recipeService, { Recipe, Ingredient, IngredientName } from '../service-files/recipe-service';
-import regionAndUnitService, {Region, Unit} from '../service-files/regionAndUnit-service';
+import utilityService, {Region, Unit, Type} from '../service-files/utility-service';
 import { createHashHistory } from 'history';
 
 const history = createHashHistory(); // Use history.push(...) to programmatically change path, for instance after successfully saving a student
@@ -16,8 +16,26 @@ export class RecipeList extends Component {
   //Array to store all recipes
   recipes: Recipe[] = [];
   recipesToShow: Recipe[] = [];
+  regions: Region[] = [];
+  types: Type[] = [];
   searchBar: string = '';
+  regionFilter: string = 'Region';
+  recipeTypeFilter: string = 'Type';
   userId: number | undefined = 0;
+
+  filter(){
+    for(let i = 0; i < this.recipes.length; i++){
+      const recipe = this.recipes[i];
+      const name = recipe.name.toUpperCase();
+      if(name.indexOf(this.searchBar.toUpperCase()) > -1){
+        if(this.regionFilter == 'Region' && this.recipeTypeFilter == 'Type' || recipe.region == this.regionFilter && recipe.type == this.recipeTypeFilter){
+          this.recipesToShow.push(recipe);
+        }else if(this.regionFilter == 'Region' && recipe.type == this.recipeTypeFilter || recipe.region == this.regionFilter && this.recipeTypeFilter == 'Type'){
+          this.recipesToShow.push(recipe)
+        }
+      }
+    }
+  }
 
   render() {
     if(userData != null) {
@@ -29,29 +47,59 @@ export class RecipeList extends Component {
               onChange={(event) => {
                 this.searchBar = event.currentTarget.value;
                 this.recipesToShow = [];
-                for(let i = 0; i < this.recipes.length; i++){
-                  const name = this.recipes[i].name.toUpperCase();
-                  if(name.indexOf(this.searchBar.toUpperCase()) > -1){
-                    this.recipesToShow.push(this.recipes[i]);
-                  }
-                }
+                this.filter()
               }} 
               value={this.searchBar}
               type='search'
               placeholder='Search for recipes'
               ></Form.Input></Column>
+              <Column><Form.Select 
+              value={this.regionFilter} 
+              onChange={(event) => {
+                this.regionFilter = event.currentTarget.value;
+                this.recipesToShow = [];
+                this.filter()
+                }}>
+               <option>Region</option>
+                {this.regions.map((region) => (
+                  <option key={region.id} value={region.name}>{region.name}</option>
+                ))}
+                </Form.Select></Column>
+              <Column><Form.Select 
+              value={this.recipeTypeFilter} 
+              onChange={(event) => {
+                this.recipeTypeFilter = event.currentTarget.value;
+                this.recipesToShow = [];
+                this.filter()
+                }}>
+               <option>Type</option>
+                {this.types.map((type) => (
+                  <option key={type.id} value={type.name}>{type.name}</option>
+                ))}
+                </Form.Select></Column>
               <Column>{userData.admin ? <Button.Success onClick={() => {
                 history.push('/recipes/' + this.userId + '/addRecipes')
               }
               }>Add Recipe</Button.Success> : <></>}</Column>
             </Row>
-            {this.recipesToShow.map((recipe) => (
+          <div>
+            {this.recipesToShow.length > 0 ? (this.recipesToShow.map((recipe) => (
               //Maps all the different recipes and renders them as links to their respective recipe details
               <Row key={recipe.recipe_id}>
                 <Column>
                   <NavLink to={'/recipes/' + recipe.recipe_id}>{recipe.name}</NavLink>
                 </Column>
-              </Row>))}
+              </Row>
+              ))) : (<h3>No results</h3>)}
+          </div>
+            {/* {this.recipesToShow.map((recipe) => (
+              //Maps all the different recipes and renders them as links to their respective recipe details
+              <Row key={recipe.recipe_id}>
+                <Column>
+                  <NavLink to={'/recipes/' + recipe.recipe_id}>{recipe.name}</NavLink>
+                </Column>
+              </Row>
+              ))} */}
           </Card>
         </>
       );
@@ -97,6 +145,10 @@ export class RecipeList extends Component {
       let recipes = await recipeService.getAll();
       this.recipes = recipes;
       this.recipesToShow = recipes;
+      let regions = await utilityService.getAllRegions();
+      this.regions = regions;
+      let types = await utilityService.getAllTypes();
+      this.types = types;
     } catch (error: any){
       Alert.danger('Error getting recipes: ' + error.message)
     }
@@ -108,7 +160,7 @@ export class RecipeList extends Component {
  */
 export class RecipeDetails extends Component<{ match: { params: { id: number } } }> {
   //Objects to store recipe and recipe ingredient details
-  recipe: Recipe = { recipe_id: 0, name: '', description: '', region: '', picture_url: '' };
+  recipe: Recipe = { recipe_id: 0, name: '', description: '', region: '', picture_url: '', type: '' };
   ingredients: Ingredient[] = [];
   portions: number = 4;
   emailSubject: string = '';
@@ -269,7 +321,7 @@ export class RecipeDetails extends Component<{ match: { params: { id: number } }
  * Renders a page to edit a recipe
  */
 export class RecipeEdit extends Component<{ match: { params: { id: number } } }> {
-  recipe: Recipe = { recipe_id: 0, name: '', description: '', region: '', picture_url: '' };
+  recipe: Recipe = { recipe_id: 0, name: '', description: '', region: '', picture_url: '', type: '' };
   recipeIngredients: Ingredient[] = [];
   ingredientsToDelete: Ingredient[] = [];
   regions: Region[] = [];
@@ -489,9 +541,9 @@ export class RecipeEdit extends Component<{ match: { params: { id: number } } }>
       this.recipe = recipe;
       let recipeIngredients = await recipeService.getRecipeIngredients(this.props.match.params.id)
       this.recipeIngredients = recipeIngredients;
-      let regions = await regionAndUnitService.getAllRegions()
+      let regions = await utilityService.getAllRegions()
       this.regions = regions;
-      let units = await regionAndUnitService.getAllUnits()
+      let units = await utilityService.getAllUnits()
       this.units = units;
       let ingredients = await recipeService.getAllIngredients(this.props.match.params.id)
       //@ts-ignore

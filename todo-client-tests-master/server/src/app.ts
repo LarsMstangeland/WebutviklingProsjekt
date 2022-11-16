@@ -4,6 +4,7 @@ import UserRouter from './router-files/user-router';
 import RegionRouter from './router-files/region-router';
 import CartRouter from './router-files/cart-router';
 import UnitRouter from './router-files/unit-router';
+import TypeRouter from './router-files/type-router';
 
 
 /**
@@ -17,6 +18,7 @@ app.use(express.json());
 app.use('/api/v2/users', UserRouter);
 app.use('/api/v2/recipes', RecipeRouter);
 app.use('/api/v2/regions', RegionRouter);
+app.use('/api/v2/types', TypeRouter)
 app.use('/api/v2/cart', CartRouter);
 app.use('/api/v2/units', UnitRouter);
 

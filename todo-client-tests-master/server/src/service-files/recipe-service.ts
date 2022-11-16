@@ -5,6 +5,7 @@ export type Recipe = {
   recipe_id: number;
   name: string;
   region: string;
+  type: string;
   picture_url: string;
   description: string;
 };
