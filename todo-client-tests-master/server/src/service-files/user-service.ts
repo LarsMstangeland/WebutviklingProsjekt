@@ -1,5 +1,6 @@
 import pool from '../mysql-pool';
 import type { RowDataPacket, ResultSetHeader } from 'mysql2';
+import { Recipe } from './recipe-service';
 
 export type User = {
   user_id: number;
@@ -8,6 +9,11 @@ export type User = {
   password: string;
   admin: boolean;
 };
+
+export type LikedRecipe = {
+  recipe_id : number;
+  name : string;
+}
 
 class UserService {
   /**
@@ -34,6 +40,19 @@ class UserService {
         resolve(results as User[]);
       });
     });
+  }
+
+  getLikedRecipes(userId : number) {
+    return new Promise<LikedRecipe[]>((resolve, reject) => {
+      pool.query('SELECT r.recipe_id, r.name FROM recipes r, user_to_recipe utr WHERE utr.recipe_id = r.recipe_id AND utr.user_id = ?',
+      [userId],
+      (error, results: RowDataPacket[]) => {
+        if(error) return reject(error)
+
+        resolve(results as LikedRecipe[])
+      }
+      )
+    })
   }
 
   /**
@@ -63,6 +82,21 @@ class UserService {
       });
     });
   }
+
+  removeLikedRecipe(userId : number, recipeId : number) {
+    return new Promise<void>((resolve, reject) => {
+      pool.query('DELETE FROM user_to_recipe WHERE user_id = ? AND recipe_id = ?',
+      [userId, recipeId],
+      (error, results: ResultSetHeader) => {
+        if(error) return reject(error);
+        if(results.affectedRows == 0) return reject(new Error('No row deleted'));
+
+        resolve();
+      }
+      )
+    })
+  }
+  
 }
 
 const userService = new UserService();

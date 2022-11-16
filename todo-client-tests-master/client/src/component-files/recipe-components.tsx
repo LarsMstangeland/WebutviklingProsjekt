@@ -3,7 +3,9 @@ import { Component } from 'react-simplified';
 import { Alert, Card, Row, Column, Form, Button } from '../widgets';
 import { NavLink } from 'react-router-dom';
 import recipeService, { Recipe, Ingredient, IngredientName } from '../service-files/recipe-service';
+import userService, { LikedRecipe } from '../service-files/user-service';
 import utilityService, {Region, Unit, Type} from '../service-files/utility-service';
+import cartService, {CartItem} from 'src/service-files/cart-service';
 import { createHashHistory } from 'history';
 
 const history = createHashHistory(); // Use history.push(...) to programmatically change path, for instance after successfully saving a student
@@ -23,6 +25,14 @@ export class RecipeList extends Component {
   regionFilter: string = 'Region';
   recipeTypeFilter: string = 'Type';
   userId: number | undefined = 0;
+  recipe: Recipe = {
+    recipe_id: 0,
+    name: '',
+    description: '',
+    region: '',
+    picture_url: '',
+    type: ''
+  };
 
   filter(){
     for(let i = 0; i < this.recipes.length; i++){
@@ -97,7 +107,7 @@ export class RecipeList extends Component {
 
   async mounted() {
     //Gets all recipes and pass them to recipe array
-    try{
+    try {
       let recipes = await recipeService.getAll();
       this.recipes = recipes;
       this.recipesToShow = recipes;
@@ -117,13 +127,13 @@ export class RecipeList extends Component {
 export class RecipeDetails extends Component<{ match: { params: { id: number } } }> {
   //Objects to store recipe and recipe ingredient details
   recipe: Recipe = { recipe_id: 0, name: '', description: '', region: '', picture_url: '', type: '' };
+  likedRecipes : LikedRecipe[] = [];
   ingredients: Ingredient[] = [];
   portions: number = 4;
   emailSubject: string = '';
   emailBody: string = '';
 
   render() {
-  if(userData != null){
       return (
         <>
           <Card title={this.recipe.name}>
@@ -142,10 +152,9 @@ export class RecipeDetails extends Component<{ match: { params: { id: number } }
             </Row>
             <Row>
             <Column><Button.Success onClick={() => {
-              console.log(userData.user_id)
               userData ? 
-                recipeService.addRecipeIngredientsToCart(this.ingredients, this.recipe.recipe_id, userData.user_id)
-               : Alert.info('Log in to add ingredients to cart')
+                (recipeService.addRecipeIngredientsToCart(this.ingredients, this.recipe.recipe_id, userData.user_id)
+               ) : (Alert.info('Log in to add ingredients to cart'))
             }}>Add ingredients to cart</Button.Success></Column> 
             <Column><Button.Light onClick={() => {window.open(`mailto:example@mail.com?subject=${this.emailSubject}&body=${this.emailBody}`)}}>Share</Button.Light></Column>
           </Row>
@@ -153,12 +162,19 @@ export class RecipeDetails extends Component<{ match: { params: { id: number } }
           <Card title='Ingredients'>
             <Row>
               <Column>Portions:</Column>
-              <Column><Form.Input 
-              type='number' 
-              max='50'
-              min='1'
-              value={this.portions}
-              onChange={(event) => (Number(event.currentTarget.value) <= 50 ? this.portions = Number(event.currentTarget.value) : '')} ></Form.Input></Column>
+              <Column>
+                <Form.Input
+                  type="number"
+                  max="50"
+                  min="1"
+                  value={this.portions}
+                  onChange={(event) =>
+                    Number(event.currentTarget.value) <= 50
+                      ? (this.portions = Number(event.currentTarget.value))
+                      : ''
+                  }
+                ></Form.Input>
+              </Column>
             </Row>
             <Row>
               <Column>Ingredients name:</Column>
@@ -169,19 +185,38 @@ export class RecipeDetails extends Component<{ match: { params: { id: number } }
               //Maps the different ingredients of a recipe and renders their respective values
               <Row key={ingredient.ingredients_id}>
                 <Column>{ingredient.name}</Column>
-                <Column>{ingredient.amount * this.portions / 4}</Column>
+                <Column>{(ingredient.amount * this.portions) / 4}</Column>
                 <Column>{ingredient.unit}</Column>
               </Row>
               ))}
               <Row>
                   <Column>
-                    <Button.Success onClick={()=> {
-                      }}>Like recipe
-                    </Button.Success>
+                  {
+                  userData ?
+                  (this.likedRecipes.some((r) => (this.recipe.recipe_id == r.recipe_id)) ?
+                  <Button.Danger onClick={async ()=>{
+                    await userService.removeLikedRecipe(userData.user_id, this.recipe.recipe_id)
+                    location.reload();
+                  console.log('nei')
+                    }}>Unlike</Button.Danger>  
+                    :
+                   <Button.Success onClick={async ()=> {
+                    await recipeService.likeRecipe(userData.user_id, this.props.match.params.id);
+                    location.reload();
+                    }}>Like recipe
+                  </Button.Success>)
+                   : 
+                   (<Button.Success onClick={async ()=> {
+                    Alert.info('Log in to like a recipe')
+                    }}>Like recipe
+                  </Button.Success>)
+                  }
                   </Column>
               </Row>
           </Card>
-          {userData.admin ? <Row>
+          {
+          userData ? 
+          (userData.admin ? (<Row>
               <Column><Button.Danger onClick={() => {
                 //Deletes the recipe and pushes the path back to all recipes
                   recipeService.delete(this.recipe.recipe_id).then(() => {
@@ -192,75 +227,31 @@ export class RecipeDetails extends Component<{ match: { params: { id: number } }
                 //Pushes the path to edit page of recipe
                 history.push('/recipes/' + this.props.match.params.id + '/edit')
               }}>Edit</Button.Success></Column>
-            </Row> : <Row/>}
+            </Row>) : ( <> </>
+            )): <> </>}
         </>
       )
-  }
-    else {
-      return (
-        <>
-          <Card title={this.recipe.name}>
-            <Row>
-              <picture>
-                <img src={this.recipe.picture_url} alt={this.recipe.name} />
-              </picture>
-            </Row>
-            <Row>
-              <Column width={2}>Region:</Column>
-              <Column>{this.recipe.region}</Column>
-            </Row>
-            <Row>
-              <Column width={2}>Description:</Column>
-              <Column>{this.recipe.description}</Column>
-            </Row>
-          </Card>
-          <Card title='Ingredients'>
-            <Row>
-              <Column>Portions:</Column>
-              <Column><Form.Input 
-              type='number' 
-              max='50'
-              min='1'
-              value={this.portions}
-              onChange={(event) => (Number(event.currentTarget.value) <= 50 ? this.portions = Number(event.currentTarget.value) : '')} ></Form.Input></Column>
-            </Row>
-            <Row>
-              <Column>Ingredients name:</Column>
-              <Column>Amount:</Column>
-              <Column>Unit:</Column>
-            </Row>
-            {this.ingredients.map((ingredient) => (
-              //Maps the different ingredients of a recipe and renders their respective values
-              <Row key={ingredient.ingredients_id}>
-                <Column>{ingredient.name}</Column>
-                <Column>{ingredient.amount * this.portions / 4}</Column>
-                <Column>{ingredient.unit}</Column>
-              </Row>
-              ))}
-            <Row>
-              <Column>
-                <Button.Success onClick={()=> {
-                    Alert.danger('You have to log in to like a recipe');
-                  }}>Like recipe
-                </Button.Success>
-                </Column>
-            </Row>
-          </Card>
-        </>
-      )
-    }
+    
   }
 
+
+    
   async mounted() {
-    //Gets spesific recipe and it´s ingredients, and pass them to 
-     try {
-      let recipe = await recipeService.get(this.props.match.params.id)
+    //Gets spesific recipe and it´s ingredients, and pass them to
+    try {
+      let recipe = await recipeService.get(this.props.match.params.id);
       this.recipe = recipe;
-      let ingredients = await recipeService.getRecipeIngredients(this.props.match.params.id)
+      let ingredients = await recipeService.getRecipeIngredients(this.props.match.params.id);
       this.ingredients = ingredients;
       this.emailSubject = 'Recipe for ' + this.recipe.name;
       this.emailBody = 'Description: %0D%0A' + this.recipe.description + '%0D%0A %0D%0A Ingredients:  %0D%0A' + this.ingredients.map(ing => `${ing.name + ' - ' + ing.amount + ' ' + ing.unit} %0D%0A`)
-     } catch (error: any) {
+      
+      if(userData) {
+        let likedRecipes = await userService.getLikedRecipes(userData.user_id)
+        this.likedRecipes = likedRecipes
+      }
+
+    } catch (error: any) {
       Alert.danger('Error getting recipe or ingredients: ' + error.message)
      }  
   }
@@ -276,16 +267,16 @@ export class RecipeEdit extends Component<{ match: { params: { id: number } } }>
   regions: Region[] = [];
   units: Unit[] = [];
   types: Type[] = [];
-  newIngredient: Ingredient = {ingredients_id: 0, name: '', amount: 0, unit: ''}
+  newIngredient: Ingredient = { ingredients_id: 0, name: '', amount: 0, unit: '' };
   newIngredients: Ingredient[] = [];
   newIngredientsToDelete: Ingredient[] = [];
   ingredients: IngredientName[] = [];
-  searchBar : string = '';
+  searchBar: string = '';
   ingredientsToShow: IngredientName[] = [];
 
   render() {
     return (
-      <>
+      <> 
         <Card title="Edit recipe">
           <Row>
             <Column width={2}>
@@ -304,13 +295,30 @@ export class RecipeEdit extends Component<{ match: { params: { id: number } } }>
               <Form.Label>Region:</Form.Label>
             </Column>
             <Column>
-              <Form.Select 
-                value={this.recipe.region} 
-                onChange={(event) => (this.recipe.region = event.currentTarget.value)}>
-
+              <Form.Select
+                value={this.recipe.region}
+                onChange={(event) => (this.recipe.region = event.currentTarget.value)}
+              >
                 {this.regions.map((region) => (
                   <option key={region.id} value={region.name}>
-                  {region.name}
+                    {region.name}
+                    </option>
+                ))}
+              </Form.Select>
+            </Column>
+          </Row>
+          <Row>
+            <Column width={2}>
+              <Form.Label>Type:</Form.Label>
+            </Column>
+            <Column>
+              <Form.Select 
+                value={this.recipe.type} 
+                onChange={(event) => (this.recipe.type = event.currentTarget.value)}>
+
+                {this.types.map((type) => (
+                  <option key={type.id} value={type.name}>
+                  {type.name}
                 </option>
                 ))}
               </Form.Select>
@@ -350,11 +358,11 @@ export class RecipeEdit extends Component<{ match: { params: { id: number } } }>
           <Row>
             <Column width={2}>Image URL:</Column>
             <Column>
-                <Form.Input
-                  type='text'
-                  value={this.recipe.picture_url}
-                  onChange={(event) => (this.recipe.picture_url = event.currentTarget.value)}
-                ></Form.Input>
+              <Form.Input
+                type="text"
+                value={this.recipe.picture_url}
+                onChange={(event) => (this.recipe.picture_url = event.currentTarget.value)}
+              ></Form.Input>
             </Column>
           </Row>
           <Row>
@@ -366,58 +374,85 @@ export class RecipeEdit extends Component<{ match: { params: { id: number } } }>
           {this.recipeIngredients.map((ingredient) => (
             <Row key={ingredient.ingredients_id}>
               <Column>{ingredient.name}</Column>
-              <Column><Form.Input
-                type="number"
-                max='1000'
-                min='0'
-                value={ingredient.amount}
-                onChange={(event) => (ingredient.amount = Number(event.currentTarget.value))}
-              /></Column>
+              <Column>
+                <Form.Input
+                  type="number"
+                  max="1000"
+                  min="0"
+                  value={ingredient.amount}
+                  onChange={(event) => (ingredient.amount = Number(event.currentTarget.value))}
+                />
+              </Column>
               <Column>
                 <Form.Select 
                   value={ingredient.unit} 
                   onChange={(event) => (ingredient.unit = event.currentTarget.value)} >
                   {this.units.map((unit) => (
                     <option key={unit.id} value={unit.unit}>
-                    {unit.unit}
+                      {unit.unit}
                     </option>
                   ))}
-                </Form.Select></Column>
+                </Form.Select>
+              </Column>
               <Column>
-             {this.ingredientsToDelete.findIndex(ing => ing.ingredients_id == ingredient.ingredients_id) == -1 ? 
-              <Button.Danger small onClick={() => {
-                if(this.newIngredients.findIndex(ing => ing.ingredients_id == ingredient.ingredients_id) == -1){
-                  this.ingredientsToDelete.push(ingredient)
-                } else{
-                  this.newIngredients.splice(this.newIngredients.indexOf(ingredient), 1); 
-                  this.recipeIngredients.splice(this.recipeIngredients.indexOf(ingredient), 1);
-                }
-              }}>X</Button.Danger> : 
-              <Button.Success small onClick={()=>{
-                const index = this.ingredientsToDelete.indexOf(ingredient);
-                  if (index > -1) { // only splice array when item is found
-                this.ingredientsToDelete.splice(index, 1); // 2nd parameter means remove one item only
-                }
-              }}>Add</Button.Success>}</Column>
+                {this.ingredientsToDelete.findIndex(
+                  (ing) => ing.ingredients_id == ingredient.ingredients_id
+                ) == -1 ? (
+                  <Button.Danger
+                    small
+                    onClick={() => {
+                      if (
+                        this.newIngredients.findIndex(
+                          (ing) => ing.ingredients_id == ingredient.ingredients_id
+                        ) == -1
+                      ) {
+                        this.ingredientsToDelete.push(ingredient);
+                      } else {
+                        this.newIngredients.splice(this.newIngredients.indexOf(ingredient), 1);
+                        this.recipeIngredients.splice(
+                          this.recipeIngredients.indexOf(ingredient),
+                          1
+                        );
+                      }
+                    }}
+                  >
+                    X
+                  </Button.Danger>
+                ) : (
+                  <Button.Success
+                    small
+                    onClick={() => {
+                      const index = this.ingredientsToDelete.indexOf(ingredient);
+                      if (index > -1) {
+                        // only splice array when item is found
+                        this.ingredientsToDelete.splice(index, 1); // 2nd parameter means remove one item only
+                      }
+                    }}
+                  >
+                    Add
+                  </Button.Success>
+                )}
+              </Column>
             </Row>
-            ))}
-            <h4>Add ingredient</h4>
-            <Row>
-              <Column>
-              <Form.Input 
-              type="search" 
-              value={this.searchBar} 
-              placeholder="Seacrh for ingredient"
-              onChange={(event)=> { 
+          ))}
+          <h4>Add ingredient</h4>
+          <Row>
+            <Column>
+              <Form.Input
+                type="search"
+                value={this.searchBar}
+                placeholder="Seacrh for ingredient"
+                onChange={(event) => {
                   this.searchBar = event.currentTarget.value;
                   this.ingredientsToShow = [];
-                  for(let i = 0; i < this.ingredients.length; i++){
-                  const name = this.ingredients[i].name.toUpperCase();
-                  if(name.indexOf(this.searchBar.toUpperCase()) > -1){
-                    this.ingredientsToShow.push(this.ingredients[i]);
+                  for (let i = 0; i < this.ingredients.length; i++) {
+                    const name = this.ingredients[i].name.toUpperCase();
+                    if (name.indexOf(this.searchBar.toUpperCase()) > -1) {
+                      this.ingredientsToShow.push(this.ingredients[i]);
+                    }
                   }
                 }
-              }}></Form.Input>
+              }></Form.Input>
               </Column>
               <Column>
                 <Form.Select 
@@ -426,14 +461,15 @@ export class RecipeEdit extends Component<{ match: { params: { id: number } } }>
                 <option>Select Name</option>
                 {this.ingredients.map((ingredient) => (
                   <option key={ingredient.ingredients_id} value={ingredient.name}>
-                  {ingredient.name}
+                    {ingredient.name}
                   </option>
                 ))}
-                </Form.Select> 
-              </Column>
-              <Column><Form.Input
+              </Form.Select>
+            </Column>
+            <Column>
+              <Form.Input
                 type="number"
-                max='1000'
+                max="1000"
                 value={this.newIngredient.amount}
                 onChange={(event) => (this.newIngredient.amount = Number(event.currentTarget.value))}
               /></Column>
@@ -445,32 +481,45 @@ export class RecipeEdit extends Component<{ match: { params: { id: number } } }>
                   {this.units.map((unit) => (
                     <option key={unit.id} value={unit.unit}>
                     {unit.unit}
-                    </option>
-                  ))}
-                </Form.Select></Column>
-              <Column>
-                  <Button.Light small onClick={() => {
-                    let duplicat = this.recipeIngredients.find(ingredient => ingredient.name == this.newIngredient.name);
-                    
-                    if(this.newIngredient.name == 'Select Name' || 
-                    this.newIngredient.unit == 'Select Unit' || 
-                    this.newIngredient.name == '' || 
-                    this.newIngredient.unit == '' || 
+                  </option>
+                ))}
+              </Form.Select>
+            </Column>
+            <Column>
+              <Button.Light
+                small
+                onClick={() => {
+                  let duplicat = this.recipeIngredients.find(
+                    (ingredient) => ingredient.name == this.newIngredient.name
+                  );
+
+                  if (
+                    this.newIngredient.name == 'Select Name' ||
+                    this.newIngredient.unit == 'Select Unit' ||
+                    this.newIngredient.name == '' ||
+                    this.newIngredient.unit == '' ||
                     this.newIngredient.amount > 1000 ||
-                    this.newIngredient.amount < 0){
-                      return Alert.danger('Unvalid value in new ingredient')
-                    }else if(duplicat){
-                      return Alert.danger('This ingredient is already in use')
-                    } else{
-                      let id = Number(this.ingredients.find(ing => ing.name == this.newIngredient.name)?.ingredients_id)
-                      this.newIngredient.ingredients_id = id;
-                      this.recipeIngredients.push(this.newIngredient);
-                      this.newIngredients.push(this.newIngredient);
-                      this.newIngredient = {ingredients_id: 0, name: '', amount: 0, unit: ''};
-                    }
-                  }}>Add</Button.Light>
-              </Column>
-            </Row>
+                    this.newIngredient.amount < 0
+                  ) {
+                    return Alert.danger('Unvalid value in new ingredient');
+                  } else if (duplicat) {
+                    return Alert.danger('This ingredient is already in use');
+                  } else {
+                    let id = Number(
+                      this.ingredients.find((ing) => ing.name == this.newIngredient.name)
+                        ?.ingredients_id
+                    );
+                    this.newIngredient.ingredients_id = id;
+                    this.recipeIngredients.push(this.newIngredient);
+                    this.newIngredients.push(this.newIngredient);
+                    this.newIngredient = { ingredients_id: 0, name: '', amount: 0, unit: '' };
+                  }
+                }}
+              >
+                Add
+              </Button.Light>
+            </Column>
+          </Row>
         </Card>
         <Row>
           <Column>
@@ -490,8 +539,11 @@ export class RecipeEdit extends Component<{ match: { params: { id: number } } }>
                   recipeService.addRecipeIngredient(this.newIngredients, this.recipe.recipe_id)
                   console.log(this.newIngredients);
                 }
-                 recipeService.updateRecipeIngredients(this.recipeIngredients, this.recipe.recipe_id)
-                  recipeService.update(this.recipe).then(() => {
+                recipeService.updateRecipeIngredients(
+                  this.recipeIngredients,
+                  this.recipe.recipe_id
+                );
+                recipeService.update(this.recipe).then(() => {
                   history.push('/recipes/' + this.recipe.recipe_id);
                 })}
               } else{
@@ -508,11 +560,11 @@ export class RecipeEdit extends Component<{ match: { params: { id: number } } }>
     );
   }
 
- async mounted() {
+  async mounted() {
     try {
-      let recipe = await recipeService.get(this.props.match.params.id)
+      let recipe = await recipeService.get(this.props.match.params.id);
       this.recipe = recipe;
-      let recipeIngredients = await recipeService.getRecipeIngredients(this.props.match.params.id)
+      let recipeIngredients = await recipeService.getRecipeIngredients(this.props.match.params.id);
       this.recipeIngredients = recipeIngredients;
       let regions = await utilityService.getAllRegions()
       this.regions = regions;
@@ -523,9 +575,118 @@ export class RecipeEdit extends Component<{ match: { params: { id: number } } }>
       let ingredients = await recipeService.getAllIngredients(this.props.match.params.id)
       //@ts-ignore
       this.ingredients = ingredients;
+    } catch (error: any) {
+      Alert.danger('Error getting recipe or ingredients: ' + error.message);
+    }
+  }
+}
 
-     } catch (error: any) {
-      Alert.danger('Error getting recipe or ingredients: ' + error.message)
-     }
+class RecipeAdd extends Component {
+  recipe: Recipe = { recipe_id: 0, name: '', description: '', region: '', picture_url: '', type:''};
+  ingredients: void | Ingredient[] = [];
+  regions: Region[] = [];
+  ingredient: Ingredient = { ingredients_id: 0, name: '', amount: 0, unit: '' };
+
+  render() {
+    return (
+      <>
+        <Card title="Create new recipe">
+          <Row>
+            <Column width={1}>
+              <Form.Label>Name:</Form.Label>
+            </Column>
+            <Column>
+              <Form.Input
+                value={this.recipe.name}
+                type="string"
+                onChange={(event) => {
+                  this.recipe.name = event.currentTarget.value;
+                }}
+              ></Form.Input>
+            </Column>
+          </Row>
+          <Row>
+            <Column width={1}>
+              <Form.Label>Description:</Form.Label>{' '}
+            </Column>
+            <Column>
+              <Form.Textarea
+                value={this.recipe.description}
+                type="string"
+                onChange={(event) => {
+                  this.recipe.description = event.currentTarget.value;
+                }}
+              ></Form.Textarea>
+            </Column>
+          </Row>
+          <Row>
+            <Column width={1}>
+              <Form.Label>Select region: </Form.Label>
+            </Column>
+            <Column>
+              <Form.Select
+                value={this.recipe.region}
+                onChange={(event) => (this.recipe.region = event.currentTarget.value)}
+              >
+                <option>Select Region</option>
+                {this.regions.map((region) => (
+                  <option key={region.id} value={region.name}>
+                    {region.name}
+                  </option>
+                ))}
+              </Form.Select>
+            </Column>
+          </Row>
+          <Row>
+            <Column width={1}>
+              <Form.Label>Picture-url: </Form.Label>
+            </Column>
+            <Column>
+              <Form.Input
+                value={this.recipe.picture_url}
+                type="string"
+                onChange={(event) => {
+                  this.recipe.picture_url = event.currentTarget.value;
+                }}
+              ></Form.Input>
+            </Column>
+          </Row>
+
+          <Button.Success
+            onClick={async () => {
+              if (this.recipe.name.length > 1) {
+                if (this.recipe.region != '' && this.recipe.region != 'Select Region') {
+                  await recipeService.addRecipe(
+                    this.recipe.name,
+                    this.recipe.description,
+                    this.recipe.picture_url,
+                    this.recipe.region
+                  );
+                  history.push('/recipes/' + this.recipe.recipe_id + '/edit');
+                } else {
+                  Alert.danger('You need to select a region for your recipe');
+                }
+              } else {
+                Alert.danger('You need a name for your recipe');
+              }
+            }}
+          >
+            Create recipe
+          </Button.Success>
+          <Button.Light
+            onClick={() => {
+              history.push('/recipes');
+            }}
+          >
+            Cancel
+          </Button.Light>
+        </Card>
+      </>
+    );
+  }
+
+  async mounted() {
+    let regions = await utilityService.getAllRegions();
+    this.regions = regions;
   }
 }
