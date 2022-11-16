@@ -5,12 +5,25 @@ import { NavLink } from 'react-router-dom';
 import userService, {User} from '../service-files/user-service';
 import regionAndUnitService, {Region, Unit} from '../service-files/regionAndUnit-service';
 import { createHashHistory } from 'history';
+import bcrypt from 'bcryptjs';
 
 const history = createHashHistory(); // Use history.push(...) to programmatically change path, for instance after successfully saving a student
 // const user : User = {user_id : 0, username : '', cart_id : 0, password : '', admin : false};
 // export const loggedIn : boolean = false;
 //@ts-ignore
-const userData = JSON.parse(sessionStorage.getItem('user'));
+const userData = JSON.parse(sessionStorage.getItem('user')); 
+
+//function to hash password. To be done before adding password to database
+export async function generateHash(password:string){
+    const salt = bcrypt.genSaltSync(10);
+    const hash = bcrypt.hashSync(password, salt);
+    return hash;
+}
+
+//function to compare entered password to the saved hashed password in the database
+export async function compareHash(password : string, hashed : string){
+    return bcrypt.compareSync(password, hashed);
+}
 
 export class UserLogin extends Component  {
     
@@ -21,7 +34,7 @@ export class UserLogin extends Component  {
     render() {
         //@ts-ignore
         if(userData != null) {
-            return (
+            return ( 
                 <>
             <Card title="Your user information">
             <Row>
@@ -75,14 +88,18 @@ export class UserLogin extends Component  {
                         </Row>
                         <Row>
                             <Column>
-                                <Button.Success onClick={()=>{
-                                let loggedInUser = this.users.filter(u => u.username == this.user.username).find( pw => pw.password == this.user.password);
-                                if(loggedInUser){
-                                        let userData = JSON.stringify(loggedInUser)
-                                        sessionStorage.setItem('user', userData)
-                                        location.reload();
-                                    } 
-                                    else Alert.danger('Wrong username or password. Try again')
+                                <Button.Success onClick={async ()=>{
+                                let hashPass = this.users.find(u => u.username == this.user.username)?.password
+                                //@ts-ignore because hashpass can be undefined if the username typed in is not already an user
+                                let hashCheck = await compareHash(this.user.password, hashPass);
+                                if(hashCheck){
+                                    let loggedInUser = this.users.find(u => u.username == this.user.username)
+                                    let userData = JSON.stringify(loggedInUser)
+                                    sessionStorage.setItem('user', userData)
+                                    location.reload();
+                                } 
+                                else Alert.danger('Wrong username or password. Try again')
+                                
                                 }}>Log in
                                 </Button.Success> 
                                 <Button.Light onClick={()=> history.push('/user/create')}>Create user</Button.Light>
@@ -171,7 +188,8 @@ export class NewUser extends Component {
                                     if(this.user.password == this.passwordCheck){
                                         if(this.user.password != ''){
                                             if(this.user.username != ''){
-                                                await userService.create(this.user.password, this.user.username, this.user.admin) 
+                                                let hashPassword : string = await generateHash(this.user.password)
+                                                await userService.create(hashPassword, this.user.username, this.user.admin) 
                                                  let u = await userService.get(this.user.username)
                                                  this.user = u       
                                                  sessionStorage.setItem('user', JSON.stringify(this.user));
