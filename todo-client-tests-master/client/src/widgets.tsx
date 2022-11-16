@@ -22,24 +22,15 @@ export class Card extends Component<{ title: ReactNode }> {
 }
 
 
-export class PreviewCard extends Component<{ title1: ReactNode, title2:ReactNode, image2: string, image1: string, link1: string, link2: string }> {
+export class PreviewCard extends Component<{ title1: number, title2:number, image2: string, image1: string, link1: string, link2: string }> {
 
   render() {
     return (
     <div style={{display: "flex"}}>
-
       <div style={{padding: "10px", margin: "20px", flexBasis:"20%", flexGrow:"1", height: "400px"}}>
-        <NavLink to={this.props.link1}>
+        <NavLink to={'recipes/'+this.props.link1}>
           <b style={{position:"absolute", left: "10%", right:"0" , width:"20%",  color: "black"}}>{this.props.title1}</b>
           <img alt='DETTE ER ET BILDE' src={this.props.image1} style={{height:"100%", width:"auto", marginLeft: "50px", boxShadow: "rgba(0, 0, 0, 0.1) 0px 4px 12px", borderRadius: "10px"}}></img>
-          </NavLink>
-
-      </div>
-      
-      <div style={{padding: "10px", margin: "20px", flexBasis:"20%", flexGrow:"1", height: "400px"}}>
-        <NavLink to={this.props.link2}>
-          <img alt='DETTE ER ET BILDE' src={this.props.image2} style={{height:"100%", width:"auto", marginLeft: "50px", boxShadow:"rgba(0, 0, 0, 0.1) 0px 4px 12px", borderRadius: "10px"}}></img>
-          <b style={{position:"absolute", width:"20%", left: "60%", right:"0", color: "black"}}>{this.props.title2}</b>
         </NavLink>
       </div>
     </div>
