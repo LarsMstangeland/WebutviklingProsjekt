@@ -30,8 +30,8 @@ UserRouter.post('', (request, response) => {
   const admin = request.body.admin;
     userService
       .create(password, username, admin)
-      .then((id) => response.send(id))
-      .catch((error) => response.status(500).send(error));
+      .then((id) => response.send({id: id}))
+      .catch((error) => response.status(500).send(error.response.data));
 });
 
 UserRouter.delete('/:id', (request, response) => {

@@ -89,16 +89,22 @@ export class UserLogin extends Component  {
                         <Row>
                             <Column>
                                 <Button.Success onClick={async ()=>{
-                                let hashPass = this.users.find(u => u.username == this.user.username)?.password
-                                //@ts-ignore because hashpass can be undefined if the username typed in is not already an user
-                                let hashCheck = await compareHash(this.user.password, hashPass);
-                                if(hashCheck){
-                                    let loggedInUser = this.users.find(u => u.username == this.user.username)
-                                    let userData = JSON.stringify(loggedInUser)
-                                    sessionStorage.setItem('user', userData)
-                                    location.reload();
-                                } 
-                                else Alert.danger('Wrong username or password. Try again')
+                                    console.log(generateHash('vetleek'))
+                                if(this.users.find(u => u.username == this.user.username)){
+                                    let hashPass = this.users.find(u => u.username == this.user.username)?.password                                    
+                                    //@ts-ignore because hashpass can be undefined if the username typed in is not already an user
+                                    let hashCheck = await compareHash(this.user.password, hashPass);
+                                    if(hashCheck){
+                                        let loggedInUser = this.users.find(u => u.username == this.user.username)
+                                        let userData = JSON.stringify(loggedInUser)
+                                        sessionStorage.setItem('user', userData)
+                                        location.reload();
+                                    } 
+                                    else Alert.danger('Wrong username or password. Try again')
+                                }
+                                else{
+                                    Alert.danger('Username does not exist')
+                                }
                                 
                                 }}>Log in
                                 </Button.Success> 
