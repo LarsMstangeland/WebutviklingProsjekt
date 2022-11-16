@@ -1,11 +1,11 @@
 import express, { response } from 'express';
-import TypeService, {Type} from '../service-files/type-service';
+import utilityService from '../service-files/utility-service';
 
 const TypeRouter = express.Router();
 
 TypeRouter.get('', (_request, response) => {
-    TypeService
-      .getAll()
+    utilityService
+      .getAllType()
       .then((rows) => response.send(rows))
       .catch((error) => response.status(500).send(error));
   });
@@ -13,8 +13,8 @@ TypeRouter.get('', (_request, response) => {
 /*
 TypeRouter.get('/:id', (request, response) => {
     const id = Number(request.params.id);
-    TypeService
-      .get(id)
+    utilityService
+      .getType(id)
       .then((recipe) => (recipe ? response.send(recipe) : response.status(404).send('Type not found')))
       .catch((error) => response.status(500).send(error));
   });*/
