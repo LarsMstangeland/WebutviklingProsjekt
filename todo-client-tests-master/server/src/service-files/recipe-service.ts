@@ -179,7 +179,6 @@ class RecipeService {
               console.log(error);
               return reject(error);
             }
-            console.log('Result: ', results);
             resolve(results as Ingredient[]);
           }
         );

@@ -584,7 +584,6 @@ export class RecipeEdit extends Component<{ match: { params: { id: number } } }>
                 }
                 if (this.newIngredients.length > 0) {
                   recipeService.addRecipeIngredient(this.newIngredients, this.recipe.recipe_id);
-                  console.log(this.newIngredients);
                 }
                 recipeService.updateRecipeIngredients(
                   this.recipeIngredients,
@@ -697,7 +696,6 @@ class RecipeAdd extends Component {
             onClick={async () => {
               if (this.recipe.name.length > 1) {
                 if (this.recipe.region != '' && this.recipe.region != 'Select Region') {
-                  console.log(this.recipe);
                   await recipeService.addRecipe(
                     this.recipe.name,
                     this.recipe.description,

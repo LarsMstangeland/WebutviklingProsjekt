@@ -49,7 +49,6 @@ RecipeRouter.post('/add', (request, response) => {
   const description = request.body.description;
   const picture_url = request.body.picture_url;
   const region = request.body.region;
-  console.log(name);
   recipeService
     .createRecipe(name, description, picture_url, region)
     .then((id) => response.send({ id: id }))

@@ -114,7 +114,6 @@ class RecipeService {
   }
 
   addRecipe(name: string, description: string, picture_url: string, region: string) {
-    console.log('dette er service ', name, description, picture_url, region);
     return axios
       .post('/recipes/add', {
         name: name,
@@ -123,7 +122,7 @@ class RecipeService {
         region: region,
       })
       .then((response) => response.data.id)
-      .catch((error) => console.log('THIS IS ERROR ' + error));
+      .catch((error) => console.log(error));
   }
 }
 
