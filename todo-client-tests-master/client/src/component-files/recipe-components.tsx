@@ -146,7 +146,6 @@ export class RecipeDetails extends Component<{ match: { params: { id: number } }
   emailBody: string = '';
 
   render() {
-    if (userData != null) {
       return (
         <>
           <Card title={this.recipe.name}>
@@ -219,7 +218,8 @@ export class RecipeDetails extends Component<{ match: { params: { id: number } }
               <Row>
                   <Column>
                   {
-                  this.likedRecipes.some((r) => (this.recipe.recipe_id == r.recipe_id)) ?
+                  userData ?
+                  (this.likedRecipes.some((r) => (this.recipe.recipe_id == r.recipe_id)) ?
                   <Button.Danger onClick={async ()=>{
                     await userService.removeLikedRecipe(userData.user_id, this.recipe.recipe_id)
                     location.reload();
@@ -230,12 +230,19 @@ export class RecipeDetails extends Component<{ match: { params: { id: number } }
                     await recipeService.likeRecipe(userData.user_id, this.props.match.params.id);
                     location.reload();
                     }}>Like recipe
-                  </Button.Success>
+                  </Button.Success>)
+                   : 
+                   (<Button.Success onClick={async ()=> {
+                    Alert.info('Log in to like a recipe')
+                    }}>Like recipe
+                  </Button.Success>)
                   }
                   </Column>
               </Row>
           </Card>
-          {userData.admin ? (
+          {
+          userData ? 
+          (userData.admin ? (
             <Row>
               <Column>
                 <Button.Danger
@@ -261,73 +268,11 @@ export class RecipeDetails extends Component<{ match: { params: { id: number } }
               </Column>
             </Row>
           ) : (
-            <Row />
-          )}
+            <></>
+          )) : <></>}
         </>
       );
-    } else {
-      return (
-        <>
-          <Card title={this.recipe.name}>
-            <Row>
-              <picture>
-                <img src={this.recipe.picture_url} alt={this.recipe.name} />
-              </picture>
-            </Row>
-            <Row>
-              <Column width={2}>Region:</Column>
-              <Column>{this.recipe.region}</Column>
-            </Row>
-            <Row>
-              <Column width={2}>Description:</Column>
-              <Column>{this.recipe.description}</Column>
-            </Row>
-          </Card>
-          <Card title="Ingredients">
-            <Row>
-              <Column>Portions:</Column>
-              <Column>
-                <Form.Input
-                  type="number"
-                  max="50"
-                  min="1"
-                  value={this.portions}
-                  onChange={(event) =>
-                    Number(event.currentTarget.value) <= 50
-                      ? (this.portions = Number(event.currentTarget.value))
-                      : ''
-                  }
-                ></Form.Input>
-              </Column>
-            </Row>
-            <Row>
-              <Column>Ingredients name:</Column>
-              <Column>Amount:</Column>
-              <Column>Unit:</Column>
-            </Row>
-            {this.ingredients.map((ingredient) => (
-              //Maps the different ingredients of a recipe and renders their respective values
-              <Row key={ingredient.ingredients_id}>
-                <Column>{ingredient.name}</Column>
-                <Column>{(ingredient.amount * this.portions) / 4}</Column>
-                <Column>{ingredient.unit}</Column>
-              </Row>
-            ))}
-            <Row>
-              <Column>
-                <Button.Success
-                  onClick={() => {
-                    Alert.danger('You have to log in to like a recipe');
-                  }}
-                >
-                  Like recipe
-                </Button.Success>
-              </Column>
-            </Row>
-          </Card>
-        </>
-      );
-    }
+
   }
 
   async mounted() {
