@@ -112,18 +112,18 @@ class RecipeService {
       .catch((error) => console.log(error));
   }
 
-  addRecipe(name: string, description: string, picture_url: string, region: string) {
+  addRecipe(name: string, description: string, picture_url: string, region: string, type: string) {
     return axios
       .post('/recipes/add', {
         name: name,
         description: description,
         picture_url: picture_url,
         region: region,
+        type: type
       })
       .then((response) => response.data.id)
       .catch((error) => console.log(error));
   }
-
 
   likeRecipe(userId : number, recipeId : number){
     return axios.post('recipes/' + recipeId +'/like', {userId : userId})
@@ -140,8 +140,6 @@ class RecipeService {
       .then((response) => response.data.id)
       .catch((error) => console.log(error));
   }
-
-
 }
 
 const recipeService = new RecipeService();

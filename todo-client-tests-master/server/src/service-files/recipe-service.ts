@@ -120,11 +120,11 @@ class RecipeService {
     });
   }
 
-  createRecipe(name: string, description: string, picture_url: string, region: string) {
+  createRecipe(name: string, description: string, picture_url: string, region: string, type: string) {
     return new Promise<number>((resolve, reject) => {
       pool.query(
-        'INSERT INTO recipes (name, region, picture_url, description) VALUES (?,?,?,?)',
-        [name, region, picture_url, description],
+        'INSERT INTO recipes (name, region, picture_url, description, type) VALUES (?,?,?,?,?)',
+        [name, region, picture_url, description, type],
         (error, results: ResultSetHeader) => {
           if (error) {
             console.log(error);

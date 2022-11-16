@@ -86,9 +86,23 @@ export class RecipeList extends Component {
                 {this.types.map((type) => (
                   <option key={type.id} value={type.name}>{type.name}</option>
                 ))}
-                </Form.Select></Column>
-              <Column>{userData && userData.admin ? <Button.Success onClick={() => {
-                history.push('/recipes/' + this.userId + '/addRecipes')
+                </Form.Select>
+                </Column>
+              <Column>
+              {userData && userData.admin ? 
+              
+              <Button.Success onClick={() => {
+
+                recipeService
+                        .addRecipe(
+                          this.recipe.name,
+                          this.recipe.description,
+                          this.recipe.picture_url,
+                          this.recipe.region,
+                          this.recipe.type
+                        )
+                        .then((response) => (this.recipe.recipe_id = response))
+                        .then(() => history.push('/recipes/' + this.recipe.recipe_id + '/edit'));
               }
               }>Add Recipe</Button.Success> : <></>}</Column>
             </Row>
@@ -326,23 +340,6 @@ export class RecipeEdit extends Component<{ match: { params: { id: number } } }>
           </Row>
           <Row>
             <Column width={2}>
-              <Form.Label>Type:</Form.Label>
-            </Column>
-            <Column>
-              <Form.Select 
-                value={this.recipe.type} 
-                onChange={(event) => (this.recipe.type = event.currentTarget.value)}>
-
-                {this.types.map((type) => (
-                  <option key={type.id} value={type.name}>
-                  {type.name}
-                </option>
-                ))}
-              </Form.Select>
-            </Column>
-          </Row>
-          <Row>
-            <Column width={2}>
               <Form.Label>Description:</Form.Label>
             </Column>
             <Column>
@@ -528,9 +525,8 @@ export class RecipeEdit extends Component<{ match: { params: { id: number } } }>
                 {if(this.recipe.name != '' && this.recipe.description != '' && this.recipe.picture_url != ''
                 && this.recipeIngredients.length > 0){
 
-                
 
-                
+
                 {if(this.ingredientsToDelete.length > 0){
                   this.recipeIngredients = this.recipeIngredients.filter((ingredient) => !this.ingredientsToDelete.includes(ingredient))
                   recipeService.deleteRecipeIngredients(this.ingredientsToDelete, this.recipe.recipe_id)
@@ -660,7 +656,8 @@ class RecipeAdd extends Component {
                     this.recipe.name,
                     this.recipe.description,
                     this.recipe.picture_url,
-                    this.recipe.region
+                    this.recipe.region,
+                    this.recipe.type
                   );
                   history.push('/recipes/' + this.recipe.recipe_id + '/edit');
                 } else {

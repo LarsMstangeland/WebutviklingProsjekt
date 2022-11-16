@@ -23,7 +23,6 @@ export class CartContent extends Component {
     return (
       <>
         <Card title="Your Cart">
-
           <Button.Danger onClick={() => {
             this.CartItemsToShow.map((cartitem) => {
               cartService.deleteIngredientFromCart(cartitem.cart_id)
