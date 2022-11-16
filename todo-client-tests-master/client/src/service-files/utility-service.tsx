@@ -12,7 +12,11 @@ export type Unit = {
   unit: string;
 }
 
-class RegionAndUnitsService {
+export type Type = {
+  id: number;
+  name: string;
+}
+class UtilityService {
 
   getRegion(id: number) {
       return axios.get<Region>('/regions/' + id).then((response) => response.data);
@@ -25,7 +29,11 @@ class RegionAndUnitsService {
   getAllUnits() {
     return axios.get<Unit[]>('/units').then((response) => response.data);
   }
+
+  getAllTypes() {
+    return axios.get<Type[]>('/types').then((response) => response.data);
+  }
 }
 
-const regionAndUnitsService = new RegionAndUnitsService();
-export default regionAndUnitsService;
+const utilityService = new UtilityService();
+export default utilityService;
