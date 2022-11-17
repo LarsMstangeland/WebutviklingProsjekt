@@ -68,6 +68,9 @@ class RecipeService {
     });
   }
 
+
+  //Hva er forskjellen????
+
   getAllIngredients() {
     return new Promise<IngredientName[]>((resolve, reject) => {
       pool.query('SELECT * FROM ingredients', (error: any, results: RowDataPacket[]) => {
@@ -171,7 +174,7 @@ class RecipeService {
   }
 
   addRecipeIngredient(id: number, ingredients : Ingredient[]) {
-    return new Promise<Ingredient[]>((resolve, reject) => {
+    return new Promise<void>((resolve, reject) => {
       ingredients.map((ingredient: Ingredient) => {
         pool.query(
           'INSERT INTO ingredients_to_recipe (amount, unit, ingredients_id, recipe_id) VALUES (?,?,?,?)',
@@ -181,10 +184,11 @@ class RecipeService {
               console.log(error);
               return reject(error);
             }
-            resolve(results as Ingredient[]);
           }
         );
       });
+      resolve();
+
     });
   }
 

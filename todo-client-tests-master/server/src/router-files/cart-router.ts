@@ -19,7 +19,6 @@ CartRouter.get('/:id', (request, response) => {
 CartRouter.delete('/:id', (request, response) => {
 
     const id = Number(request.params.id)
-    console.log("tetst" + id)
   cartService
     .delete(id)
     .then((_result) => response.send())

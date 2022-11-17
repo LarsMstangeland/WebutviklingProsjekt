@@ -35,57 +35,6 @@ RecipeRouter.get('/:id/ingredients', (request, response) => {
     .catch((error) => response.status(500).send(error));
 });
 
-RecipeRouter.delete('/:id', (request, response) => {
-  recipeService
-    .delete(Number(request.params.id))
-    .then((_result) => response.send())
-    .catch((error) => response.status(404).send(error));
-});
-// Example request body: { title: "Ny oppgave" }
-// Example response body: { id: 4 }
-
-RecipeRouter.post('/add', (request, response) => {
-  const name = request.body.name;
-  const description = request.body.description;
-  const picture_url = request.body.picture_url;
-  const region = request.body.region;
-  const type = request.body.type;
-  recipeService
-    .createRecipe(name, description, picture_url, region, type)
-    .then((id) => response.send({ id: id }))
-    .catch((error) => response.status(400).send(error));
-});
-
-RecipeRouter.put('/:id/edit', (request, response) => {
-  //hent ut de normale dataen og gjør det mulig å redigere
-  //bruker patch for å være økonomiske med kjøretid
-  const data = request.body;
-  recipeService
-    .updateRecipe(data)
-    .then((_result) => response.send())
-    .catch((error) => response.status(500).send(error));
-});
-
-RecipeRouter.put('/:id/edit/ingredients', (request, response) => {
-  //oppdaterer ingredients inn til en gitt recipie
-  //bruker patch for å være økonomiske med kjøretid
-  const ingredients = request.body.ingredients;
-  const id = Number(request.params.id);
-  recipeService
-    .updateRecipeIngredients(id, ingredients)
-    .then((_result) => response.send())
-    .catch((error) => response.status(500).send(error));
-});
-
-RecipeRouter.delete('/:id/edit', (request, response) => {
-  //oppdaterer ingredients inn til en gitt recipie
-  const data = request.body.ingredientsToDelete;
-  const id = Number(request.params.id);
-  recipeService
-    .deleteRecipeIngredients(id, data)
-    .then((_result) => response.send())
-    .catch((error) => response.status(500).send(error));
-});
 
 RecipeRouter.get('/:id/edit/ingredients', (_request, response) => {
   recipeService
@@ -101,6 +50,17 @@ RecipeRouter.get('/ingredients', (_request, response) => {
     .catch((error) => response.status(404).send(error));
 });  
 
+RecipeRouter.post('/add', (request, response) => {
+  const name = request.body.name;
+  const description = request.body.description;
+  const picture_url = request.body.picture_url;
+  const region = request.body.region;
+  const type = request.body.type;
+  recipeService
+    .createRecipe(name, description, picture_url, region, type)
+    .then((id) => response.send({ id: id }))
+    .catch((error) => response.status(400).send(error));
+});
 
 RecipeRouter.post('/:id/edit/ingredients', (request, response) => {
   const data = request.body.ingredients;
@@ -137,6 +97,44 @@ RecipeRouter.post('/:id/edit/ingredients', (request, response) => {
       response.send();
     }).catch((error)=> response.status(400).send(error))
   })
+
+RecipeRouter.put('/:id/edit', (request, response) => {
+  //hent ut de normale dataen og gjør det mulig å redigere
+  //bruker patch for å være økonomiske med kjøretid
+  const data = request.body;
+  recipeService
+    .updateRecipe(data)
+    .then((_result) => response.send())
+    .catch((error) => response.status(500).send(error));
+});
+
+RecipeRouter.put('/:id/edit/ingredients', (request, response) => {
+  //oppdaterer ingredients inn til en gitt recipie
+  //bruker patch for å være økonomiske med kjøretid
+  const ingredients = request.body.ingredients;
+  const id = Number(request.params.id);
+  recipeService
+    .updateRecipeIngredients(id, ingredients)
+    .then((_result) => response.send())
+    .catch((error) => response.status(500).send(error));
+});
+  
+RecipeRouter.delete('/:id/edit', (request, response) => {
+  //oppdaterer ingredients inn til en gitt recipie
+  const data = request.body.ingredientsToDelete;
+  const id = Number(request.params.id);
+  recipeService
+    .deleteRecipeIngredients(id, data)
+    .then((_result) => response.send())
+    .catch((error) => response.status(500).send(error));
+});
+
+RecipeRouter.delete('/:id', (request, response) => {
+  recipeService
+    .delete(Number(request.params.id))
+    .then((_result) => response.send())
+    .catch((error) => response.status(404).send(error));
+});
 
 
 
