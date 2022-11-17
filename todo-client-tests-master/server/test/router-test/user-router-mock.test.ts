@@ -1,11 +1,11 @@
 import axios from 'axios';
-import app from '../src/app';
-import userService, { User } from '../src/service-files/user-service';
+import app from '../../src/app';
+import userService, { User } from '../../src/service-files/user-service';
 
 const testUsers: User[] = [
-  { user_id: 1, username: 'lars', cart_id: 1, password: "test1", admin: false},
-  { user_id: 2, username: 'vetle', cart_id: 2, password: "test2", admin: false},
-  { user_id: 3, username: 'seb', cart_id: 3, password: "test3", admin: false},
+  { user_id: 1, username: 'lars', password: "test1", admin: false},
+  { user_id: 2, username: 'vetle', password: "test2", admin: false},
+  { user_id: 3, username: 'seb', password: "test3", admin: false},
 ];
 
 // Since API is not compatible with v1, API version is increased to v2
@@ -38,30 +38,22 @@ describe("Fetch users (GET)", () => {
 
   test("Fetch all users (500 Internal Server Error)", async () => {
       //todo
-
       userService.getAll = jest.fn(() => Promise.reject());
 
-      try {
-          const response = await axios.get("/users");
-      } catch (error) {
-          expect(error.response.status).toEqual(500);
-      }
+          const response = await axios.get("/users").catch((error) => {
+            expect(error.response.status).toEqual(500);
+          });
+      
   });
 
   test("Fetch user (404 Not Found)", async () => {
       //todo
-
       const user = testUsers[0];
-
-
       userService.get = jest.fn(() => Promise.resolve(user));
 
-      try {
-          const response = await axios.get("DårligSti");
-
-      } catch (error) {
-          expect(error.response.status).toEqual(404);
-      }
+    const response = await axios.get("DårligSti").catch((error) => {
+        expect(error.response.status).toEqual(404)
+    })      
   });
 
   test("Fetch user (500 Internal Server error)", async () => {
