@@ -130,7 +130,6 @@ class RecipeService {
             console.log(error);
             return reject(error);
           }
-          console.log('Result: ', results);
           resolve(results.insertId);
         }
       );
@@ -140,8 +139,8 @@ class RecipeService {
   updateRecipe(recipe: Recipe) {
     return new Promise<void>((resolve, reject) => {
       pool.query(
-        'UPDATE recipes SET name = ?, region = ?, picture_url = ?, description = ? WHERE recipe_id = ?',
-        [recipe.name, recipe.region, recipe.picture_url, recipe.description, recipe.recipe_id],
+        'UPDATE recipes SET name = ?, region = ?, type = ?, picture_url = ?, description = ? WHERE recipe_id = ?',
+        [recipe.name, recipe.region, recipe.type, recipe.picture_url, recipe.description, recipe.recipe_id],
         (error, results: ResultSetHeader) => {
           if (error) return reject(error);
           if (results.affectedRows == 0) return reject(new Error('No row updated'));
@@ -204,7 +203,6 @@ class RecipeService {
   AddIngredientsToCartFromRecipe(ingredients: Ingredient[], user_id: number){
     return new Promise<void>((resolve, reject) => {
         ingredients.map((ingredient) => {
-          console.log(ingredient, user_id)
           pool.query(
             'INSERT INTO cart (ingredients, user_id) VALUES (?,?)', [ingredient.name, user_id], (error) => {
               if (error) return reject(error);

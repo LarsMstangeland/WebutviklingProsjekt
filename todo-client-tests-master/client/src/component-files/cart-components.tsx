@@ -29,7 +29,7 @@ export class CartContent extends Component {
             })
             this.mounted()
           }}>Clear All</Button.Danger>
-
+ 
           {this.CartItemsToShow.map((cart: CartItem) => (
             //Maps all the different cart and renders them as links to their respective cart details
             <Row key={cart.cart_id}>

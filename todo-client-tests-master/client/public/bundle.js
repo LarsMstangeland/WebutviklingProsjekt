@@ -4387,76 +4387,6 @@ module.exports = {
 
 /***/ }),
 
-/***/ "./src/component-files/cart-components.tsx":
-/*!*************************************************!*\
-  !*** ./src/component-files/cart-components.tsx ***!
-  \*************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "CartContent": () => (/* binding */ CartContent)
-/* harmony export */ });
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
-/* harmony import */ var react_simplified__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-simplified */ "./node_modules/react-simplified/lib/index.js");
-/* harmony import */ var _widgets__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../widgets */ "./src/widgets.tsx");
-/* harmony import */ var history__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! history */ "./node_modules/history/esm/history.js");
-/* harmony import */ var _service_files_cart_service__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../service-files/cart-service */ "./src/service-files/cart-service.tsx");
-
-
-
-
-
-const history = (0,history__WEBPACK_IMPORTED_MODULE_4__.createHashHistory)(); // Use history.push(...) to programmatically change path, for instance after successfully saving a student
-//@ts-ignore
-const userData = JSON.parse(sessionStorage.getItem('user'));
-
-/**
- * Renders cart list.
- */
-class CartContent extends react_simplified__WEBPACK_IMPORTED_MODULE_1__.Component {
-  //Array to store all cart
-  cart = [];
-  CartItemsToShow = [];
-  searchBar = '';
-  render() {
-    return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Card, {
-      title: "Your Cart"
-    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Button.Danger, {
-      onClick: () => {
-        this.CartItemsToShow.map(cartitem => {
-          _service_files_cart_service__WEBPACK_IMPORTED_MODULE_3__["default"].deleteIngredientFromCart(cartitem.cart_id);
-        });
-        this.mounted();
-      }
-    }, "Clear All"), this.CartItemsToShow.map(cart =>
-    /*#__PURE__*/
-    //Maps all the different cart and renders them as links to their respective cart details
-    react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Row, {
-      key: cart.cart_id
-    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Column, null, cart.ingredients), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Column, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Button.Danger, {
-      onClick: () => {
-        _service_files_cart_service__WEBPACK_IMPORTED_MODULE_3__["default"].deleteIngredientFromCart(cart.cart_id).then(() => {
-          this.mounted();
-        });
-      }
-    }, "X"))))));
-  }
-  async mounted() {
-    //Gets all cart and pass them to cart array
-    try {
-      let cart = await _service_files_cart_service__WEBPACK_IMPORTED_MODULE_3__["default"].get(userData.user_id);
-      this.cart = cart;
-      this.CartItemsToShow = cart;
-    } catch (error) {
-      _widgets__WEBPACK_IMPORTED_MODULE_2__.Alert.danger('Error getting cart: ' + error.message);
-    }
-  }
-}
-
-/***/ }),
-
 /***/ "./src/component-files/recipe-components.tsx":
 /*!***************************************************!*\
   !*** ./src/component-files/recipe-components.tsx ***!
@@ -4473,12 +4403,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 /* harmony import */ var react_simplified__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-simplified */ "./node_modules/react-simplified/lib/index.js");
 /* harmony import */ var _widgets__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../widgets */ "./src/widgets.tsx");
-/* harmony import */ var react_router_dom__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router-dom/esm/react-router-dom.js");
 /* harmony import */ var _service_files_recipe_service__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../service-files/recipe-service */ "./src/service-files/recipe-service.tsx");
 /* harmony import */ var _service_files_user_service__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../service-files/user-service */ "./src/service-files/user-service.tsx");
 /* harmony import */ var _service_files_utility_service__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../service-files/utility-service */ "./src/service-files/utility-service.tsx");
 /* harmony import */ var history__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! history */ "./node_modules/history/esm/history.js");
-
 
 
 
@@ -4560,14 +4488,20 @@ class RecipeList extends react_simplified__WEBPACK_IMPORTED_MODULE_1__.Component
       onClick: () => {
         _service_files_recipe_service__WEBPACK_IMPORTED_MODULE_3__["default"].addRecipe(this.recipe.name, this.recipe.description, this.recipe.picture_url, this.recipe.region, this.recipe.type).then(response => this.recipe.recipe_id = response).then(() => history.push('/recipes/' + this.recipe.recipe_id + '/edit'));
       }
-    }, "Add Recipe") : /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null))), this.recipesToShow.length > 0 ? this.recipesToShow.map(recipe =>
+    }, "Add Recipe") : /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", {
+      style: {
+        display: "flex",
+        flexWrap: 'wrap'
+      }
+    }, this.recipesToShow.length > 0 ? this.recipesToShow.map(recipe =>
     /*#__PURE__*/
     //Maps all the different recipes and renders them as links to their respective recipe details
-    react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Row, {
-      key: recipe.recipe_id
-    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Column, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_7__.NavLink, {
-      to: '/recipes/' + recipe.recipe_id
-    }, recipe.name)))) : /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("h3", null, "No results")));
+    react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.PreviewCard, {
+      small: true,
+      id: recipe.recipe_id,
+      name: recipe.name,
+      url: recipe.picture_url
+    })) : /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("h3", null, "No results"))));
   }
   async mounted() {
     //Gets all recipes and pass them to recipe array
@@ -4613,9 +4547,25 @@ class RecipeDetails extends react_simplified__WEBPACK_IMPORTED_MODULE_1__.Compon
       width: 2
     }, "Region:"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Column, null, this.recipe.region)), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Row, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Column, {
       width: 2
-    }, "Description:"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Column, null, this.recipe.description)), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Row, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Column, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Button.Success, {
+    }, "Type:"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Column, null, this.recipe.type)), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Row, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Column, {
+      width: 2
+    }, "Description:"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Column, null, this.recipe.description)), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Row, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Column, null, userData ? this.likedRecipes.some(r => this.recipe.recipe_id == r.recipe_id) ? /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Button.Danger, {
+      onClick: async () => {
+        await _service_files_user_service__WEBPACK_IMPORTED_MODULE_4__["default"].removeLikedRecipe(userData.user_id, this.recipe.recipe_id);
+        location.reload();
+      }
+    }, "Unlike") : /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Button.Success, {
+      onClick: async () => {
+        await _service_files_recipe_service__WEBPACK_IMPORTED_MODULE_3__["default"].likeRecipe(userData.user_id, this.props.match.params.id);
+        location.reload();
+      }
+    }, "Like recipe") : /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Button.Success, {
+      onClick: async () => {
+        _widgets__WEBPACK_IMPORTED_MODULE_2__.Alert.info('Log in to like a recipe');
+      }
+    }, "Like recipe")), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Column, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Button.Success, {
       onClick: () => {
-        userData ? _service_files_recipe_service__WEBPACK_IMPORTED_MODULE_3__["default"].addRecipeIngredientsToCart(this.ingredients, this.recipe.recipe_id, userData.user_id) : _widgets__WEBPACK_IMPORTED_MODULE_2__.Alert.info('Log in to add ingredients to cart');
+        userData ? (_service_files_recipe_service__WEBPACK_IMPORTED_MODULE_3__["default"].addRecipeIngredientsToCart(this.ingredients, this.recipe.recipe_id, userData.user_id), _widgets__WEBPACK_IMPORTED_MODULE_2__.Alert.info('Ingredients added to cart!')) : _widgets__WEBPACK_IMPORTED_MODULE_2__.Alert.info('Log in to add ingredients to cart');
       }
     }, "Add ingredients to cart")), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Column, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Button.Light, {
       onClick: () => {
@@ -4634,22 +4584,7 @@ class RecipeDetails extends react_simplified__WEBPACK_IMPORTED_MODULE_1__.Compon
     //Maps the different ingredients of a recipe and renders their respective values
     react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Row, {
       key: ingredient.ingredients_id
-    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Column, null, ingredient.name), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Column, null, ingredient.amount * this.portions / 4), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Column, null, ingredient.unit))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Row, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Column, null, userData ? this.likedRecipes.some(r => this.recipe.recipe_id == r.recipe_id) ? /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Button.Danger, {
-      onClick: async () => {
-        await _service_files_user_service__WEBPACK_IMPORTED_MODULE_4__["default"].removeLikedRecipe(userData.user_id, this.recipe.recipe_id);
-        location.reload();
-        console.log('nei');
-      }
-    }, "Unlike") : /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Button.Success, {
-      onClick: async () => {
-        await _service_files_recipe_service__WEBPACK_IMPORTED_MODULE_3__["default"].likeRecipe(userData.user_id, this.props.match.params.id);
-        location.reload();
-      }
-    }, "Like recipe") : /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Button.Success, {
-      onClick: async () => {
-        _widgets__WEBPACK_IMPORTED_MODULE_2__.Alert.info('Log in to like a recipe');
-      }
-    }, "Like recipe")))), userData ? userData.admin ? /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Row, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Column, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Button.Danger, {
+    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Column, null, ingredient.name), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Column, null, ingredient.amount * this.portions / 4), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Column, null, ingredient.unit)))), userData ? userData.admin ? /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Row, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Column, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Button.Danger, {
       onClick: () => {
         //Deletes the recipe and pushes the path back to all recipes
         _service_files_recipe_service__WEBPACK_IMPORTED_MODULE_3__["default"]["delete"](this.recipe.recipe_id).then(() => {
@@ -4724,7 +4659,9 @@ class RecipeEdit extends react_simplified__WEBPACK_IMPORTED_MODULE_1__.Component
     }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Form.Label, null, "Region:")), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Column, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Form.Select, {
       value: this.recipe.region,
       onChange: event => this.recipe.region = event.currentTarget.value
-    }, this.regions.map(region => /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("option", {
+    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("option", {
+      value: 'Regions'
+    }, "Regions"), this.regions.map(region => /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("option", {
       key: region.id,
       value: region.name
     }, region.name))))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Row, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Column, {
@@ -4732,7 +4669,9 @@ class RecipeEdit extends react_simplified__WEBPACK_IMPORTED_MODULE_1__.Component
     }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Form.Label, null, "Type:")), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Column, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Form.Select, {
       value: this.recipe.type,
       onChange: event => this.recipe.type = event.currentTarget.value
-    }, this.types.map(type => /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("option", {
+    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("option", {
+      value: 'Types'
+    }, "Types"), this.types.map(type => /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("option", {
       key: type.id,
       value: type.name
     }, type.name))))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Row, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Column, {
@@ -4785,21 +4724,23 @@ class RecipeEdit extends react_simplified__WEBPACK_IMPORTED_MODULE_1__.Component
     }, "Add")))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("h4", null, "Add ingredient"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Row, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Column, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Form.Input, {
       type: "search",
       value: this.searchBar,
-      placeholder: "Seacrh for ingredient",
+      placeholder: "Search for ingredient",
+      list: 'searchList',
       onChange: event => {
         this.searchBar = event.currentTarget.value;
-        this.ingredientsToShow = [];
-        for (let i = 0; i < this.ingredients.length; i++) {
-          const name = this.ingredients[i].name.toUpperCase();
-          if (name.indexOf(this.searchBar.toUpperCase()) > -1) {
-            this.ingredientsToShow.push(this.ingredients[i]);
+        if (this.searchBar.length > 1) {
+          this.ingredientsToShow = [];
+          for (let i = 0; i < this.ingredients.length; i++) {
+            const name = this.ingredients[i].name.toUpperCase();
+            if (name.indexOf(this.searchBar.toUpperCase()) > -1) {
+              this.ingredientsToShow.push(this.ingredients[i]);
+            }
           }
         }
       }
-    })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Column, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Form.Select, {
-      value: this.newIngredient.name,
-      onChange: event => this.newIngredient.name = event.currentTarget.value
-    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("option", null, "Select Name"), this.ingredients.map(ingredient => /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("option", {
+    }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("datalist", {
+      id: "searchList"
+    }, this.ingredientsToShow.map(ingredient => /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("option", {
       key: ingredient.ingredients_id,
       value: ingredient.name
     }, ingredient.name)))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Column, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Form.Input, {
@@ -4816,14 +4757,16 @@ class RecipeEdit extends react_simplified__WEBPACK_IMPORTED_MODULE_1__.Component
     }, unit.unit)))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Column, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Button.Light, {
       small: true,
       onClick: () => {
+        let nameCheck = this.ingredients.find(ing => ing.name == this.searchBar);
         let duplicat = this.recipeIngredients.find(ingredient => ingredient.name == this.newIngredient.name);
-        if (this.newIngredient.name == 'Select Name' || this.newIngredient.unit == 'Select Unit' || this.newIngredient.name == '' || this.newIngredient.unit == '' || this.newIngredient.amount > 1000 || this.newIngredient.amount < 0) {
+        if (this.newIngredient.unit == 'Select Unit' || this.newIngredient.unit == '' || this.newIngredient.amount > 1000 || this.newIngredient.amount < 0) {
           return _widgets__WEBPACK_IMPORTED_MODULE_2__.Alert.danger('Unvalid value in new ingredient');
         } else if (duplicat) {
           return _widgets__WEBPACK_IMPORTED_MODULE_2__.Alert.danger('This ingredient is already in use');
-        } else {
-          let id = Number(this.ingredients.find(ing => ing.name == this.newIngredient.name)?.ingredients_id);
+        } else if (nameCheck) {
+          let id = Number(nameCheck.ingredients_id);
           this.newIngredient.ingredients_id = id;
+          this.newIngredient.name = this.searchBar;
           this.recipeIngredients.push(this.newIngredient);
           this.newIngredients.push(this.newIngredient);
           this.newIngredient = {
@@ -4836,7 +4779,7 @@ class RecipeEdit extends react_simplified__WEBPACK_IMPORTED_MODULE_1__.Component
       }
     }, "Add")))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Row, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Column, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Button.Success, {
       onClick: () => {
-        if (this.recipe.name != '' && this.recipe.description != '' && this.recipe.picture_url != '' && this.recipeIngredients.length > 0) {
+        if (this.recipe.name != '' && this.recipe.description != '' && this.recipe.picture_url != '' && this.recipeIngredients.length > 0 && this.recipe.region != 'Regions' && this.recipe.type != 'Types') {
           {
             if (this.ingredientsToDelete.length > 0) {
               this.recipeIngredients = this.recipeIngredients.filter(ingredient => !this.ingredientsToDelete.includes(ingredient));
@@ -4844,7 +4787,6 @@ class RecipeEdit extends react_simplified__WEBPACK_IMPORTED_MODULE_1__.Component
             }
             if (this.newIngredients.length > 0) {
               _service_files_recipe_service__WEBPACK_IMPORTED_MODULE_3__["default"].addRecipeIngredient(this.newIngredients, this.recipe.recipe_id);
-              console.log(this.newIngredients);
             }
             _service_files_recipe_service__WEBPACK_IMPORTED_MODULE_3__["default"].updateRecipeIngredients(this.recipeIngredients, this.recipe.recipe_id);
             _service_files_recipe_service__WEBPACK_IMPORTED_MODULE_3__["default"].update(this.recipe).then(() => {
@@ -4861,6 +4803,10 @@ class RecipeEdit extends react_simplified__WEBPACK_IMPORTED_MODULE_1__.Component
     try {
       let recipe = await _service_files_recipe_service__WEBPACK_IMPORTED_MODULE_3__["default"].get(this.props.match.params.id);
       this.recipe = recipe;
+      if (this.recipe.region == null || this.recipe.type == null) {
+        this.recipe.region = 'Regions';
+        this.recipe.type = 'Types';
+      }
       let recipeIngredients = await _service_files_recipe_service__WEBPACK_IMPORTED_MODULE_3__["default"].getRecipeIngredients(this.props.match.params.id);
       this.recipeIngredients = recipeIngredients;
       let regions = await _service_files_utility_service__WEBPACK_IMPORTED_MODULE_5__["default"].getAllRegions();
@@ -4875,82 +4821,6 @@ class RecipeEdit extends react_simplified__WEBPACK_IMPORTED_MODULE_1__.Component
     } catch (error) {
       _widgets__WEBPACK_IMPORTED_MODULE_2__.Alert.danger('Error getting recipe or ingredients: ' + error.message);
     }
-  }
-}
-class RecipeAdd extends react_simplified__WEBPACK_IMPORTED_MODULE_1__.Component {
-  recipe = {
-    recipe_id: 0,
-    name: '',
-    description: '',
-    region: '',
-    picture_url: '',
-    type: ''
-  };
-  ingredients = [];
-  regions = [];
-  ingredient = {
-    ingredients_id: 0,
-    name: '',
-    amount: 0,
-    unit: ''
-  };
-  render() {
-    return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Card, {
-      title: "Create new recipe"
-    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Row, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Column, {
-      width: 1
-    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Form.Label, null, "Name:")), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Column, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Form.Input, {
-      value: this.recipe.name,
-      type: "string",
-      onChange: event => {
-        this.recipe.name = event.currentTarget.value;
-      }
-    }))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Row, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Column, {
-      width: 1
-    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Form.Label, null, "Description:"), ' '), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Column, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Form.Textarea, {
-      value: this.recipe.description,
-      type: "string",
-      onChange: event => {
-        this.recipe.description = event.currentTarget.value;
-      }
-    }))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Row, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Column, {
-      width: 1
-    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Form.Label, null, "Select region: ")), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Column, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Form.Select, {
-      value: this.recipe.region,
-      onChange: event => this.recipe.region = event.currentTarget.value
-    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("option", null, "Select Region"), this.regions.map(region => /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("option", {
-      key: region.id,
-      value: region.name
-    }, region.name))))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Row, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Column, {
-      width: 1
-    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Form.Label, null, "Picture-url: ")), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Column, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Form.Input, {
-      value: this.recipe.picture_url,
-      type: "string",
-      onChange: event => {
-        this.recipe.picture_url = event.currentTarget.value;
-      }
-    }))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Button.Success, {
-      onClick: async () => {
-        if (this.recipe.name.length > 1) {
-          if (this.recipe.region != '' && this.recipe.region != 'Select Region') {
-            await _service_files_recipe_service__WEBPACK_IMPORTED_MODULE_3__["default"].addRecipe(this.recipe.name, this.recipe.description, this.recipe.picture_url, this.recipe.region, this.recipe.type);
-            history.push('/recipes/' + this.recipe.recipe_id + '/edit');
-          } else {
-            _widgets__WEBPACK_IMPORTED_MODULE_2__.Alert.danger('You need to select a region for your recipe');
-          }
-        } else {
-          _widgets__WEBPACK_IMPORTED_MODULE_2__.Alert.danger('You need a name for your recipe');
-        }
-      }
-    }, "Create recipe"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Button.Light, {
-      onClick: () => {
-        history.push('/recipes');
-      }
-    }, "Cancel")));
-  }
-  async mounted() {
-    let regions = await _service_files_utility_service__WEBPACK_IMPORTED_MODULE_5__["default"].getAllRegions();
-    this.regions = regions;
   }
 }
 
@@ -4973,11 +4843,12 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 /* harmony import */ var react_simplified__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-simplified */ "./node_modules/react-simplified/lib/index.js");
 /* harmony import */ var _widgets__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../widgets */ "./src/widgets.tsx");
-/* harmony import */ var react_router_dom__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router-dom/esm/react-router-dom.js");
+/* harmony import */ var react_router_dom__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router-dom/esm/react-router-dom.js");
 /* harmony import */ var _service_files_user_service__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../service-files/user-service */ "./src/service-files/user-service.tsx");
-/* harmony import */ var history__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! history */ "./node_modules/history/esm/history.js");
-/* harmony import */ var bcryptjs__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! bcryptjs */ "../../node_modules/bcryptjs/index.js");
-/* harmony import */ var bcryptjs__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(bcryptjs__WEBPACK_IMPORTED_MODULE_4__);
+/* harmony import */ var _service_files_cart_service__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../service-files/cart-service */ "./src/service-files/cart-service.tsx");
+/* harmony import */ var history__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! history */ "./node_modules/history/esm/history.js");
+/* harmony import */ var bcryptjs__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! bcryptjs */ "../../node_modules/bcryptjs/index.js");
+/* harmony import */ var bcryptjs__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(bcryptjs__WEBPACK_IMPORTED_MODULE_5__);
 
 
 
@@ -4985,21 +4856,22 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-const history = (0,history__WEBPACK_IMPORTED_MODULE_5__.createHashHistory)(); // Use history.push(...) to programmatically change path, for instance after successfully saving a student
 
+const history = (0,history__WEBPACK_IMPORTED_MODULE_6__.createHashHistory)(); // Use history.push(...) to programmatically change path, for instance after successfully saving a student
+let created = false;
 //@ts-ignore This is the userdata that gets added to sessionstorage if you log in. Ts-ignore because it can be empty
 const userData = JSON.parse(sessionStorage.getItem('user'));
 
 //function to hash password. To be done before adding password to database
 async function generateHash(password) {
-  const salt = bcryptjs__WEBPACK_IMPORTED_MODULE_4___default().genSaltSync(10);
-  const hash = bcryptjs__WEBPACK_IMPORTED_MODULE_4___default().hashSync(password, salt);
+  const salt = bcryptjs__WEBPACK_IMPORTED_MODULE_5___default().genSaltSync(10);
+  const hash = bcryptjs__WEBPACK_IMPORTED_MODULE_5___default().hashSync(password, salt);
   return hash;
 }
 
 //function to compare entered password to the saved hashed password in the database
 async function compareHash(password, hashed) {
-  return bcryptjs__WEBPACK_IMPORTED_MODULE_4___default().compareSync(password, hashed);
+  return bcryptjs__WEBPACK_IMPORTED_MODULE_5___default().compareSync(password, hashed);
 }
 class UserLogin extends react_simplified__WEBPACK_IMPORTED_MODULE_1__.Component {
   likedRecipes = [];
@@ -5011,6 +4883,8 @@ class UserLogin extends react_simplified__WEBPACK_IMPORTED_MODULE_1__.Component 
     password: '',
     admin: false
   };
+  cart = [];
+  CartItemsToShow = [];
   render() {
     // if userdata exists the page that renders is the one with your information
     if (userData) {
@@ -5018,17 +4892,41 @@ class UserLogin extends react_simplified__WEBPACK_IMPORTED_MODULE_1__.Component 
         title: "Your user information"
       }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Row, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Column, null, "Brukernavn: ", userData.username)), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Row, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Column, null, "Your liked recipes:")), this.likedRecipes.length > 0 ? this.likedRecipes.map(recipe => /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Row, {
         key: recipe.recipe_id
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_6__.NavLink, {
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_7__.NavLink, {
         to: "/recipes/" + recipe.recipe_id
       }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Column, null, recipe.name)))) : 'You have no liked recipes', /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Row, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Column, null, userData.admin ? 'You are admin' : 'You are not admin')), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Row, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Column, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Button.Danger, {
         onClick: () => {
           sessionStorage.clear();
           location.reload();
         }
-      }, "Log out")))));
+      }, "Log out")))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Card, {
+        title: "Your Cart"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Button.Danger, {
+        onClick: () => {
+          this.CartItemsToShow.map(cartitem => {
+            _service_files_cart_service__WEBPACK_IMPORTED_MODULE_4__["default"].deleteIngredientFromCart(cartitem.cart_id);
+          });
+          this.mounted();
+        }
+      }, "Clear All"), this.CartItemsToShow.map(cart =>
+      /*#__PURE__*/
+      //Maps all the different cart and renders them as links to their respective cart details
+      react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Row, {
+        key: cart.cart_id
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Column, null, cart.ingredients), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Column, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Button.Danger, {
+        onClick: () => {
+          _service_files_cart_service__WEBPACK_IMPORTED_MODULE_4__["default"].deleteIngredientFromCart(cart.cart_id).then(() => {
+            this.mounted();
+          });
+        }
+      }, "X"))))));
     }
     //if userdata does not exist, the page that renders is a login-page
     else {
+      if (created == true) {
+        created = false;
+        location.reload();
+      }
       return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Card, {
         title: "Log in"
       }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Row, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Column, null, "Brukernavn:", /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Form.Input, {
@@ -5074,6 +4972,13 @@ class UserLogin extends react_simplified__WEBPACK_IMPORTED_MODULE_1__.Component 
       if (userData) {
         let likedRecipes = await _service_files_user_service__WEBPACK_IMPORTED_MODULE_3__["default"].getLikedRecipes(userData.user_id);
         this.likedRecipes = likedRecipes;
+        try {
+          let cart = await _service_files_cart_service__WEBPACK_IMPORTED_MODULE_4__["default"].get(userData.user_id);
+          this.cart = cart;
+          this.CartItemsToShow = cart;
+        } catch (error) {
+          _widgets__WEBPACK_IMPORTED_MODULE_2__.Alert.danger('Error getting cart: ' + error.message);
+        }
       }
     } catch {
       _widgets__WEBPACK_IMPORTED_MODULE_2__.Alert.danger('Could not fetch existing users from database');
@@ -5126,6 +5031,7 @@ class NewUser extends react_simplified__WEBPACK_IMPORTED_MODULE_1__.Component {
                 let u = await _service_files_user_service__WEBPACK_IMPORTED_MODULE_3__["default"].get(this.user.username);
                 this.user = u;
                 sessionStorage.setItem('user', JSON.stringify(this.user));
+                created = true;
                 history.push('/user/login');
               } else {
                 _widgets__WEBPACK_IMPORTED_MODULE_2__.Alert.danger("Username can't be null");
@@ -5250,7 +5156,8 @@ class RecipeService {
       name: recipe.name,
       picture_url: recipe.picture_url,
       description: recipe.description,
-      region: recipe.region
+      region: recipe.region,
+      type: recipe.type
     }).then(response => response.data.id);
   }
   deleteRecipeIngredients(ingredientsToDelete, id) {
@@ -5435,38 +5342,41 @@ class Card extends react_simplified__WEBPACK_IMPORTED_MODULE_1__.Component {
 class PreviewCard extends react_simplified__WEBPACK_IMPORTED_MODULE_1__.Component {
   render() {
     return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", {
-      style: {
-        display: "flex"
-      }
-    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", {
-      style: {
+      style: this.props.small ? {
+        height: "250px",
         padding: "10px",
         margin: "20px",
         flexBasis: "20%",
-        flexGrow: "1",
-        height: "400px"
+        flexGrow: "1"
+      } : {
+        height: "400px",
+        padding: "10px",
+        margin: "20px",
+        flexBasis: "20%",
+        flexGrow: "1"
       }
     }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_2__.NavLink, {
-      to: 'recipes/' + this.props.link1
+      to: 'recipes/' + this.props.id
     }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("b", {
       style: {
-        position: "absolute",
+        position: "relative",
         left: "10%",
         right: "0",
         width: "20%",
         color: "black"
       }
-    }, this.props.title1), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("img", {
-      alt: "DETTE ER ET BILDE",
-      src: this.props.image1,
+    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("h2", null, this.props.name)), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("img", {
+      alt: this.props.name,
+      src: this.props.url,
       style: {
         height: "100%",
         width: "auto",
         marginLeft: "50px",
-        boxShadow: "rgba(0, 0, 0, 0.1) 0px 4px 12px",
-        borderRadius: "10px"
+        boxShadow: "rgba(0, 0, 0, 0.5) 0px 4px 12px",
+        borderRadius: "10px",
+        maxWidth: '40vw'
       }
-    }))));
+    })));
   }
 }
 class BootstrapPreviewCard extends react_simplified__WEBPACK_IMPORTED_MODULE_1__.Component {
@@ -40681,8 +40591,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react_router_dom__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router/esm/react-router.js");
 /* harmony import */ var _widgets__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./widgets */ "./src/widgets.tsx");
 /* harmony import */ var _component_files_recipe_components__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./component-files/recipe-components */ "./src/component-files/recipe-components.tsx");
-/* harmony import */ var _component_files_user_components__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./component-files/user-components */ "./src/component-files/user-components.tsx");
-/* harmony import */ var _component_files_cart_components__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./component-files/cart-components */ "./src/component-files/cart-components.tsx");
+/* harmony import */ var _service_files_recipe_service__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./service-files/recipe-service */ "./src/service-files/recipe-service.tsx");
+/* harmony import */ var _component_files_user_components__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./component-files/user-components */ "./src/component-files/user-components.tsx");
 
 
 
@@ -40701,17 +40611,12 @@ class Menu extends react_simplified__WEBPACK_IMPORTED_MODULE_2__.Component {
     }, "Recipes"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_3__.NavBar.Link, {
       left: false,
       to: "/user/login"
-    }, "My Profile"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_3__.NavBar.Link, {
-      left: true,
-      to: "/cart"
-    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_3__.Button.Light, {
-      left: true,
-      small: true,
-      onClick: () => {}
-    }, "Jeg vil v\xE6re et icon"))));
+    }, "My Profile")));
   }
 }
 class Home extends react_simplified__WEBPACK_IMPORTED_MODULE_2__.Component {
+  recipes = [];
+  recipesToShow = [];
   render() {
     return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1__.createElement("div", {
       style: {
@@ -40719,11 +40624,37 @@ class Home extends react_simplified__WEBPACK_IMPORTED_MODULE_2__.Component {
       }
     }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_3__.Card, {
       title: "Welcome"
-    }, "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent laoreet risus et nunc ultricies, a varius velit ultrices. Etiam in efficitur sem. Nulla facilisi. Curabitur nunc sem, sollicitudin ut tortor auctor, gravida dapibus dui. In auctor justo diam, ut dapibus justo ultricies a. Sed sollicitudin ipsum in velit rutrum rhoncus. Integer porttitor odio nisi, vitae rhoncus velit egestas sed. Ut lobortis lectus ut fringilla auctor. Donec rutrum eros nec nibh molestie, a molestie nibh semper. Suspendisse velit tellus, luctus sit amet lectus consectetur, tincidunt blandit metus. Curabitur vehicula fringilla erat, vel egestas urna mollis in. Nam cursus accumsan mauris eget molestie. Suspendisse suscipit porta purus, id interdum sem tempus sed. Curabitur mattis aliquam dolor. Etiam et velit eget arcu semper dapibus. Nulla sit amet auctor mi, vitae laoreet lorem. In et euismod erat, vitae eleifend tellus. Proin consectetur sit amet nunc vitae egestas. Ut ultrices, lacus a sagittis pretium, nunc dui condimentum erat, ac auctor dui ante id mi. Aliquam volutpat laoreet placerat. Ut dignissim eu enim at vulputate. Sed neque justo, mollis sit amet ligula vitae, tincidunt auctor lorem. Curabitur at augue sit amet odio cursus tristique. Nam cursus eros et neque condimentum convallis. Sed efficitur dolor ligula, sit amet faucibus odio posuere quis. Suspendisse lobortis rutrum tortor et finibus. Nam ac tincidunt felis."), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_3__.PreviewCard, {
-      link1: "recipes/1",
-      title1: 1,
-      image1: "https://i.guim.co.uk/img/media/26392d05302e02f7bf4eb143bb84c8097d09144b/446_167_3683_2210/master/3683.jpg?width=1200&quality=85&auto=format&fit=max&s=a52bbe202f57ac0f5ff7f47166906403"
-    }));
+    }, "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent laoreet risus et nunc ultricies, a varius velit ultrices. Etiam in efficitur sem. Nulla facilisi. Curabitur nunc sem, sollicitudin ut tortor auctor, gravida dapibus dui. In auctor justo diam, ut dapibus justo ultricies a. Sed sollicitudin ipsum in velit rutrum rhoncus. Integer porttitor odio nisi, vitae rhoncus velit egestas sed. Ut lobortis lectus ut fringilla auctor. Donec rutrum eros nec nibh molestie, a molestie nibh semper. Suspendisse velit tellus, luctus sit amet lectus consectetur, tincidunt blandit metus. Curabitur vehicula fringilla erat, vel egestas urna mollis in. Nam cursus accumsan mauris eget molestie. Suspendisse suscipit porta purus, id interdum sem tempus sed. Curabitur mattis aliquam dolor. Etiam et velit eget arcu semper dapibus. Nulla sit amet auctor mi, vitae laoreet lorem. In et euismod erat, vitae eleifend tellus. Proin consectetur sit amet nunc vitae egestas. Ut ultrices, lacus a sagittis pretium, nunc dui condimentum erat, ac auctor dui ante id mi. Aliquam volutpat laoreet placerat. Ut dignissim eu enim at vulputate. Sed neque justo, mollis sit amet ligula vitae, tincidunt auctor lorem. Curabitur at augue sit amet odio cursus tristique. Nam cursus eros et neque condimentum convallis. Sed efficitur dolor ligula, sit amet faucibus odio posuere quis. Suspendisse lobortis rutrum tortor et finibus. Nam ac tincidunt felis."), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1__.createElement("div", {
+      style: {
+        display: "flex",
+        flexWrap: 'wrap'
+      }
+    }, this.recipesToShow.map(recipe => /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_3__.PreviewCard, {
+      key: recipe.recipe_id,
+      id: recipe.recipe_id,
+      name: recipe.name,
+      url: recipe.picture_url
+    }))));
+  }
+  async mounted() {
+    //Gets all recipes and pass them to recipe array
+    try {
+      let recipes = await _service_files_recipe_service__WEBPACK_IMPORTED_MODULE_5__["default"].getAll();
+      this.recipes = recipes;
+      for (let i = 0; i < 2; i++) {
+        let index = Math.floor(this.recipes.length * Math.random());
+        let recipe = this.recipes[index];
+        if (!this.recipesToShow.find(rec => rec.recipe_id == recipe.recipe_id)) {
+          this.recipesToShow.push(recipe);
+        } else if (recipe.recipe_id == 1) {
+          this.recipesToShow.push(this.recipes[2]);
+        } else {
+          this.recipesToShow.push(this.recipes[index - 1]);
+        }
+      }
+    } catch (error) {
+      _widgets__WEBPACK_IMPORTED_MODULE_3__.Alert.danger('Error getting recipes: ' + error.message);
+    }
   }
 }
 react_dom__WEBPACK_IMPORTED_MODULE_0__.render( /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1__.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_7__.HashRouter, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1__.createElement("div", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_3__.Alert, null), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1__.createElement(Menu, null), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1__.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_8__.Route, {
@@ -40745,15 +40676,11 @@ react_dom__WEBPACK_IMPORTED_MODULE_0__.render( /*#__PURE__*/react__WEBPACK_IMPOR
 }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1__.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_8__.Route, {
   exact: true,
   path: "/user/login",
-  component: _component_files_user_components__WEBPACK_IMPORTED_MODULE_5__.UserLogin
+  component: _component_files_user_components__WEBPACK_IMPORTED_MODULE_6__.UserLogin
 }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1__.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_8__.Route, {
   exact: true,
   path: "/user/create",
-  component: _component_files_user_components__WEBPACK_IMPORTED_MODULE_5__.NewUser
-}), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1__.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_8__.Route, {
-  exact: true,
-  path: "/cart",
-  component: _component_files_cart_components__WEBPACK_IMPORTED_MODULE_6__.CartContent
+  component: _component_files_user_components__WEBPACK_IMPORTED_MODULE_6__.NewUser
 }))), document.getElementById('root'));
 })();
 

@@ -22,18 +22,16 @@ export class Card extends Component<{ title: ReactNode }> {
 }
 
 
-export class PreviewCard extends Component<{ title1:number, image1: string, link1: string}> {
+export class PreviewCard extends Component<{ name: string; url: string; id: number; small?: boolean; }> {
 
   render() {
     return (
-    <div style={{display: "flex"}}>
-      <div style={{padding: "10px", margin: "20px", flexBasis:"20%", flexGrow:"1", height: "400px"}}>
-        <NavLink to={'recipes/'+this.props.link1}>
-          <b style={{position:"absolute", left: "10%", right:"0" , width:"20%",  color: "black"}}>{this.props.title1}</b>
-          <img alt='DETTE ER ET BILDE' src={this.props.image1} style={{height:"100%", width:"auto", marginLeft: "50px", boxShadow: "rgba(0, 0, 0, 0.1) 0px 4px 12px", borderRadius: "10px"}}></img>
+      <div style={this.props.small ? {height: "250px", padding: "10px", margin: "20px", flexBasis:"20%", flexGrow:"1"} : {height: "400px", padding: "10px", margin: "20px", flexBasis:"20%", flexGrow:"1"}}>
+        <NavLink to={'recipes/' + this.props.id}>
+          <b style={{position:"relative", left: "10%", right:"0" , width:"20%",  color: "black"}}><h2>{this.props.name}</h2></b>
+          <img alt={this.props.name} src={this.props.url} style={{height:"100%", width:"auto", marginLeft: "50px", boxShadow: "rgba(0, 0, 0, 0.5) 0px 4px 12px", borderRadius: "10px", maxWidth:'40vw'}}></img>
         </NavLink>
       </div>
-    </div>
     )   
   }
 }
@@ -233,7 +231,7 @@ class FormLabel extends Component {
   render() {
     return <label className="col-form-label">{this.props.children}</label>;
   }
-}
+} 
 
 /**
  * Renders a form input using Bootstrap styles.

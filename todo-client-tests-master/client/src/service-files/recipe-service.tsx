@@ -83,6 +83,7 @@ class RecipeService {
         picture_url: recipe.picture_url,
         description: recipe.description,
         region: recipe.region,
+        type: recipe.type,
       })
       .then((response) => response.data.id);
   }

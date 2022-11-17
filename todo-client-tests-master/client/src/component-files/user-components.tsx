@@ -3,12 +3,13 @@ import { Component } from 'react-simplified';
 import { Alert, Card, Row, Column, Form, Button } from '../widgets';
 import { NavLink } from 'react-router-dom';
 import userService, {User, LikedRecipe} from '../service-files/user-service';
+import cartService, {CartItem} from '../service-files/cart-service';
 import utilityService, {Region, Unit, Type} from '../service-files/utility-service';
 import { createHashHistory } from 'history';
 import bcrypt from 'bcryptjs';
 
 const history = createHashHistory(); // Use history.push(...) to programmatically change path, for instance after successfully saving a student
-
+let created : boolean = false;
 //@ts-ignore This is the userdata that gets added to sessionstorage if you log in. Ts-ignore because it can be empty
 const userData = JSON.parse(sessionStorage.getItem('user')); 
 
@@ -18,7 +19,7 @@ export async function generateHash(password:string){
     const hash = bcrypt.hashSync(password, salt);
     return hash;
 }
-
+ 
 //function to compare entered password to the saved hashed password in the database
 export async function compareHash(password : string, hashed : string){
     return bcrypt.compareSync(password, hashed);
@@ -29,9 +30,14 @@ export class UserLogin extends Component  {
     users : User[] = [];
     loggedIn : boolean = false;
     user: User = {user_id : 0, username : '', password : '', admin : false};
+
+    cart:CartItem[] = [];
+    CartItemsToShow:CartItem[] = [];
+
     render() {
         // if userdata exists the page that renders is the one with your information
         if(userData) {
+  
             return ( 
                 <>
             <Card title="Your user information">
@@ -61,11 +67,37 @@ export class UserLogin extends Component  {
             </Row>
 
             </Card>
+            <Card title="Your Cart">
+          <Button.Danger onClick={() => {
+            this.CartItemsToShow.map((cartitem) => {
+              cartService.deleteIngredientFromCart(cartitem.cart_id)
+            })
+            this.mounted()
+          }}>Clear All</Button.Danger>
+ 
+          {this.CartItemsToShow.map((cart: CartItem) => (
+            //Maps all the different cart and renders them as links to their respective cart details
+            <Row key={cart.cart_id}>
+              <Column>
+                {cart.ingredients}
+              </Column>
+              <Column><Button.Danger onClick={() => {
+
+                cartService.deleteIngredientFromCart(cart.cart_id).then(() => {
+                  this.mounted();
+                })
+              }}>X</Button.Danger></Column>
+            </Row>))}
+        </Card>
                 </>
             )
         }
         //if userdata does not exist, the page that renders is a login-page
         else{ 
+            if(created == true){
+                created = false;
+                location.reload();
+            }
             return (
                 <>  
                     <Card title="Log in">
@@ -116,20 +148,12 @@ export class UserLogin extends Component  {
                                 }}>Log in
                                 </Button.Success> 
                                 <Button.Light onClick={()=> history.push('/user/create')}>Create user</Button.Light>
-                                
-                            </Column>
-                            
+                            </Column> 
                         </Row>
-    
-    
                     </Card>
-    
                 </>
             )
-
         }
-
-        
     }
 
     async mounted() {
@@ -140,11 +164,23 @@ export class UserLogin extends Component  {
             if(userData){
                 let likedRecipes = await userService.getLikedRecipes(userData.user_id)
                 this.likedRecipes = likedRecipes
+
+                try{
+                    let cart = await cartService.get(userData.user_id);
+                    this.cart = cart;
+                    this.CartItemsToShow = cart;
+              
+                  } catch (error: any){
+                    Alert.danger('Error getting cart: ' + error.message)
+                  }
             }
         }
         catch{
             Alert.danger('Could not fetch existing users from database')
         }
+
+        
+
     }
 }
 
@@ -211,6 +247,7 @@ export class NewUser extends Component {
                                                  let u = await userService.get(this.user.username)
                                                  this.user = u       
                                                  sessionStorage.setItem('user', JSON.stringify(this.user));
+                                                 created = true;
                                                  history.push('/user/login')                                  
     
                                             }
