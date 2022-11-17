@@ -1,12 +1,13 @@
+/*
 import axios from 'axios';
 import pool from '../../src/mysql-pool';
 import app from '../../src/app';
 import userService, { User } from '../../src/service-files/user-service';
 
 const testUsers: User[] = [
-  { user_id: 1, username: 'lars', cart_id: 1, password: "test1", admin: false},
-  { user_id: 2, username: 'vetle', cart_id: 2, password: "test2", admin: false},
-  { user_id: 3, username: 'seb', cart_id: 3, password: "test3", admin: false},
+  { user_id: 1, username: 'lars', password: "test1", admin: false},
+  { user_id: 2, username: 'vetle', password: "test2", admin: false},
+  { user_id: 3, username: 'seb', password: "test3", admin: false},
 ];
 
 // Since API is not compatible with v1, API version is increased to v2
@@ -25,9 +26,9 @@ beforeEach((done) => {
 
     // Create testUsers in order to set correct id, and call done() when finished
     userService
-      .create(testUsers[0])
-      .then(() => userService.create(testUsers[1])) // Create testTask[1] after testTask[0] has been created
-      .then(() => userService.create(testUsers[2])) // Create testTask[2] after testTask[1] has been created
+      .create(testUsers[0].password,testUsers[0].username, testUsers[0].admin,)
+      .then(() => userService.create(testUsers[1].password,testUsers[1].username, testUsers[1].admin)) // Create testTask[1] after testTask[0] has been created
+      .then(() => userService.create(testUsers[2].password,testUsers[2].username, testUsers[2].admin)) // Create testTask[2] after testTask[1] has been created
       .then(() => done()); // Call done() after testTask[2] has been created
   });
 });
@@ -84,3 +85,5 @@ describe('Delete User (DELETE)', () => {
     });
   });
 });
+
+*
