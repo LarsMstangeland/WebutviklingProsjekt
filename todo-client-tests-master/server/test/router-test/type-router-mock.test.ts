@@ -1,11 +1,11 @@
 import axios from 'axios';
 import app from '../../src/app';
-import  utilityService, {Unit} from '../../src/service-files/utility-service';
+import utilityService, {Type} from '../../src/service-files/utility-service';
 
-const testUnits: Unit[] = [
-    {id: 1, unit : 'dl'},
-    {id: 2, unit : 'kg'},
-    {id: 3, unit : 'hg'}
+const testTypes: Type[] = [
+    {id: 1, name : 'Fish'},
+    {id: 2, name : 'Pork'},
+    {id: 3, name : 'Beef'}
     
 ]
 
@@ -18,32 +18,33 @@ let webServer: any;
 beforeAll(() => webServer = app.listen(3001));
 afterAll(() => webServer.close());
 
-describe('Fetch units (GET)', ()=> {
 
-    test('Fetch all units (200 OK)', async ()=> {
-        utilityService.getAllUnit = jest.fn(()=> Promise.resolve(testUnits));
 
-        const response = await axios.get('/units');
+describe('Fetch types (GET)', ()=> {
+
+    test('Fetch all types (200 OK)', async ()=> {
+        utilityService.getAllType = jest.fn(()=> Promise.resolve(testTypes));
+
+        const response = await axios.get('/types');
         expect(response.status).toEqual(200);
-        expect(response.data).toEqual(testUnits);
+        expect(response.data).toEqual(testTypes);
     });
 
     test('Fetch all units (500 internal server error)', async ()=> {
-        utilityService.getAllUnit = jest.fn(() => Promise.reject());
+        utilityService.getAllType = jest.fn(() => Promise.reject());
 
-        const response = await axios.get('/units').catch((error) => {
+        const response = await axios.get('/types').catch((error) => {
             expect(error.response.status).toEqual(500);
         })
     })
 
     test('Fetch all units (404 Not Found)', async () => {
-        utilityService.getAllUnit = jest.fn(() => Promise.resolve(testUnits));
+        utilityService.getAllType = jest.fn(() => Promise.resolve(testTypes));
 
         const response = await axios.get('badpath').catch((error) => {
             expect(error.response.status).toEqual(404);
-            expect(error.response.body).toEqual('Could not find units');
+            expect(error.response.data).toEqual('Could not find types');
         })
     })
 
 });
-

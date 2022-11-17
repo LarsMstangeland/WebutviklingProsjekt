@@ -8,7 +8,7 @@ export type CartItem = {
 };
 
 
-class Cartservice{
+class CartService{
 
     get(id: number) {
         return new Promise<CartItem[] | undefined>((resolve, reject) => {
@@ -39,5 +39,5 @@ class Cartservice{
 
 
 
-const cartService = new Cartservice();
+const cartService = new CartService();
 export default cartService;
