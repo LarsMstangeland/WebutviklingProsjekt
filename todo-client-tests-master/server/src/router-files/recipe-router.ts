@@ -20,7 +20,7 @@ RecipeRouter.get('/:id', (request, response) => {
     .then((recipe) =>
       recipe ? response.send(recipe) : response.status(404).send('Recipe not found')
     )
-    .catch((error) => response.status(404).send(error));
+    .catch((error) => response.status(500).send(error));
 });
 
 RecipeRouter.get('/:id/ingredients', (request, response) => {

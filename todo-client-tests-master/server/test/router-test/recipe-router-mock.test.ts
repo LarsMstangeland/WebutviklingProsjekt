@@ -31,13 +31,38 @@ describe('Fetch recipes (GET)', ()=> {
         const response = await axios.get('badpath').catch(error => {
             expect(error.response.status).toEqual(404);
             // expect(error.response.data).toEqual('Recipes not found')
-        })
-    })
+        });
+    });
 
     test('Fetch all recipes (500 internal server error)', async () => {
         recipeService.getAll = jest.fn(() => Promise.reject());
 
         const response = await axios.get('/recipes').catch((error) => {
+            expect(error.response.status).toEqual(500);
+        });
+    });
+
+    test('Fetch recipe (200 OK)', async ()=> {
+        recipeService.get = jest.fn(() => Promise.resolve(testRecipes[0]));
+
+        const response = await axios.get('/recipes/1');
+        expect(response.status).toEqual(200);
+        expect(response.data).toEqual(testRecipes[0]);
+    })
+
+    test('Fetch recipe (404 Not Found)', async ()=> {
+        recipeService.get = jest.fn(() => Promise.resolve(testRecipes[0]));
+
+        const response = await axios.get('badpath').catch((error) => {
+            expect(error.response.status).toEqual(404);
+            // expect(error.response.data).toEqual('Recipe not found');
+        })
+    })
+
+    test('Fetch recipe (500 internal server error)', async () => {
+        recipeService.get = jest.fn(() => Promise.reject());
+
+        const response = await axios.get('/recipes/1').catch((error) => {
             expect(error.response.status).toEqual(500);
         })
     })
