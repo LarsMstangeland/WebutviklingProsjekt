@@ -5,8 +5,7 @@ import  utilityService, {Unit} from '../../src/service-files/utility-service';
 const testUnits: Unit[] = [
     {id: 1, unit : 'dl'},
     {id: 2, unit : 'kg'},
-    {id: 3, unit : 'hg'}
-    
+    {id: 3, unit : 'hg'},
 ]
 
 // Since API is not compatible with v1, API version is increased to v2

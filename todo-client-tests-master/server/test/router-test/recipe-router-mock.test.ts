@@ -28,9 +28,9 @@ describe('Fetch recipes (GET)', ()=> {
     test('Fetch all recipes (404 Not Found)', async () => {
         recipeService.getAll = jest.fn(() => Promise.resolve(testRecipes));
 
-        const response = await axios.get('badpath').catch(error => {
+        const response = await axios.get('/recipies/badpath').catch(error => {
             expect(error.response.status).toEqual(404);
-            // expect(error.response.data).toEqual('Recipes not found')
+            //expect(error.response.data).toEqual('Recipes not found')
         });
     });
 

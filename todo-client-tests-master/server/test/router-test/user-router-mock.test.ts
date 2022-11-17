@@ -17,7 +17,7 @@ let LikedRecipeTest = [
         recipe_id: 2,
         name: "testdata"
     }
-]
+];
 
 // Since API is not compatible with v1, API version is increased to v2
 axios.defaults.baseURL = 'http://localhost:3001/api/v2';

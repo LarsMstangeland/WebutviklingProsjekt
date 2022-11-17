@@ -50,7 +50,7 @@ describe('Fetch regions (GET)', ()=> {
 
         const response = await axios.get('badpath').catch((error) => {
             expect(error.response.status).toEqual(404);
-            // expect(error.data).toEqual('Regions not found');
+            //expect(error.data).toEqual('Regions not found');
         })
     })
 

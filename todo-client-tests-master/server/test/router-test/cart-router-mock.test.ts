@@ -19,25 +19,26 @@ let webServer: any;
 beforeAll(() => webServer = app.listen(3001));
 afterAll(() => webServer.close());
 
-// describe('Fetch carts (200 OK)', ()=> {
+describe('Fetch carts (200 OK)', ()=> {
+    test('Fetch all carts for user (200 OK)', async () => {
 
-//     const user_id : number = 1;
-    
-//     test('Fetch all carts for user (200 OK)', async () => {
-//         cartService.get(user_id) = jest.fn(()=> Promise.resolve(testCartItems[0]))
-//     })
-// })
+        const user_id : number = 1;
 
-// describe('Delete cart (DELETE)', ()=> {
+        cartService.get = jest.fn(()=> Promise.resolve(testCartItems));
+        const response = await axios.get('/cart/'+user_id)
 
-//     test('Delete cart (200 OK)', async ()=> {
-//         cartService.delete() = jest.fn(() => Promise.resolve());
-//         const response = await axios.delete('/cart/1');
+        expect(response.data).toEqual(testCartItems);
+        expect(response.status).toEqual(200);
+    })
+})
 
-//         expect(response.status).toEqual(200);
-//     });
+describe('Delete cart (DELETE)', ()=> {
+    test('Delete cart (200 OK)', async ()=> {
+        cartService.delete = jest.fn(() => Promise.resolve());
+        const response = await axios.delete('/cart/1');
 
-//     test('Delete cart (500 internal server error)', () => {})
-// })
+        expect(response.status).toEqual(200);
+    });
+})
 
 
