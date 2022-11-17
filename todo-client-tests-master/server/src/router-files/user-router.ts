@@ -44,7 +44,7 @@ UserRouter.delete('/:id', (request, response) => {
 UserRouter.get('/recipes/:userId', (request, response)=> {
   const userId = Number(request.params.userId)
   userService.getLikedRecipes(userId)
-  .then((rows) => rows ? response.send(rows) : response.send("No like recipes"))
+  .then((rows) => rows ? response.send(rows) : response.send("No liked recipes"))
   .catch((error) => response.status(500).send(error));
 })
 

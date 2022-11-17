@@ -7,16 +7,16 @@ const RegionRouter = express.Router();
 RegionRouter.get('', (_request, response) => {
     utilityService
       .getAllRegion()
-      .then((rows) => response.send(rows))
-      .catch((error) => response.status(404).send(error));
+      .then((rows) => rows ? response.send(rows) : response.status(404).send('Regions not found'))
+      .catch((error) => response.status(500).send(error));
   });
 
 RegionRouter.get('/:id', (request, response) => {
     const id = Number(request.params.id);
     utilityService
       .getRegion(id)
-      .then((recipe) => (recipe ? response.send(recipe) : response.status(404).send('Region not found')))
-      .catch((error) => response.status(404).send(error));
+      .then((region) => (region ? response.send(region) : response.status(404).send('Region not found')))
+      .catch((error) => response.status(500).send(error));
   });
 
 export default RegionRouter;
