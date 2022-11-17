@@ -9,8 +9,8 @@ const RecipeRouter = express.Router();
 RecipeRouter.get('/', (_request, response) => {
   recipeService
     .getAll()
-    .then((rows) => response.send(rows))
-    .catch((error) => response.status(404).send(error));
+    .then((rows) => rows ? response.send(rows) : response.status(404).send('Recipes not found'))
+    .catch((error) => response.status(500).send(error));
 });
 
 RecipeRouter.get('/:id', (request, response) => {
