@@ -8,6 +8,14 @@ const testRecipes : Recipe[] = [
     {recipe_id : 3, name : 'pizza', region : 'Europe', type : 'ham', picture_url : 'noooo', description : 'muy bien'}
 ]
 
+const testIngredients: Ingredient[] = [
+
+
+    {ingredients_id: 1, name: "test", amount: 1, unit: "test", type: "test"},
+    {ingredients_id: 2, name: "test", amount: 2, unit: "test", type: "test"}
+
+]
+
 axios.defaults.baseURL = 'http://localhost:3001/api/v2';
 
 jest.mock('../../src/service-files/recipe-service');
@@ -20,7 +28,7 @@ describe('Fetch recipes (GET)', ()=> {
     test('Fetch all recipes (200 OK)', async ()=> {
         recipeService.getAll = jest.fn(() => Promise.resolve(testRecipes));
 
-        const response = await axios.get('/recipes');
+        const response = await axios.get('/recipes/');
         expect(response.status).toEqual(200);
         expect(response.data).toEqual(testRecipes);
     });
@@ -66,5 +74,55 @@ describe('Fetch recipes (GET)', ()=> {
             expect(error.response.status).toEqual(500);
         })
     })
+
 });
+
+
+/*
+describe('Fetch ingredients (GET)', () => {
+
+    test('Fetch all ingredients', async () => {
+
+        recipeService.getIngredients = jest.fn(() => Promise.resolve(testIngredients));
+        const response = await axios.get('/recipes/ingredients');
+            
+        expect(response.status).toEqual(200);
+        expect(response.data).toEqual(testIngredients)
+
+    })
+})
+
+*/
+
+
+describe('Post recipes (POST)', () => {
+
+    test('Create a recipe (200)', async () => {
+
+        const testid = 1
+
+        recipeService.createRecipe = jest.fn(() => Promise.resolve(testid));
+
+        const response = await axios.post('recipes/add', testRecipes[0])
+        expect(response.data).toEqual({"id": testid});
+        expect(response.status).toEqual(200);
+
+    })
+
+    
+    test('add ingredient to recipe (200)', async () => {
+        const testid = 1
+
+        recipeService.addRecipeIngredient = jest.fn(() => Promise.resolve());
+
+        const response = await axios.post('recipes/'+testid+'/edit/ingredients', testIngredients)
+        expect(response.status).toEqual(200);
+
+    })
+
+
+
+
+
+})
 
