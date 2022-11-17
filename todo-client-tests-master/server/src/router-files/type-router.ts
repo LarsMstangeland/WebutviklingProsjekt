@@ -7,7 +7,7 @@ TypeRouter.get('', (_request, response) => {
     utilityService
       .getAllType()
       .then((rows) => response.send(rows))
-      .catch((error) => response.status(500).send(error));
+      .catch((error) => response.status(404).send(error));
   });
 
 /*
