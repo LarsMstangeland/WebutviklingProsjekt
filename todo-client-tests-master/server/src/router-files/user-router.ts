@@ -10,7 +10,7 @@ UserRouter.get('', (_request, response) => {
   userService
     .getAll()
     .then((rows) => response.send(rows))
-    .catch((error) => response.status(500).send(error));
+    .catch((error) => response.status(404).send(error));
 });
 
 UserRouter.get('/:username', (request, response) => {
@@ -45,7 +45,7 @@ UserRouter.get('/recipes/:userId', (request, response)=> {
   const userId = Number(request.params.userId)
   userService.getLikedRecipes(userId)
   .then((rows) => response.send(rows))
-  .catch((error) => response.status(500).send(error));
+  .catch((error) => response.status(404).send(error));
 })
 
 UserRouter.delete('/:userId/recipes/:recipeId', (request, response) => {

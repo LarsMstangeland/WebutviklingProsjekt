@@ -15,6 +15,7 @@ export type Ingredient = {
   name: string;
   amount: number;
   unit: string;
+  type: string;
 };
 
 export type IngredientName = {

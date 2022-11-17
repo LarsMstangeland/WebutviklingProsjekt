@@ -1,7 +1,7 @@
 import axios from 'axios';
-import pool from '../src/mysql-pool';
-import app from '../src/app';
-import userService, { User } from '../src/service-files/user-service';
+import pool from '../../src/mysql-pool';
+import app from '../../src/app';
+import userService, { User } from '../../src/service-files/user-service';
 
 const testUsers: User[] = [
   { user_id: 1, username: 'lars', cart_id: 1, password: "test1", admin: false},

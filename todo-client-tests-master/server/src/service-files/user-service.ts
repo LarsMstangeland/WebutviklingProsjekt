@@ -5,7 +5,6 @@ import { Recipe } from './recipe-service';
 export type User = {
   user_id: number;
   username: string;
-  cart_id: number;
   password: string;
   admin: boolean;
 };
@@ -56,9 +55,9 @@ class UserService {
   }
 
   /**
-   * Create new task having the given title.
+   * Create new user having the given username, password and admin rights declaration.
    *
-   * Resolves the newly created task id.
+   * Resolves the newly created user id.
    */
   create( password : string, username : string, admin : boolean) {
     return new Promise<number>((resolve, reject) => {

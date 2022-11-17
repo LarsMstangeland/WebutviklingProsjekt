@@ -10,7 +10,7 @@ RecipeRouter.get('/', (_request, response) => {
   recipeService
     .getAll()
     .then((rows) => response.send(rows))
-    .catch((error) => response.status(500).send(error));
+    .catch((error) => response.status(404).send(error));
 });
 
 RecipeRouter.get('/:id', (request, response) => {
@@ -20,7 +20,7 @@ RecipeRouter.get('/:id', (request, response) => {
     .then((recipe) =>
       recipe ? response.send(recipe) : response.status(404).send('Recipe not found')
     )
-    .catch((error) => response.status(500).send(error));
+    .catch((error) => response.status(404).send(error));
 });
 
 RecipeRouter.get('/:id/ingredients', (request, response) => {
@@ -39,7 +39,7 @@ RecipeRouter.delete('/:id', (request, response) => {
   recipeService
     .delete(Number(request.params.id))
     .then((_result) => response.send())
-    .catch((error) => response.status(500).send(error));
+    .catch((error) => response.status(404).send(error));
 });
 // Example request body: { title: "Ny oppgave" }
 // Example response body: { id: 4 }
@@ -53,7 +53,7 @@ RecipeRouter.post('/add', (request, response) => {
   recipeService
     .createRecipe(name, description, picture_url, region, type)
     .then((id) => response.send({ id: id }))
-    .catch((error) => response.status(500).send(error));
+    .catch((error) => response.status(400).send(error));
 });
 
 RecipeRouter.put('/:id/edit', (request, response) => {
@@ -91,14 +91,14 @@ RecipeRouter.get('/:id/edit/ingredients', (_request, response) => {
   recipeService
     .getAllIngredients()
     .then((rows) => response.send(rows))
-    .catch((error) => response.status(500).send(error));
+    .catch((error) => response.status(404).send(error));
 });
 
 RecipeRouter.get('/ingredients', (_request, response) => {
   recipeService
     .getIngredients()
     .then((rows) => response.send(rows))
-    .catch((error) => response.status(500).send(error));
+    .catch((error) => response.status(404).send(error));
 });  
 
 
@@ -111,7 +111,7 @@ RecipeRouter.post('/:id/edit/ingredients', (request, response) => {
     .then(() => {
       response.send();
     })
-    .catch((error) => response.status(500).send(error));
+    .catch((error) => response.status(400).send(error));
 });
 
   RecipeRouter.post('/:id/ingredients', (request, response) => {
@@ -123,7 +123,7 @@ RecipeRouter.post('/:id/edit/ingredients', (request, response) => {
     recipeService
     .AddIngredientsToCartFromRecipe(ingredients,user_id)
     .then((rows) => response.send(rows))
-    .catch((error) => response.status(500).send(error));
+    .catch((error) => response.status(400).send(error));
   
   })
 
@@ -135,21 +135,9 @@ RecipeRouter.post('/:id/edit/ingredients', (request, response) => {
     recipeService.likeRecipe(userId, recipeId)
     .then(() => {
       response.send();
-    }).catch((error)=> response.status(500).send(error))
+    }).catch((error)=> response.status(400).send(error))
   })
 
 
-  /*
-RecipeRouter.post('/recipies/addRecipe', (request, response) => {
-  const newrecipe = request.body
-  if (id)
-    recipeService
-      .createRecipe(id)
-      .then((id) => response.send({ id: id }))
-      .catch((error) => response.status(500).send(error));
-  else response.status(400).send('Missing UserId');
-});
-
-*/
 
 export default RecipeRouter;

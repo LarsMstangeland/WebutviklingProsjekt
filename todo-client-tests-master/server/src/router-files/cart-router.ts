@@ -13,7 +13,7 @@ CartRouter.get('/:id', (request, response) => {
   cartService
     .get(id)
     .then((rows) => response.send(rows))
-    .catch((error) => response.status(500).send(error));
+    .catch((error) => response.status(404).send(error));
 });
 
 CartRouter.delete('/:id', (request, response) => {
@@ -22,7 +22,7 @@ CartRouter.delete('/:id', (request, response) => {
   cartService
     .delete(id)
     .then((_result) => response.send())
-    .catch((error) => response.status(500).send(error));
+    .catch((error) => response.status(404).send(error));
 });
 
 export default CartRouter

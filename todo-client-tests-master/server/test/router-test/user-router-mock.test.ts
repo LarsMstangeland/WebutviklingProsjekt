@@ -11,7 +11,7 @@ const testUsers: User[] = [
 // Since API is not compatible with v1, API version is increased to v2
 axios.defaults.baseURL = 'http://localhost:3001/api/v2';
 
-jest.mock("../service-files/user-service");
+jest.mock("../src/service-files/user-service");
 
 let webServer: any;
 beforeAll(() => webServer = app.listen(3001));
@@ -43,7 +43,6 @@ describe("Fetch users (GET)", () => {
 
       try {
           const response = await axios.get("/users");
-
       } catch (error) {
           expect(error.response.status).toEqual(500);
       }
@@ -52,8 +51,10 @@ describe("Fetch users (GET)", () => {
   test("Fetch user (404 Not Found)", async () => {
       //todo
 
+      const user = testUsers[0];
 
-      userService.get = jest.fn(() => Promise.resolve());
+
+      userService.get = jest.fn(() => Promise.resolve(user));
 
       try {
           const response = await axios.get("DårligSti");

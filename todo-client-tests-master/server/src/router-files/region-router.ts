@@ -8,7 +8,7 @@ RegionRouter.get('', (_request, response) => {
     utilityService
       .getAllRegion()
       .then((rows) => response.send(rows))
-      .catch((error) => response.status(500).send(error));
+      .catch((error) => response.status(404).send(error));
   });
 
 RegionRouter.get('/:id', (request, response) => {
@@ -16,7 +16,7 @@ RegionRouter.get('/:id', (request, response) => {
     utilityService
       .getRegion(id)
       .then((recipe) => (recipe ? response.send(recipe) : response.status(404).send('Region not found')))
-      .catch((error) => response.status(500).send(error));
+      .catch((error) => response.status(404).send(error));
   });
 
 export default RegionRouter;
