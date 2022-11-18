@@ -21,10 +21,7 @@ class CartService{
       }
 
 
-    //burde vi bruke ingredient objekt?
     delete(id: number) {
-
-      console.log(id)
 
         return new Promise<void>((resolve, reject) => {
           pool.query('DELETE FROM cart WHERE cart_id = ?', [id], (error: any, results: RowDataPacket[]) => {
@@ -33,6 +30,18 @@ class CartService{
             resolve();
           });
         });
+    }
+
+    //created only for the testing of the calls
+    createForTest(cart_id : number, user_id : number, ingredient : string) {
+      return new Promise<void>((resolve, reject) => {
+        pool.query('INSERT INTO cart (cart_id, user_id, ingredients) VALUES (?,?,?)', [cart_id, user_id, ingredient]), 
+        (error : any, results : ResultSetHeader) => {
+          if (error) return reject(error);
+
+          resolve()
+        }
+      })
     }
 
 }

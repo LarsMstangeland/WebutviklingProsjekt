@@ -15,7 +15,7 @@ export type Ingredient = {
   name: string;
   amount: number;
   unit: string;
-  type: string;
+  // type: string;
 };
 
 export type IngredientName = {
@@ -69,8 +69,6 @@ class RecipeService {
   }
 
 
-  //Hva er forskjellen????
-
   getAllIngredients() {
     return new Promise<IngredientName[]>((resolve, reject) => {
       pool.query('SELECT * FROM ingredients', (error: any, results: RowDataPacket[]) => {
@@ -105,6 +103,7 @@ class RecipeService {
       );
     });
   }
+
 
   //delete ingredients from recipe, not from table
   deleteRecipeIngredients(id: number, ingredients: Ingredient[]) {
@@ -141,11 +140,12 @@ class RecipeService {
     });
   }
 
+
   updateRecipe(recipe: Recipe) {
     return new Promise<void>((resolve, reject) => {
       pool.query(
-        'UPDATE recipes SET name = ?, region = ?, picture_url = ?, description = ? WHERE recipe_id = ?',
-        [recipe.name, recipe.region, recipe.picture_url, recipe.description, recipe.recipe_id],
+        'UPDATE recipes SET name = ?, region = ?, picture_url = ?, description = ?, type=? WHERE recipe_id = ?',
+        [recipe.name, recipe.region, recipe.picture_url, recipe.description, recipe.type, recipe.recipe_id],
         (error, results: ResultSetHeader) => {
           if (error) return reject(error);
           if (results.affectedRows == 0) return reject(new Error('No row updated'));
@@ -218,7 +218,17 @@ class RecipeService {
           )
         })      
       })
-    }  
+    } 
+    
+  createIngredient(name : string) {
+    return new Promise<number>((resolve, reject) => {
+      pool.query('INSERT INTO ingredients (name) VALUES (?)', [name], (error, response : ResultSetHeader) => {
+        if(error) return reject(error);
+
+        resolve(response.insertId);
+      })
+    })
+  }
 }
 
 const recipeService = new RecipeService();
