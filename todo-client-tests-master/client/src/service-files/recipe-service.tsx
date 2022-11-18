@@ -125,12 +125,6 @@ class RecipeService {
       .catch((error) => console.log(error));
   }
 
-  likeRecipe(userId : number, recipeId : number){
-    return axios.post('recipes/' + recipeId +'/like', {userId : userId})
-    .then((response) => response.data)
-    .catch(error => console.log(error))
-  }
-
   /**
    * Adds all ingredients of a spesific recipe to the cart of the current logged in user
    */

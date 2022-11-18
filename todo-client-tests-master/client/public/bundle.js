@@ -4642,7 +4642,7 @@ class RecipeDetails extends react_simplified__WEBPACK_IMPORTED_MODULE_1__.Compon
       }
     }, "Unlike") : /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Button.Success, {
       onClick: async () => {
-        await _service_files_recipe_service__WEBPACK_IMPORTED_MODULE_3__["default"].likeRecipe(userData.user_id, this.props.match.params.id);
+        await _service_files_user_service__WEBPACK_IMPORTED_MODULE_4__["default"].likeRecipe(userData.user_id, this.props.match.params.id);
         location.reload();
       }
     }, "Like recipe") : /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Button.Success, {
@@ -5279,11 +5279,6 @@ class RecipeService {
       type: type
     }).then(response => response.data.id).catch(error => console.log(error));
   }
-  likeRecipe(userId, recipeId) {
-    return axios__WEBPACK_IMPORTED_MODULE_0___default().post('recipes/' + recipeId + '/like', {
-      userId: userId
-    }).then(response => response.data).catch(error => console.log(error));
-  }
 
   /**
    * Adds all ingredients of a spesific recipe to the cart of the current logged in user
@@ -5340,6 +5335,11 @@ class UserService {
     }).then(response => {
       response.data.id;
     }).catch(error => console.log(error));
+  }
+  likeRecipe(userId, recipeId) {
+    return axios__WEBPACK_IMPORTED_MODULE_0___default().post('users/' + recipeId + '/like', {
+      userId: userId
+    }).then(response => response.data).catch(error => console.log(error));
   }
   getLikedRecipes(userId) {
     return axios__WEBPACK_IMPORTED_MODULE_0___default().get('/users/recipes/' + userId).then(response => response.data);
