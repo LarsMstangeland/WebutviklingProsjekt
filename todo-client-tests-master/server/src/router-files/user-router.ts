@@ -34,6 +34,18 @@ UserRouter.post('', (request, response) => {
       .catch((error) => response.status(500).send(error));
 });
 
+UserRouter.post('/:id/like', (request, response) => {
+
+  const userId = request.body.userId;
+  const recipeId = Number(request.params.id);
+
+  userService.likeRecipe(userId, recipeId)
+  .then(() => {
+    response.send();
+  }).catch((error)=> response.status(400).send(error))
+})
+
+
 UserRouter.delete('/:id', (request, response) => {
   userService
     .delete(Number(request.params.id))

@@ -154,16 +154,6 @@ describe('Post recipes (POST)', () => {
         expect(response.status).toEqual(200);
 
     })
-
-    test('like recipe (200)', async () => {
-        const testid = 1
-        const user_id = 1
-
-        recipeService.likeRecipe = jest.fn(() => Promise.resolve());
-        const response = await axios.post('recipes/'+testid+'/like', {testid: testid, user_id: user_id})
-        expect(response.status).toEqual(200);
-
-    })
 })
 
 

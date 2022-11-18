@@ -192,20 +192,6 @@ class RecipeService {
     });
   }
 
-  likeRecipe(userId : number, recipeId : number) {
-    return new Promise<void>((resolve, reject) => {
-      pool.query(
-        'INSERT INTO user_to_recipe (user_id, recipe_id) VALUES (?, ?)', 
-        [userId, recipeId],
-        (error, results) => {
-          if(error) return reject(error)
-
-          resolve();
-        }
-      )
-    })
-  }
-
   AddIngredientsToCartFromRecipe(ingredients: Ingredient[], user_id: number){
     return new Promise<void>((resolve, reject) => {
         ingredients.map((ingredient) => {
