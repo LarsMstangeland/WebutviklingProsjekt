@@ -68,6 +68,19 @@ class UserService {
     });
   }
 
+  //created for beforeEach and afterAll on testing the database. This way the testUsers' id is always the same as the ones getting deleted without having to use truncate
+  createForTest( user_id : number, password : string, username : string, admin : boolean) {
+    return new Promise<void>((resolve, reject) => {
+      pool.query(
+        'INSERT INTO user (user_id, password, username, admin) VALUES (?,?,?,?)', [user_id, password, username, admin], 
+        (error, results) => {
+          if(error) return reject(error);
+
+          resolve();
+        }
+      )
+    })
+  }
   /**
    * Delete task with given id.
    */
@@ -80,6 +93,19 @@ class UserService {
       });
     });
   }
+
+
+  // reset() {
+  //   return new Promise<void>((resolve,reject) => {
+  //     pool.query(
+  //       'TRUNCATE TABLE user', (error, results) => {
+  //         if (error) return console.error(error);
+
+  //         else return console.log(results);
+  //       }
+  //     )
+  //   })
+  // }
 
   removeLikedRecipe(userId : number, recipeId : number) {
     return new Promise<void>((resolve, reject) => {

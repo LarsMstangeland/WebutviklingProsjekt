@@ -23,28 +23,27 @@ beforeAll( () => {
 beforeEach(async() => {
   // Delete all tasks, and reset id auto-increment start value
 
-    const deleteUserTestData = testUsers.map((user) => {
-      userService.delete(user.user_id)
-    }) 
-    await Promise.all(deleteUserTestData)
+  const deleteActions = testUsers.map(user => userService.delete(user.user_id));
+  await Promise.all(deleteActions);
 
     const createUserTestData = testUsers.map((user) => {
-      userService.create(user.password, user.username, user.admin)
+      userService.createForTest(user.user_id, user.password, user.username, user.admin)
     })
     await Promise.all(createUserTestData)
-
-
 
   });
 
 // Stop web server and close connection to MySQL server
 afterAll(async () => {
+
   const deleteActions = testUsers.map(user => userService.delete(user.user_id));
   await Promise.all(deleteActions);
 
   pool.end();
   webServer.close();
 })
+
+
 
 describe('Fetch Users (GET)', () => {
   test('Fetch all Users (200 OK)', async () => {
@@ -54,21 +53,21 @@ describe('Fetch Users (GET)', () => {
   });
 });
 
-describe('Create new User (POST)', () => {
-  test('Create new User (200 OK)', (done) => {
-    axios.post('/users',testUsers[1]).then((response) => {
-      expect(response.status).toEqual(200);
-      //expect(response.data).toEqual({ id: testUsers[1].user_id });
-      done();
-    });
-  });
-});
+// describe('Create new User (POST)', () => {
+//   test('Create new User (200 OK)', (done) => {
+//     axios.post('/users',testUsers[1]).then((response) => {
+//       expect(response.status).toEqual(200);
+//       //expect(response.data).toEqual({ id: testUsers[1].user_id });
+//       done();
+//     });
+//   });
+// });
 
-describe('Delete User (DELETE)', () => {
-  test('Delete User (200 OK)', (done) => {
-    axios.delete('/users/2').then((response) => {
-      expect(response.status).toEqual(200);
-      done();
-    });
-  });
-});
+// describe('Delete User (DELETE)', () => {
+//   test('Delete User (200 OK)', (done) => {
+//     axios.delete('/users/2').then((response) => {
+//       expect(response.status).toEqual(200);
+//       done();
+//     });
+//   });
+// });
