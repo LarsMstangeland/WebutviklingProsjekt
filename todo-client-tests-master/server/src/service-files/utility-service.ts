@@ -67,6 +67,8 @@ class UtilityService{
             });
         });
     }
+
+
 }
 const utilityService = new UtilityService();
 export default utilityService;
