@@ -16,6 +16,13 @@ const testIngredients: Ingredient[] = [
 
 ]
 
+const testIngredientNames: IngredientName[] = [
+
+    {ingredients_id: 1, name: "test"},
+    {ingredients_id: 2, name: "test"}
+
+]
+
 axios.defaults.baseURL = 'http://localhost:3001/api/v2';
 
 jest.mock('../../src/service-files/recipe-service');
@@ -78,21 +85,38 @@ describe('Fetch recipes (GET)', ()=> {
 });
 
 
-/*
 describe('Fetch ingredients (GET)', () => {
 
-    test('Fetch all ingredients', async () => {
+    test.skip('Fetch all ingredients (200)', async () => {
 
         recipeService.getIngredients = jest.fn(() => Promise.resolve(testIngredients));
         const response = await axios.get('/recipes/ingredients');
             
         expect(response.status).toEqual(200);
         expect(response.data).toEqual(testIngredients)
+    })
+
+    test('Fetch all ingredients names (200)', async () => {
+
+        let recipe_id = 1
+
+        recipeService.getAllIngredients = jest.fn(() => Promise.resolve(testIngredientNames));
+        const response = await axios.get('/recipes/'+recipe_id+'/edit/ingredients');
+            
+        expect(response.status).toEqual(200);
+        expect(response.data).toEqual(testIngredientNames)
+    })
+
+    test('Fetch all ingredients to a recipe (200)', async () => {
+
+        let recipe_id = 1
+        recipeService.getAllRecipeIngredients = jest.fn(() => Promise.resolve(testIngredients))
+        const response = await axios.get('/recipes/'+recipe_id+'/ingredients')
+        expect(response.data).toEqual(testIngredients)
+        expect(response.status).toEqual(200)
 
     })
 })
-
-*/
 
 
 describe('Post recipes (POST)', () => {
@@ -120,9 +144,76 @@ describe('Post recipes (POST)', () => {
 
     })
 
+    test('add ingredient to cart from recipe (200)', async () => {
+        const testid = 1
+        const user_id = 1
 
 
+        recipeService.AddIngredientsToCartFromRecipe = jest.fn(() => Promise.resolve());
+        const response = await axios.post('recipes/'+testid+'/ingredients', {testIngredients: testIngredients, user_id: user_id})
+        expect(response.status).toEqual(200);
 
+    })
+
+    test('like recipe (200)', async () => {
+        const testid = 1
+        const user_id = 1
+
+        recipeService.likeRecipe = jest.fn(() => Promise.resolve());
+        const response = await axios.post('recipes/'+testid+'/like', {testid: testid, user_id: user_id})
+        expect(response.status).toEqual(200);
+
+    })
+})
+
+
+describe('Update recipes (PUT)', () => {
+
+    test('edit a recipe (200)',async () => {
+
+        const testid = 1
+
+        recipeService.updateRecipe = jest.fn(() => Promise.resolve());
+        const response = await axios.put('recipes/'+testid+'/edit', testRecipes[0])
+        expect(response.status).toEqual(200);
+
+    })
+
+    test('edit a recipe`s ingredients (200)',async () => {
+
+        const testid = 1
+        const recipe = testRecipes[0]
+
+        recipeService.updateRecipeIngredients = jest.fn(() => Promise.resolve());
+        const response = await axios.put('recipes/'+testid+'/edit/ingredients', {testid: testid , recipe: recipe})
+        expect(response.status).toEqual(200);
+
+    })
+
+})
+
+describe('delete recipe (DELETE)', () => {
+
+    test('delete recipe (200)', async () => {
+        const testid = 1
+
+        recipeService.delete = jest.fn(() => Promise.resolve());
+        const response = await axios.delete('/recipes/'+testid);
+
+        expect(response.status).toEqual(200)
+
+    })
+
+
+    test('delete recipe (200)', async () => {
+        const testid = 1
+
+        recipeService.deleteRecipeIngredients = jest.fn(() => Promise.resolve());
+        const response = await axios.delete('/recipes/'+testid+'/edit');
+
+        expect(response.status).toEqual(200)
+
+    })
 
 })
 
