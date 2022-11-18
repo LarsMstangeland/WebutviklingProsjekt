@@ -45,8 +45,11 @@ afterAll(async () => {
     webServer.close();
   })
 
+// the utilities are only used for filtering and adding value(name) in a column in another table so we only have get-sentences for these
+//therefore we decided to have static data in the test-database for these tables and not remove/add them in beforeEach() or afterAll()
 
 describe('Get all utilities from tables in database', () => {
+
 
     test('Get all units', async () => {
         const response = await utilityService.getAllUnit();

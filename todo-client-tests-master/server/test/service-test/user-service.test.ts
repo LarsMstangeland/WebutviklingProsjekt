@@ -3,6 +3,8 @@ import pool from '../../src/mysql-pool';
 import app from '../../src/app';
 import userService, { User, LikedRecipe } from '../../src/service-files/user-service';
 
+
+//using this for base data to compare with db-calls
 let testUsers: User[] = [
   { user_id: 1, username: 'lars', password: "test1", admin: false},
   { user_id: 2, username: 'vetle', password: "test2", admin: false},
@@ -31,8 +33,8 @@ beforeAll( () => {
 });
 
 beforeEach((done) => {
-  // Delete all tasks, and reset id auto-increment start value
 
+  //Truncate/reset all the table data to make the tests consistent
     pool.query('TRUNCATE TABLE user', (error) => {
         if(error) return done(error)
     });
@@ -41,12 +43,7 @@ beforeEach((done) => {
         if(error) return done(error)
     });
 
-    // let deleteTestUsers = testUsers.map(user => userService.delete(user.user_id));
-    // await Promise.all(deleteTestUsers);
-
-    // let deleteUserLikes = userLike.map((like) => userService.removeLikedRecipe(like.user_id, like.recipe_id))
-    // await Promise.all(deleteUserLikes);
-
+    //initialize the base data to our db, by mapping
     userService.createForTest(testUsers[0].user_id, testUsers[0].password, testUsers[0].username,  testUsers[0].admin)
     .then(() => userService.createForTest(testUsers[1].user_id, testUsers[1].password, testUsers[1].username,  testUsers[1].admin))
     .then(() => userService.createForTest(testUsers[2].user_id, testUsers[2].password, testUsers[2].username,  testUsers[2].admin))
@@ -58,48 +55,54 @@ beforeEach((done) => {
     .then(() => userService.likeRecipe(userLike[2].user_id, userLike[2].recipe_id))
     .then(()=> done())
 
-    // let createUserLike = userLike.map((like) => {
-    //   userService.likeRecipe(userLike[0].user_id, userLike[0].recipe_id)
-    // })
-    // await Promise.all(createUserLike)
-
   });
 
 // Stop web server and close connection to MySQL server
+// Could truncate here aswell, however we saw it as overkill
 afterAll(async() => {
-
   pool.end();
   webServer.close();
 })
 
 
 
+
 describe('Fetch Users (GET)', () => {
-  test('Fetch User (200 OK)', async () => {
+  test('Fetch a User (200 OK)', async () => {
+
+    //calling service and compareing with basedata
       const response = await userService.get(testUsers[0].username)
       expect(response).toEqual(testUsers[0])
   });
 
 
   test('Fetch all Users (200 OK)', async () => {
+
+    //calling service and compareing with basedata
     const response = await userService.getAll()
     expect(response).toEqual(testUsers)
   });
 
   test('Fetch all User`s likes (200 OK)', async () => {
+
+    //calling service for an array of the users liked recipes
     const response = await userService.getLikedRecipes(testUsers[0].user_id)
-    //comparing the id fetched via getlikedrecipes and the one that is declared here
+
+    //comparing the id of our first recipe that was fetched
+    //via getlikedrecipes and the one that is declared as base data
     expect(response[0].recipe_id).toEqual(testLikedRecipes[0].recipe_id)
   });
-
 
 });
 
 describe('Create new User (POST)', () => {
+
   test('Create new User with id (200 OK)', async() => {
 
+    //Declared a dummy value for use in testing
     let testuser: User = { user_id: 4, username: 'lars', password: "test1", admin: false}
    
+    //creating a new user with the dummy value, and comparing the id's of the two
     const response = await userService.createForTest(testuser.user_id, testuser.password, testuser.username, testuser.admin)
     expect(response).toEqual(testuser.user_id)
 
@@ -107,8 +110,10 @@ describe('Create new User (POST)', () => {
 
   test('Create new User without id (200 OK)', async() => {
 
+    //Declared a dummy value for use in testing
     let testuser: User = { user_id: 4, username: 'lars', password: "test1", admin: false}
    
+    //creating a new user with the dummy value, and comparing the id's of the two
     const response = await userService.create(testuser.password, testuser.username, testuser.admin)
     expect(response).toEqual(testuser.user_id)
 
@@ -118,50 +123,42 @@ describe('Create new User (POST)', () => {
 
     //adds recipe with testLikedRecipies[0] to the list of liked recipes
     //for user testusers[0]
-
     await userService.likeRecipe(testUsers[0].user_id, testLikedRecipes[0].recipe_id)
 
     //gets all of the likes for user testUsers[0]
     const results = await userService.getLikedRecipes(testUsers[0].user_id)
 
-    let lastelement = results.length-1
-
     //compares the last element in the liked recipes for user[0]
     //with the recipie we added, if they are alike the test passes
+    let lastelement = results.length-1
     expect(results[lastelement].recipe_id).toEqual(testLikedRecipes[0].recipe_id)
 
   });
 });
 
 describe('Delete User (DELETE)', () => {
-  test('Delete User (200 OK)', async() => {
-
-    let testuser: User = { user_id: 4, username: 'lars', password: "test1", admin: false}
-
-    const response = await userService.delete(testuser.user_id)
-    const result = await userService.getAll()
-
-    expect(result).toEqual(testUsers)
-    });
 
     test('Delete User (200 OK)', async() => {
 
+      //removing the fist user from our dummy value user sett
       const response = await userService.delete(testUsers[0].user_id)
       const result = await userService.getAll()
-  
+
+      //checking to see if the user got removed
       expect(result).toEqual([testUsers[1], testUsers[2]])
     });
 
     
     test('Delete User`s liked recipe (200 OK)', async() => {
 
-      //fjerner den ene oppskriften til user[0]
-    await userService.removeLikedRecipe(userLike[0].user_id, userLike[0].recipe_id);
+      //Removing the like user_id = 1 had on recipe_id 1
+      await userService.removeLikedRecipe(userLike[0].user_id, userLike[0].recipe_id);
       
-    //henter alle oppskrifter som er liket
+      //Getting the remaining likes for user_id = 1
       const result = await userService.getLikedRecipes(userLike[0].user_id)
 
-      //sjekker om den oppskriften er igjen er den definert lenger oppe
+      //checking to see if the user_id = 1 only has the
+      //recipe_id 3 liked, as shown in the base 
       expect(result[0].recipe_id).toEqual(userLike[1].recipe_id)
     });
 });

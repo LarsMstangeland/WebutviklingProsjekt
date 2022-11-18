@@ -11,8 +11,8 @@ const testRecipes : Recipe[] = [
 const testIngredients: Ingredient[] = [
 
 
-    {ingredients_id: 1, name: "test", amount: 1, unit: "test", type: "test"},
-    {ingredients_id: 2, name: "test", amount: 2, unit: "test", type: "test"}
+    {ingredients_id: 1, name: "test", amount: 1, unit: "test"},
+    {ingredients_id: 2, name: "test", amount: 2, unit: "test"}
 
 ]
 
