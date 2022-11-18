@@ -75,8 +75,7 @@ class UserService {
     return new Promise<void>((resolve, reject) => {
       pool.query('DELETE FROM user WHERE user_id = ?', [id], (error, results: ResultSetHeader) => {
         if (error) return reject(error);
-        if (results.affectedRows == 0) return reject(new Error('No row deleted'));
-
+        //if (results.affectedRows == 0) return reject(new Error('No row deleted'));
         resolve();
       });
     });
