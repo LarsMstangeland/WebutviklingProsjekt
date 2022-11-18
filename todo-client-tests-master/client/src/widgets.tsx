@@ -2,6 +2,7 @@ import * as React from 'react';
 import { ReactNode, ChangeEvent } from 'react';
 import { Component } from 'react-simplified';
 import { NavLink } from 'react-router-dom';
+import pizzaIcon from './assets/pizza-icon.png';
 
 /**
  * Renders an information card using Bootstrap classes.
@@ -21,45 +22,83 @@ export class Card extends Component<{ title: ReactNode }> {
   }
 }
 
-
-export class PreviewCard extends Component<{ name: string; url: string; id: number; small?: boolean; }> {
-
+export class PreviewCard extends Component<{
+  name: string;
+  url: string;
+  id: number;
+  small?: boolean;
+}> {
   render() {
     return (
-      <div style={this.props.small ? {height: "250px", padding: "10px", margin: "20px", flexBasis:"20%", flexGrow:"1"} : {height: "400px", padding: "10px", margin: "20px", flexBasis:"20%", flexGrow:"1"}}>
+      <div style={{ margin: '1rem' }}>
         <NavLink to={'recipes/' + this.props.id}>
-          <b style={{position:"relative", left: "10%", right:"0" , width:"20%",  color: "black"}}><h2>{this.props.name}</h2></b>
-          <img alt={this.props.name} src={this.props.url} style={{height:"100%", width:"auto", marginLeft: "50px", boxShadow: "rgba(0, 0, 0, 0.5) 0px 4px 12px", borderRadius: "10px", maxWidth:'40vw'}}></img>
+          <div style={{ display: 'flex', position: 'relative' }}>
+            <h2
+              style={{
+                position: 'absolute',
+                left: '0',
+                top: '0',
+                color: 'black',
+                fontSize: '2rem',
+                fontWeight: 'bold',
+                margin: '1rem',
+                padding: '0.5rem',
+                backgroundColor: 'rgba(255, 255, 255, 0.5)',
+                borderRadius: '0.5rem',
+              }}
+            >
+              {this.props.name}
+            </h2>
+            <img
+              alt={this.props.name}
+              src={this.props.url}
+              style={{
+                height: 'auto',
+                width: '100%',
+                objectFit: 'contain',
+                boxShadow: 'rgba(0, 0, 0, 0.5) 0px 4px 12px',
+                borderRadius: '10px',
+                maxWidth: '40vw',
+              }}
+            />
+          </div>
         </NavLink>
       </div>
-    )   
+    );
   }
 }
 
-export class BootstrapPreviewCard extends Component <{ }>{
+export class BootstrapPreviewCard extends Component<{}> {
   render() {
     return (
-      <div className="card" style={{width: "18rem;"}}>
-        <img src="https://i.guim.co.uk/img/media/26392d05302e02f7bf4eb143bb84c8097d09144b/446_167_3683_2210/master/3683.jpg?width=1200&quality=85&auto=format&fit=max&s=a52bbe202f57ac0f5ff7f47166906403" className="card-img-top" alt="..."></img>
+      <div className="card" style={{ width: '18rem;' }}>
+        <img
+          src="https://i.guim.co.uk/img/media/26392d05302e02f7bf4eb143bb84c8097d09144b/446_167_3683_2210/master/3683.jpg?width=1200&quality=85&auto=format&fit=max&s=a52bbe202f57ac0f5ff7f47166906403"
+          className="card-img-top"
+          alt="..."
+        ></img>
         <div className="card-body">
           <h5 className="card-title">Card title</h5>
-          <p className="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-          <a href="#" className="btn btn-primary">Go somewhere</a>
+          <p className="card-text">
+            Some quick example text to build on the card title and make up the bulk of the card's
+            content.
+          </p>
+          <a href="#" className="btn btn-primary">
+            Go somewhere
+          </a>
         </div>
       </div>
-    )
-
-
+    );
   }
 }
-
 
 /**
  * Renders a row using Bootstrap classes.
  */
-export class Row extends Component {
+export class Row extends Component<{style?: React.CSSProperties}, {}> {
+
   render() {
-    return <div className="row">{this.props.children}</div>;
+    return <div className="row" style={this.props.style}>{this.props.children}</div>;
   }
 }
 
@@ -68,10 +107,10 @@ export class Row extends Component {
  *
  * Properties: width, right
  */
-export class Column extends Component<{ width?: number; right?: boolean }> {
+export class Column extends Component<{ width?: number; right?: boolean; style?: React.CSSProperties}> {
   render() {
     return (
-      <div className={'col' + (this.props.width ? '-' + this.props.width : '')}>
+      <div className={'col' + (this.props.width ? '-' + this.props.width : '')} style={this.props.style}>
         <div className={'float-' + (this.props.right ? 'end' : 'start')}>{this.props.children}</div>
       </div>
     );
@@ -86,6 +125,7 @@ export class Column extends Component<{ width?: number; right?: boolean }> {
 class ButtonSuccess extends Component<{
   small?: boolean;
   onClick: () => void;
+  style?: React.CSSProperties;
 }> {
   render() {
     return (
@@ -93,14 +133,13 @@ class ButtonSuccess extends Component<{
         type="button"
         className="btn btn-success"
         style={
-          this.props.small
+          {...(this.props.small
             ? {
                 padding: '5px 5px',
                 fontSize: '16px',
                 lineHeight: '0.7',
               }
-            : {}
-
+            : {}), ...this.props.style}
         }
         onClick={this.props.onClick}
       >
@@ -118,6 +157,7 @@ class ButtonSuccess extends Component<{
 class ButtonDanger extends Component<{
   small?: boolean;
   onClick: () => void;
+  style?: React.CSSProperties;
 }> {
   render() {
     return (
@@ -125,13 +165,13 @@ class ButtonDanger extends Component<{
         type="button"
         className="btn btn-danger"
         style={
-          this.props.small
+          {...(this.props.small
             ? {
                 padding: '5px 5px',
                 fontSize: '16px',
                 lineHeight: '0.7',
               }
-            : {}
+            : {}), ...this.props.style}
         }
         onClick={this.props.onClick}
       >
@@ -150,6 +190,7 @@ class ButtonLight extends Component<{
   small?: boolean;
   onClick: () => void;
   left?: boolean;
+  style?: React.CSSProperties;
 }> {
   render() {
     return (
@@ -157,16 +198,14 @@ class ButtonLight extends Component<{
         type="button"
         className="btn btn-light"
         style={
-          this.props.small
+          {...(this.props.small
             ? {
                 padding: '5px 5px',
                 fontSize: '16px',
                 lineHeight: '0.7',
-              } 
-            : {
-
               }
-          }
+            : {}), ...this.props.style}
+        }
         onClick={this.props.onClick}
       >
         {this.props.children}
@@ -191,11 +230,16 @@ export class Button {
  *
  * Properties: to
  */
-class NavBarLink extends Component<{ to: string, left: boolean }> {
+class NavBarLink extends Component<{ to: string; left: boolean }> {
   left?: boolean;
   render() {
     return (
-      <NavLink style={this.props.left ? {position:"relative" , left:"70vw"}: {}} className="nav-link" activeClassName="active" to={this.props.to}>
+      <NavLink
+        style={this.props.left ? { position: 'relative', left: '70vw' } : {}}
+        className="nav-link"
+        activeClassName="active"
+        to={this.props.to}
+      >
         {this.props.children}
       </NavLink>
     );
@@ -207,19 +251,24 @@ class NavBarLink extends Component<{ to: string, left: boolean }> {
  *
  * Properties: brand
  */
-export class NavBar extends Component<{ brand: ReactNode}> {
+export class NavBar extends Component<{ brand: ReactNode }> {
   static Link = NavBarLink;
 
   render() {
     return (
-      <nav className="navbar navbar-expand-sm navbar-light bg-light">
+      <div
+        className="navbar navbar-expand-sm navbar-dark bg-dark"
+        style={{ padding: '5px', borderBottom: '1px solid gray' }}
+      >
         <div className="container-fluid justify-content-start">
           <NavLink className="navbar-brand" activeClassName="active" exact to="/">
-            {this.props.brand}
+            <img src={pizzaIcon} alt="pizza" />
           </NavLink>
-          <div className='navbar-nav' style={{width:"100%"}}>{this.props.children}</div>
+          <div className="navbar-nav" style={{ width: '100%' }}>
+            {this.props.children}
+          </div>
         </div>
-      </nav>
+      </div>
     );
   }
 }
@@ -231,7 +280,7 @@ class FormLabel extends Component {
   render() {
     return <label className="col-form-label">{this.props.children}</label>;
   }
-} 
+}
 
 /**
  * Renders a form input using Bootstrap styles.
@@ -257,7 +306,6 @@ class FormInput extends Component<{
     );
   }
 }
-
 
 /**
  * Renders a form textarea using Bootstrap styles.
@@ -341,7 +389,7 @@ export class Alert extends Component {
 
   render() {
     return (
-      <div>
+      <div style={{ position: 'absolute', zIndex: 100, width: '100%', opacity: '90%', backgroundColor: "transparent", padding: this.alerts.length > 0 ? "1rem" : "0" }}>
         {this.alerts.map((alert, i) => (
           <div
             key={alert.id}

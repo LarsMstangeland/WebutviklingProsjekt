@@ -68,26 +68,31 @@ export class UserLogin extends Component  {
 
             </Card>
             <Card title="Your Cart">
-          <Button.Danger onClick={() => {
+          <Button.Danger
+            style={{marginBottom: "1rem"}}
+          onClick={() => {
             this.CartItemsToShow.map((cartitem) => {
               cartService.deleteIngredientFromCart(cartitem.cart_id)
             })
             this.mounted()
           }}>Clear All</Button.Danger>
  
-          {this.CartItemsToShow.map((cart: CartItem) => (
-            //Maps all the different cart and renders them as links to their respective cart details
-            <Row key={cart.cart_id}>
-              <Column>
-                {cart.ingredients}
-              </Column>
-              <Column><Button.Danger onClick={() => {
-
-                cartService.deleteIngredientFromCart(cart.cart_id).then(() => {
-                  this.mounted();
-                })
-              }}>X</Button.Danger></Column>
-            </Row>))}
+          <div style={{width: "100%"}}>
+            {this.CartItemsToShow.map((cart: CartItem) => (
+                //Maps all the different cart and renders them as links to their respective cart details
+                <div style={{width: "100%", marginRight: "1rem", display: "flex", flexDirection: "row", alignItems: "center", marginBottom: "0.5rem"}} key={cart.cart_id}>
+                <Button.Danger
+                    style={{marginRight: "1rem"}}
+                    onClick={() => {
+                        cartService.deleteIngredientFromCart(cart.cart_id).then(() => {
+                        this.mounted();
+                    })
+                }}>X</Button.Danger>
+                <span>
+                    {cart.ingredients}
+                </span>
+                </div>))}
+            </div>
         </Card>
                 </>
             )

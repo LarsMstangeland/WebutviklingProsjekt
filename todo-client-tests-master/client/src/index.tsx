@@ -33,16 +33,62 @@ class Home extends Component {
 
 
     return (
-      <div style={{backgroundColor: "#f9f5f1"}}>
-        <Card title="Welcome">
-
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent laoreet risus et nunc ultricies, a varius velit ultrices. Etiam in efficitur sem. Nulla facilisi. Curabitur nunc sem, sollicitudin ut tortor auctor, gravida dapibus dui. In auctor justo diam, ut dapibus justo ultricies a. Sed sollicitudin ipsum in velit rutrum rhoncus. Integer porttitor odio nisi, vitae rhoncus velit egestas sed. Ut lobortis lectus ut fringilla auctor. Donec rutrum eros nec nibh molestie, a molestie nibh semper. Suspendisse velit tellus, luctus sit amet lectus consectetur, tincidunt blandit metus. Curabitur vehicula fringilla erat, vel egestas urna mollis in. Nam cursus accumsan mauris eget molestie. Suspendisse suscipit porta purus, id interdum sem tempus sed. Curabitur mattis aliquam dolor. Etiam et velit eget arcu semper dapibus.
-          Nulla sit amet auctor mi, vitae laoreet lorem. In et euismod erat, vitae eleifend tellus. Proin consectetur sit amet nunc vitae egestas. Ut ultrices, lacus a sagittis pretium, nunc dui condimentum erat, ac auctor dui ante id mi. Aliquam volutpat laoreet placerat. Ut dignissim eu enim at vulputate. Sed neque justo, mollis sit amet ligula vitae, tincidunt auctor lorem. Curabitur at augue sit amet odio cursus tristique. Nam cursus eros et neque condimentum convallis. Sed efficitur dolor ligula, sit amet faucibus odio posuere quis. Suspendisse lobortis rutrum tortor et finibus. Nam ac tincidunt felis. 
-        </Card>
-        <div style={{display: "flex", flexWrap: 'wrap'}}>
-        {this.recipesToShow.map(recipe => (
-          <PreviewCard key={recipe.recipe_id} id={recipe.recipe_id} name={recipe.name} url={recipe.picture_url}></PreviewCard>
-        ))}
+      <div style={{ backgroundColor: '#f9f5f1' }}>
+        <div
+          style={{
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            backgroundColor: 'white',
+            padding: '1rem',
+          }}
+        >
+          <div style={{ margin: '4rem' }}>
+            <h1>Welcome to</h1>
+            <h1 style={{ fontSize: '3rem', fontWeight: 'bold' }}>Food Junkies</h1>
+            <NavBar.Link left={false} to="/recipes">
+              <button type="button" className="btn btn-primary" onClick={() => {}}>
+                To recipes!
+              </button>
+            </NavBar.Link>
+          </div>
+          <div style={{ padding: '0 2rem' }}>
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent laoreet risus et nunc
+            ultricies, a varius velit ultrices. Etiam in efficitur sem. Nulla facilisi. Curabitur
+            nunc sem, sollicitudin ut tortor auctor, gravida dapibus dui. In auctor justo diam, ut
+            dapibus justo ultricies a. Sed sollicitudin ipsum in velit rutrum rhoncus. Integer
+            porttitor odio nisi, vitae rhoncus velit egestas sed. Ut lobortis lectus ut fringilla
+            auctor. Donec rutrum eros nec nibh molestie, a molestie nibh semper. Suspendisse velit
+            tellus, luctus sit amet lectus consectetur, tincidunt blandit metus. Curabitur vehicula
+            fringilla erat, vel egestas urna mollis in. Nam cursus accumsan mauris eget molestie.
+            Suspendisse suscipit porta purus, id interdum sem tempus sed. Curabitur mattis aliquam
+            dolor. Etiam et velit eget arcu semper dapibus. Nulla sit amet auctor mi, vitae laoreet
+            lorem. In et euismod erat, vitae eleifend tellus. Proin consectetur sit amet nunc vitae
+            egestas. Ut ultrices, lacus a sagittis pretium, nunc dui condimentum erat, ac auctor dui
+            ante id mi. Aliquam volutpat laoreet placerat. Ut dignissim eu enim at vulputate. Sed
+            neque justo, mollis sit amet ligula vitae, tincidunt auctor lorem. Curabitur at augue
+            sit amet odio cursus tristique. Nam cursus eros et neque condimentum convallis. Sed
+            efficitur dolor ligula, sit amet faucibus odio posuere quis. Suspendisse lobortis rutrum
+            tortor et finibus. Nam ac tincidunt felis.
+          </div>
+        </div>
+        <div
+          style={{
+            display: 'flex',
+            flexWrap: 'wrap',
+            flexDirection: 'row',
+            justifyContent: 'space-around',
+            alignItems: 'center',
+          }}
+        >
+          {this.recipesToShow.map((recipe) => (
+            <PreviewCard
+              key={recipe.recipe_id}
+              id={recipe.recipe_id}
+              name={recipe.name}
+              url={recipe.picture_url}
+            />
+          ))}
         </div>
       </div>
     )
