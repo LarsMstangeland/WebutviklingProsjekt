@@ -34,12 +34,11 @@ class CartService{
 
     //created only for the testing of the calls
     createForTest(cart_id : number, user_id : number, ingredient : string) {
-      return new Promise<void>((resolve, reject) => {
+      return new Promise<number>((resolve, reject) => {
         pool.query('INSERT INTO cart (cart_id, user_id, ingredients) VALUES (?,?,?)', [cart_id, user_id, ingredient]), 
         (error : any, results : ResultSetHeader) => {
           if (error) return reject(error);
-
-          resolve()
+          resolve(results.insertId)
         }
       })
     }
