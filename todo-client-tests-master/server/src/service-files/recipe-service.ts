@@ -133,7 +133,6 @@ class RecipeService {
             console.log(error);
             return reject(error);
           }
-          console.log('Result: ', results);
           resolve(results.insertId);
         }
       );
@@ -192,24 +191,23 @@ class RecipeService {
     });
   }
 
-  likeRecipe(userId : number, recipeId : number) {
-    return new Promise<void>((resolve, reject) => {
-      pool.query(
-        'INSERT INTO user_to_recipe (user_id, recipe_id) VALUES (?, ?)', 
-        [userId, recipeId],
-        (error, results) => {
-          if(error) return reject(error)
+  // likeRecipe(userId : number, recipeId : number) {
+  //   return new Promise<void>((resolve, reject) => {
+  //     pool.query(
+  //       'INSERT INTO user_to_recipe (user_id, recipe_id) VALUES (?, ?)', 
+  //       [userId, recipeId],
+  //       (error, results) => {
+  //         if(error) return reject(error)
 
-          resolve();
-        }
-      )
-    })
-  }
+  //         resolve();
+  //       }
+  //     )
+  //   })
+  // }
 
   AddIngredientsToCartFromRecipe(ingredients: Ingredient[], user_id: number){
     return new Promise<void>((resolve, reject) => {
         ingredients.map((ingredient) => {
-          console.log(ingredient, user_id)
           pool.query(
             'INSERT INTO cart (ingredients, user_id) VALUES (?,?)', [ingredient.name, user_id], (error) => {
               if (error) return reject(error);

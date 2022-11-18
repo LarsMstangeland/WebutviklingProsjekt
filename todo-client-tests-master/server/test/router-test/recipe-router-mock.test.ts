@@ -11,8 +11,8 @@ const testRecipes : Recipe[] = [
 const testIngredients: Ingredient[] = [
 
 
-    {ingredients_id: 1, name: "test", amount: 1, unit: "test", type: "test"},
-    {ingredients_id: 2, name: "test", amount: 2, unit: "test", type: "test"}
+    {ingredients_id: 1, name: "test", amount: 1, unit: "test"},
+    {ingredients_id: 2, name: "test", amount: 2, unit: "test"}
 
 ]
 
@@ -155,15 +155,6 @@ describe('Post recipes (POST)', () => {
 
     })
 
-    test('like recipe (200)', async () => {
-        const testid = 1
-        const user_id = 1
-
-        recipeService.likeRecipe = jest.fn(() => Promise.resolve());
-        const response = await axios.post('recipes/'+testid+'/like', {testid: testid, user_id: user_id})
-        expect(response.status).toEqual(200);
-
-    })
 })
 
 

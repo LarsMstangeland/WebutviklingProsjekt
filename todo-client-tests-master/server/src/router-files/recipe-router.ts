@@ -87,16 +87,16 @@ RecipeRouter.post('/:id/edit/ingredients', (request, response) => {
   
   })
 
-  RecipeRouter.post('/:id/like', (request, response) => {
+  // RecipeRouter.post('/:id/like', (request, response) => {
 
-    const userId = request.body.userId;
-    const recipeId = Number(request.params.id);
+  //   const userId = request.body.userId;
+  //   const recipeId = Number(request.params.id);
 
-    recipeService.likeRecipe(userId, recipeId)
-    .then(() => {
-      response.send();
-    }).catch((error)=> response.status(400).send(error))
-  })
+  //   recipeService.likeRecipe(userId, recipeId)
+  //   .then(() => {
+  //     response.send();
+  //   }).catch((error)=> response.status(400).send(error))
+  // })
 
 RecipeRouter.put('/:id/edit', (request, response) => {
   //hent ut de normale dataen og gjør det mulig å redigere

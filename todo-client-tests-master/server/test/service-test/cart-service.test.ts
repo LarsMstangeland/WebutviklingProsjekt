@@ -45,19 +45,25 @@ beforeEach(async() => {
     webServer.close();
   })
 
-  describe('Test all functions on cart table in database', () => {
-    test('Fetch all cartitems for user', async () => {
 
+  describe('Test all functions on cart table in database', () => {
+
+    test('Fetch all cartitems for user', async () => {
+      //fecthes all the cartitems for a specific user with user_id = 1
         const response = await cartService.get(1);
 
+        //expecting the get-sentence to retrieve all the objects in testCartItems
         expect(response).toEqual(testCartItems);
     })
 
     test('Delete specific cartitem', async () => {
+      //deletes the cart with cart_id = 3 (which is with user_id = 1)
       await cartService.delete(3);
 
+      //then fetches all the carts existing with user_id = 1
       const newCartItems = await cartService.get(1);
 
+      //expecting the newCartItems to be like testCartItems, but without the last object
       expect(newCartItems)
       .toEqual([{cart_id : 1, user_id : 1, ingredients : 'salt'},
       {cart_id : 2, user_id : 1, ingredients : 'pepper'}])
