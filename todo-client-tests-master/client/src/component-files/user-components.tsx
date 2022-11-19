@@ -124,7 +124,7 @@ export class UserLogin extends Component  {
                 <> 
                       <div
             style={{
-                top : '30vh',
+            top : '30vh',
               width: '100%',
               display: 'flex',
               position : 'relative',
