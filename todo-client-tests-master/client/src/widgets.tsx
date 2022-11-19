@@ -9,7 +9,7 @@ import { NavLink } from 'react-router-dom';
  *
  * Properties: title
  */
-export class Card extends Component<{ title: ReactNode; inline?: boolean}> {
+export class Card extends Component<{ title: ReactNode; inline?: boolean; style? :React.CSSProperties}> {
   render() {
     return (
       <div className="card" style={{padding: '1rem', paddingLeft: '2rem'}}>
@@ -354,6 +354,7 @@ class FormSelect extends Component<{
   value: string | number;
   onChange: (event: ChangeEvent<HTMLSelectElement>) => void;
   [prop: string]: any;
+  style? : React.CSSProperties;
 }> {
   render() {
     // ...rest will contain extra passed attributes such as disabled, required, size.

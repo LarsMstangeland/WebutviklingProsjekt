@@ -4476,6 +4476,11 @@ class RecipeList extends react_simplified__WEBPACK_IMPORTED_MODULE_1__.Component
         margin: '0 0.5rem'
       }
     }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Form.Input, {
+      style: {
+        width: '12vw',
+        height: '5.5vh',
+        border: '2px solid black'
+      },
       onChange: event => {
         this.searchBar = event.currentTarget.value;
         this.recipesToShow = [];
@@ -4489,6 +4494,11 @@ class RecipeList extends react_simplified__WEBPACK_IMPORTED_MODULE_1__.Component
         margin: '0 0.5rem'
       }
     }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Form.Select, {
+      style: {
+        width: '12vw',
+        height: '5.5vh',
+        border: '2px solid black'
+      },
       value: this.regionFilter,
       onChange: event => {
         this.regionFilter = event.currentTarget.value;
@@ -4500,9 +4510,15 @@ class RecipeList extends react_simplified__WEBPACK_IMPORTED_MODULE_1__.Component
       value: region.name
     }, region.name)))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", {
       style: {
-        margin: '0 0.5rem'
+        margin: '0 0.5rem',
+        width: '2vw'
       }
     }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Form.Select, {
+      style: {
+        width: '12vw',
+        height: '5.5vh',
+        border: '2px solid black'
+      },
       value: this.recipeTypeFilter,
       onChange: event => {
         this.recipeTypeFilter = event.currentTarget.value;
@@ -5147,7 +5163,7 @@ class UserLogin extends react_simplified__WEBPACK_IMPORTED_MODULE_1__.Component 
             _widgets__WEBPACK_IMPORTED_MODULE_2__.Alert.danger('Username does not exist');
           }
         }
-      }, "Log in"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Button.Light, {
+      }, "Log in"), " ", ' ', /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Button.Light, {
         onClick: () => history.push('/user/create')
       }, "Create user"))))));
     }
@@ -5185,7 +5201,17 @@ class NewUser extends react_simplified__WEBPACK_IMPORTED_MODULE_1__.Component {
   };
   passwordCheck = '';
   render() {
-    return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Card, {
+    return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", {
+      style: {
+        top: '30vh',
+        width: '100%',
+        display: 'flex',
+        position: 'relative',
+        alignItems: 'center',
+        justifyContent: 'center',
+        marginBottom: '1rem'
+      }
+    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Card, {
       title: "Create new user"
     }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Row, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Column, null, "Username:", /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Form.Input, {
       type: "text",
@@ -5236,7 +5262,9 @@ class NewUser extends react_simplified__WEBPACK_IMPORTED_MODULE_1__.Component {
           _widgets__WEBPACK_IMPORTED_MODULE_2__.Alert.danger('Username already exists. Try another one');
         }
       }
-    }, "Create user")))));
+    }, "Create user"), ' ', /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Button.Danger, {
+      onClick: () => history.push('/user/login')
+    }, "Cancel"))))));
   }
   async mounted() {
     try {

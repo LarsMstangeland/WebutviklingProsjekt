@@ -129,7 +129,7 @@ export class UserLogin extends Component  {
                 <> 
                       <div
             style={{
-                top : '30vh',
+            top : '30vh',
               width: '100%',
               display: 'flex',
               position : 'relative',
@@ -185,7 +185,7 @@ export class UserLogin extends Component  {
                                 }
                                 
                                 }}>Log in
-                                </Button.Success> 
+                                </Button.Success> {' '}
                                 <Button.Light onClick={()=> history.push('/user/create')}>Create user</Button.Light>
                             </Column> 
                         </Row>
@@ -235,6 +235,17 @@ export class NewUser extends Component {
     render () {
         return (
             <>
+            <div
+            style={{
+            top : '30vh',
+              width: '100%',
+              display: 'flex',
+              position : 'relative',
+              alignItems: 'center',
+              justifyContent: 'center',
+              marginBottom: '1rem',
+            }}
+          > 
             <Card title="Create new user">
             <Row>
                             <Column>
@@ -311,10 +322,12 @@ export class NewUser extends Component {
                                     Alert.danger('Username already exists. Try another one')
                                 }
                                 
-                            }}>Create user</Button.Success>
+                            }}>Create user</Button.Success>{' '}
+                            <Button.Danger onClick={()=> history.push('/user/login')}>Cancel</Button.Danger>
                             </Column>
                         </Row>
             </Card> 
+            </div>
             </>
         )
 
