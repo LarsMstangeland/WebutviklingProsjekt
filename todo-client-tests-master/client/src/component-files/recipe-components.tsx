@@ -16,7 +16,7 @@ const userData = JSON.parse(sessionStorage.getItem('user'));
  * Renders recipe list.
  */
 export class RecipeList extends Component {
-  //Array to store all recipes
+  //Arrays to store all recipes and relevant recipe info
   recipes: Recipe[] = [];
   recipesToShow: Recipe[] = [];
   regions: Region[] = [];
@@ -34,6 +34,7 @@ export class RecipeList extends Component {
     type: ''
   };
 
+  //Method to filter the recipes based on input from the searchbar, types and regions
   filter(){
     for(let i = 0; i < this.recipes.length; i++){
       const recipe = this.recipes[i];
@@ -169,7 +170,7 @@ export class RecipeDetails extends Component<{ match: { params: { id: number } }
             </Row>
             <Row>
             <Column>
-                  {
+                  {//If there is a user logged in the user can like or unlike a recipe, else like button sends an alert to log in
                   userData ?
                   (this.likedRecipes.some((r) => (this.recipe.recipe_id == r.recipe_id)) ?
                   <Button.Danger onClick={async ()=>{
@@ -190,6 +191,7 @@ export class RecipeDetails extends Component<{ match: { params: { id: number } }
                   }
                   </Column>
             <Column><Button.Success onClick={() => {
+              //If there is a user logged in the user can add recipe ingredients to cart, else button sends an alert to log in
               userData ? 
                 (recipeService.addRecipeIngredientsToCart(this.ingredients, this.recipe.recipe_id, userData.user_id),
                 Alert.info('Ingredients added to cart!')
@@ -208,6 +210,7 @@ export class RecipeDetails extends Component<{ match: { params: { id: number } }
                   min="1"
                   value={this.portions}
                   onChange={(event) =>
+                    //If the input for portions don´t exceed 50 the portions value is updated
                     Number(event.currentTarget.value) <= 50
                       ? (this.portions = Number(event.currentTarget.value))
                       : ''
@@ -253,7 +256,7 @@ export class RecipeDetails extends Component<{ match: { params: { id: number } }
                   </Column>
               </Row>
           </Card>
-          {
+          {//If there is a logged in user and the user is an admin, two buttons to delete and edit a recipe is displayed
           userData ? 
           (userData.admin ? (<Row>
               <Column><Button.Danger onClick={() => {
@@ -285,6 +288,7 @@ export class RecipeDetails extends Component<{ match: { params: { id: number } }
       this.emailSubject = 'Recipe for ' + this.recipe.name;
       this.emailBody = 'Description: %0D%0A' + this.recipe.description + '%0D%0A %0D%0A Ingredients:  %0D%0A' + this.ingredients.map(ing => `${ing.name + ' - ' + ing.amount + ' ' + ing.unit} %0D%0A`)
       
+      //If there is a user logged in mounted gets the recipes the user has liked and inserts them into an client array
       if(userData) {
         let likedRecipes = await userService.getLikedRecipes(userData.user_id)
         this.likedRecipes = likedRecipes
@@ -300,6 +304,7 @@ export class RecipeDetails extends Component<{ match: { params: { id: number } }
  * Renders a page to edit a recipe
  */
 export class RecipeEdit extends Component<{ match: { params: { id: number } } }> {
+  //Arrays and objects to store all recipes and relevant recipe info
   recipe: Recipe = { recipe_id: 0, name: '', description: '', region: '', picture_url: '', type: '' };
   recipeIngredients: Ingredient[] = [];
   ingredientsToDelete: Ingredient[] = [];
@@ -340,6 +345,7 @@ export class RecipeEdit extends Component<{ match: { params: { id: number } } }>
               >
                   <option value={'Regions'}>Regions</option>
                 {this.regions.map((region) => (
+                  //Maps all the regions and displays them as options in a select element
                   <option key={region.id} value={region.name}>
                     {region.name}
                     </option>
@@ -358,6 +364,7 @@ export class RecipeEdit extends Component<{ match: { params: { id: number } } }>
 
                   <option value={'Types'}>Types</option>
                 {this.types.map((type) => (
+                  //Maps all the types and displays them as options in a select element
                   <option key={type.id} value={type.name}>
                   {type.name}
                 </option>
@@ -396,6 +403,7 @@ export class RecipeEdit extends Component<{ match: { params: { id: number } } }>
             <Column></Column>
           </Row>
           {this.recipeIngredients.map((ingredient) => (
+            //Maps all the ingredients of a recipe and displays them in custom rows, such that they may be edited or deleted
             <Row key={ingredient.ingredients_id}>
               <Column>{ingredient.name}</Column>
               <Column>
@@ -469,7 +477,8 @@ export class RecipeEdit extends Component<{ match: { params: { id: number } } }>
                 list={'searchList'}
                 onChange={(event) => {
                   this.searchBar = event.currentTarget.value;
-                  
+                  //Filter function that finds the recipe which contain the same string as the searchbar, when there is more
+                  //than one character in the searchbar
                   if(this.searchBar.length > 1){
                     this.ingredientsToShow = [];
                     for (let i = 0; i < this.ingredients.length; i++) {
@@ -483,6 +492,7 @@ export class RecipeEdit extends Component<{ match: { params: { id: number } } }>
               }></Form.Input>
               <datalist id='searchList'>
                 {this.ingredientsToShow.map((ingredient) => (
+                  //Maps all the ingredients that the filter function above selects and displays them as options in a datalist
                   <option key={ingredient.ingredients_id} value={ingredient.name}>{ingredient.name}</option>
                 ))}
               </datalist>
@@ -500,6 +510,7 @@ export class RecipeEdit extends Component<{ match: { params: { id: number } } }>
                   onChange={(event) => (this.newIngredient.unit = event.currentTarget.value)} >
                   <option>Select Unit</option>
                   {this.units.map((unit) => (
+                    //Maps all the units and displays them as options in a select element
                     <option key={unit.id} value={unit.unit}>
                     {unit.unit}
                   </option>
@@ -510,6 +521,9 @@ export class RecipeEdit extends Component<{ match: { params: { id: number } } }>
               <Button.Light
                 small
                 onClick={() => {
+                  //Checks that all values for the new ingredient in a recipe are valid and that it is not a duplicate,
+                  //if not it returns an alert, else it pushes the ingredient to arrays that displays it and eventually post
+                  //it to the database
                   let nameCheck = this.ingredients.find(ing => ing.name == this.searchBar)
                   let duplicat = this.recipeIngredients.find(
                     (ingredient) => ingredient.name == this.newIngredient.name
@@ -545,11 +559,10 @@ export class RecipeEdit extends Component<{ match: { params: { id: number } } }>
           <Column>
             <Button.Success
               onClick={() => 
+                //Checks that values for recipe are valid and if so proceeds with update, else it returns an alert
                 {if(this.recipe.name != '' && this.recipe.description != '' && this.recipe.picture_url != ''
                 && this.recipeIngredients.length > 0 && this.recipe.region != 'Regions' && this.recipe.type != 'Types'){
-
-
-
+                  
                 {if(this.ingredientsToDelete.length > 0){
                   this.recipeIngredients = this.recipeIngredients.filter((ingredient) => !this.ingredientsToDelete.includes(ingredient))
                   recipeService.deleteRecipeIngredients(this.ingredientsToDelete, this.recipe.recipe_id)
