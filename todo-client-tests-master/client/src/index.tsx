@@ -7,6 +7,7 @@ import { RecipeList, RecipeDetails, RecipeEdit } from './component-files/recipe-
 import recipeService, { Recipe, Ingredient, IngredientName } from './service-files/recipe-service';
 import {NewUser, UserLogin} from './component-files/user-components';
 import { CartContent } from './component-files/cart-components';
+import userService, { LikedRecipe } from './service-files/user-service';
 
 
 
@@ -28,6 +29,7 @@ class Menu extends Component {
 class Home extends Component {
   recipes: Recipe[] = [];
   recipesToShow: Recipe[] = [];
+  MostLikedRecipes: Recipe[] = []
 
   render() {
     return (
@@ -61,8 +63,19 @@ class Home extends Component {
             alignItems: 'center',
           }}
         >
-          {this.recipesToShow.map((recipe) => (
-            <PreviewCard
+        </div>
+        <div
+          style={{
+            display: 'flex',
+            flexWrap: 'wrap',
+            flexDirection: 'row',
+            justifyContent: 'space-around',
+            alignItems: 'center',
+          }}
+        >
+          {this.MostLikedRecipes.map((recipe) => (
+
+          <PreviewCard small={true}
               key={recipe.recipe_id}
               id={recipe.recipe_id}
               name={recipe.name}
@@ -79,6 +92,14 @@ class Home extends Component {
     try {
       let recipes = await recipeService.getAll();
       this.recipes = recipes;
+      this.MostLikedRecipes;
+      let bestrecipes = await userService.getMostLikedRecipes()
+
+      for(let i = 0; i <= 5; i++){
+        let PopularRecipe = await recipeService.get(bestrecipes[i].recipe_id)
+        this.MostLikedRecipes.push(PopularRecipe)
+        }
+
       for(let i = 0; i < 2; i++){
         let index = Math.floor(this.recipes.length * Math.random())
         let recipe = this.recipes[index];

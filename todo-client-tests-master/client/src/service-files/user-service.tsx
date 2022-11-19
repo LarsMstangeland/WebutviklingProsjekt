@@ -53,7 +53,7 @@ class UserService {
   }
 
   getLikedRecipesForUser(userId : number) {
-    return axios.get<LikedRecipe[]>('/users/recipes/' + userId).then(response => response.data);
+    return axios.get<LikedRecipe[]>('/users/recipes/' + userId).then((response) => response.data);
   }
 
   removeLikedRecipe(userId : number, recipeId : number) {
@@ -61,6 +61,11 @@ class UserService {
     .then((response)=> response.data)
     .catch((error) => console.error(error))
   }
+
+  getMostLikedRecipes(){
+    return axios.get<LikedRecipe[]>('/users/recipes/all/MostLikedRecipes').then((response) => response.data);
+  }
+
 }
 
 const userService = new UserService();
