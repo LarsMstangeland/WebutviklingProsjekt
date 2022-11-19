@@ -4,6 +4,7 @@ import { Alert, Card, Row, Column, Form, Button } from '../widgets';
 import { NavLink } from 'react-router-dom';
 import userService, {User, LikedRecipe} from '../service-files/user-service';
 import cartService, {CartItem} from '../service-files/cart-service';
+import recipeService, {Ingredient, IngredientName} from '../service-files/recipe-service';
 import utilityService, {Region, Unit, Type} from '../service-files/utility-service';
 import { createHashHistory } from 'history';
 import bcrypt from 'bcryptjs';
@@ -30,66 +31,87 @@ export class UserLogin extends Component  {
     users : User[] = [];
     loggedIn : boolean = false;
     user: User = {user_id : 0, username : '', password : '', admin : false};
-
     cart:CartItem[] = [];
     CartItemsToShow:CartItem[] = [];
+    ingredients: Ingredient[] = [];
+    newIngredient: IngredientName = {name: '', ingredients_id: 0}
 
     render() {
         // if userdata exists the page that renders is the one with your information
         if(userData) {
-  
             return ( 
-                <>
-            <Card title="Your user information">
-            <Row>
-                <Column>
-                Brukernavn: {userData.username}
-                </Column>
-            </Row>
-            <Row>
-                <Column>
-                 Your liked recipes:
-                </Column>
-            </Row>
-            {this.likedRecipes.length > 0 ? this.likedRecipes.map((recipe) => (
-                <Row key={recipe.recipe_id}><NavLink to={"/recipes/" + recipe.recipe_id}><Column>{recipe.name}</Column></NavLink></Row>
-            )) : 'You have no liked recipes'}
-            <Row>
-                <Column>
-                {userData.admin ? 'You are admin' : 'You are not admin'}
-                </Column>
-            </Row>
-            <Row>
-                <Column><Button.Danger onClick={()=> {
-                    sessionStorage.clear();
-                    location.reload();
-                }}>Log out</Button.Danger></Column>
-            </Row>
-
-            </Card>
-            <Card title="Your Cart">
-          <Button.Danger onClick={() => {
-            this.CartItemsToShow.map((cartitem) => {
-              cartService.deleteIngredientFromCart(cartitem.cart_id)
-            })
-            this.mounted()
-          }}>Clear All</Button.Danger>
+            <div style={{display: 'flex', alignItems: '', flexWrap: 'wrap', flexGrow: 4}}>
+                <div style={{width: '45vw', margin: '1vw'}}>
+                <Card title="Your user information">
+                    <Row>
+                        <Column>Brukernavn: </Column>
+                        <Column>{userData.username}</Column>
+                    </Row>
+                    <Row>
+                        <Column>Access type: </Column>
+                        <Column>{userData.admin ? 'Admin' : 'User'}</Column>
+                    </Row>
+                    <br/>
+                    <Row>
+                        <Column>
+                        Your liked recipes:
+                        </Column>
+                    </Row>
+                    {this.likedRecipes.length > 0 ? this.likedRecipes.map((recipe) => (
+                        <Row key={recipe.recipe_id}><NavLink to={"/recipes/" + recipe.recipe_id}><Column>{recipe.name}</Column></NavLink></Row>
+                    )) : 'You have no liked recipes'}
+                    <br/>
+                    <Row>
+                        <Column><Button.Danger onClick={()=> {
+                            sessionStorage.clear();
+                            location.reload();
+                        }}>Log out</Button.Danger></Column>
+                    </Row>
+                </Card>
+            </div>
+            <div style={{width: '45vw', margin: '1vw'}}>
+                <Card title="Your Cart">
+                    <Button.Danger onClick={() => {
+                        this.CartItemsToShow.map((cartitem) => {
+                        cartService.deleteIngredientFromCart(cartitem.cart_id)
+                        })
+                        this.mounted()
+                    }}>Clear All</Button.Danger>
  
-          {this.CartItemsToShow.map((cart: CartItem) => (
-            //Maps all the different cart and renders them as links to their respective cart details
-            <Row key={cart.cart_id}>
-              <Column>
-                {cart.ingredients}
-              </Column>
-              <Column><Button.Danger onClick={() => {
-
-                cartService.deleteIngredientFromCart(cart.cart_id).then(() => {
-                  this.mounted();
-                })
-              }}>X</Button.Danger></Column>
-            </Row>))}
-        </Card>
-                </>
+                    {this.CartItemsToShow.map((cart: CartItem) => (
+                    //Maps all the different cart and renders them as links to their respective cart details
+                        <Row key={cart.cart_id}>
+                            <Column>{cart.ingredients}</Column>
+                            <Column><Button.Danger onClick={() => {
+                                cartService.deleteIngredientFromCart(cart.cart_id).then(() => {
+                                this.mounted();
+                                })
+                            }}>X</Button.Danger></Column>
+                        </Row>))}
+                </Card>
+            </div>
+            {userData.admin ? (<div style={{width: '45vw', margin: '1vw'}}>
+                <Card title='Add ingredients'>
+                    <Row>
+                        <Column><Form.Input 
+                        placeholder='Ingredient'
+                        type='text' 
+                        value={this.newIngredient.name} 
+                        onChange={(event) => {this.newIngredient.name = event.currentTarget.value}}></Form.Input></Column>
+                        <Column><Button.Light onClick={() => {
+                            let name = this.newIngredient.name.toLowerCase()
+                            if(this.ingredients.find(ing => ing.name == name)){
+                                Alert.danger('This ingredient is already available')
+                            } else{
+                                recipeService.addNewIngredient(this.newIngredient);
+                                this.newIngredient = {name: '', ingredients_id: 0};
+                                this.mounted();
+                            }
+                            }}>Add</Button.Light></Column>
+                    </Row>
+                </Card>
+            </div>) : (<></>)}
+            </div>
             )
         }
         //if userdata does not exist, the page that renders is a login-page
@@ -164,6 +186,9 @@ export class UserLogin extends Component  {
             if(userData){
                 let likedRecipes = await userService.getLikedRecipes(userData.user_id)
                 this.likedRecipes = likedRecipes
+                let ingredients = await recipeService.getIngredients();
+                //@ts-ignore
+                this.ingredients = ingredients;
 
                 try{
                     let cart = await cartService.get(userData.user_id);

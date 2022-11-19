@@ -8,7 +8,7 @@ import { NavLink } from 'react-router-dom';
  *
  * Properties: title
  */
-export class Card extends Component<{ title: ReactNode }> {
+export class Card extends Component<{ title: ReactNode; inline?: boolean}> {
   render() {
     return (
       <div className="card">

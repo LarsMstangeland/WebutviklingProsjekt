@@ -125,6 +125,57 @@ RecipeRouter.delete('/:id', (request, response) => {
     .catch((error) => response.status(404).send(error));
 });
 
+RecipeRouter.get('/ingredients/all', (_request, response) => {
+  recipeService
+    .getIngredients()
+    .then((rows) => response.send(rows))
+    .catch((error) => response.status(404).send(error));
+});  
 
+
+RecipeRouter.post('/:id/edit/ingredients', (request, response) => {
+  const data = request.body.ingredients;
+  const id = Number(request.params.id);
+
+  recipeService
+    .addRecipeIngredient(id, data)
+    .then(() => {
+      response.send();
+    })
+    .catch((error) => response.status(400).send(error));
+});
+
+  RecipeRouter.post('/:id/ingredients', (request, response) => {
+
+    const id = Number(request.params.id)
+    const user_id = request.body.user_id
+    const ingredients = request.body.ingredients
+    
+    recipeService
+    .AddIngredientsToCartFromRecipe(ingredients,user_id)
+    .then((rows) => response.send(rows))
+    .catch((error) => response.status(400).send(error));
+  
+  })
+
+  RecipeRouter.post('/:id/like', (request, response) => {
+
+    const userId = request.body.userId;
+    const recipeId = Number(request.params.id);
+
+    recipeService.likeRecipe(userId, recipeId)
+    .then(() => {
+      response.send();
+    }).catch((error)=> response.status(400).send(error))
+  })
+
+  RecipeRouter.post('/ingredients/edit', (request, response) => {
+
+    const ingredient = request.body.ingredient;
+    
+    recipeService.addNewIngredient(ingredient)
+    .then(() => response.send())
+    .catch((error) => response.status(500).send(error))
+  })
 
 export default RecipeRouter;

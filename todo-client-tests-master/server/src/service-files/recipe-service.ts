@@ -1,5 +1,7 @@
 import pool from '../mysql-pool';
 import type { RowDataPacket, ResultSetHeader } from 'mysql2';
+import { resolve } from 'path';
+import { rejects } from 'assert';
 
 export type Recipe = {
   recipe_id: number;
@@ -202,15 +204,18 @@ class RecipeService {
           )
         })      
       })
-    } 
-    
-  createIngredient(name : string) {
-    return new Promise<number>((resolve, reject) => {
-      pool.query('INSERT INTO ingredients (name) VALUES (?)', [name], (error, response : ResultSetHeader) => {
-        if(error) return reject(error);
+    }
 
-        resolve(response.insertId);
-      })
+  addNewIngredient(ingredient: IngredientName){
+    return new Promise<void>((resolve, reject) => {
+      pool.query(
+        'INSERT INTO ingredients (name) VALUES (?)', [ingredient.name], (error, results:ResultSetHeader) => {
+          if (error) return reject(error);
+
+          resolve()
+  
+        }
+      )
     })
   }
 }
