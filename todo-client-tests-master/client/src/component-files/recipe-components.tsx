@@ -71,7 +71,7 @@ export class RecipeList extends Component {
             }}
           >
             <div style={{ margin: '0 0.5rem' }}>
-              <Form.Input
+              <Form.Input style={{width : '12vw', height : '5.5vh', border : '2px solid black'}}
                 onChange={(event) => {
                   this.searchBar = event.currentTarget.value;
                   this.recipesToShow = [];
@@ -82,8 +82,8 @@ export class RecipeList extends Component {
                 placeholder="Search for recipes"
               ></Form.Input>
             </div>
-            <div style={{ margin: '0 0.5rem' }}>
-              <Form.Select
+            <div style={{ margin: '0 0.5rem'}}>
+              <Form.Select style={{width : '12vw', height : '5.5vh', border : '2px solid black'}}
                 value={this.regionFilter}
                 onChange={(event) => {
                   this.regionFilter = event.currentTarget.value;
@@ -96,8 +96,9 @@ export class RecipeList extends Component {
                 ))}
               </Form.Select>
             </div>
-            <div style={{ margin: '0 0.5rem' }}>
+            <div style={{ margin: '0 0.5rem', width : '2vw' }}>
               <Form.Select
+              style={{width : '12vw', height : '5.5vh', border : '2px solid black'}}
                 value={this.recipeTypeFilter}
                 onChange={(event) => {
                   this.recipeTypeFilter = event.currentTarget.value;

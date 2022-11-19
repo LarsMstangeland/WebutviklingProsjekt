@@ -4474,6 +4474,11 @@ class RecipeList extends react_simplified__WEBPACK_IMPORTED_MODULE_1__.Component
         margin: '0 0.5rem'
       }
     }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Form.Input, {
+      style: {
+        width: '12vw',
+        height: '5.5vh',
+        border: '2px solid black'
+      },
       onChange: event => {
         this.searchBar = event.currentTarget.value;
         this.recipesToShow = [];
@@ -4487,6 +4492,11 @@ class RecipeList extends react_simplified__WEBPACK_IMPORTED_MODULE_1__.Component
         margin: '0 0.5rem'
       }
     }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Form.Select, {
+      style: {
+        width: '12vw',
+        height: '5.5vh',
+        border: '2px solid black'
+      },
       value: this.regionFilter,
       onChange: event => {
         this.regionFilter = event.currentTarget.value;
@@ -4498,9 +4508,15 @@ class RecipeList extends react_simplified__WEBPACK_IMPORTED_MODULE_1__.Component
       value: region.name
     }, region.name)))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", {
       style: {
-        margin: '0 0.5rem'
+        margin: '0 0.5rem',
+        width: '2vw'
       }
     }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Form.Select, {
+      style: {
+        width: '12vw',
+        height: '5.5vh',
+        border: '2px solid black'
+      },
       value: this.recipeTypeFilter,
       onChange: event => {
         this.recipeTypeFilter = event.currentTarget.value;
