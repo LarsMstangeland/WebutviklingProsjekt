@@ -48,7 +48,18 @@ export class PreviewCard extends Component<{
         <NavLink to={'recipes/' + this.props.id}>
           <div style={{ display: 'flex', position: 'relative' }}>
             <h2
-              style={{
+              style={this.props.small ? {
+                position: 'absolute',
+                left: '0',
+                top: '0',
+                color: 'black',
+                fontSize: '1.5rem',
+                fontWeight: 'bold',
+                margin: '1rem',
+                padding: '0.5rem',
+                backgroundColor: 'rgba(255, 255, 255, 0.7)',
+                borderRadius: '0.5rem',
+              } : {
                 position: 'absolute',
                 left: '0',
                 top: '0',
@@ -66,13 +77,19 @@ export class PreviewCard extends Component<{
             <img
               alt={this.props.name}
               src={this.props.url}
-              style={{
-                height: 'auto',
-                width: '100%',
-                objectFit: 'contain',
+              style={this.props.small ? {
+                height: '30vh',
+                width: '25vw',
+                objectFit: 'cover',
                 boxShadow: 'rgba(0, 0, 0, 0.5) 0px 4px 12px',
                 borderRadius: '10px',
-                maxWidth: '40vw',
+              } : {
+                height: '50vh',
+                width: '40vw',
+                objectFit: 'cover',
+                boxShadow: 'rgba(0, 0, 0, 0.5) 0px 4px 12px',
+                borderRadius: '10px',
+                
               }}
             />
           </div>
