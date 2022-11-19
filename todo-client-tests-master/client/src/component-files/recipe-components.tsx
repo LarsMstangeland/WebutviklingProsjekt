@@ -139,7 +139,7 @@ export class RecipeList extends Component {
               this.recipesToShow.map((recipe) => (
                 //Maps all the different recipes and renders them as links to their respective recipe details
 
-              <PreviewCard small id={recipe.recipe_id} name={recipe.name} url={recipe.picture_url}></PreviewCard>
+              <PreviewCard small key={recipe.recipe_id} id={recipe.recipe_id} name={recipe.name} url={recipe.picture_url}></PreviewCard>
               ))) : (<h3>No results</h3>)}
           </div>
         </div>

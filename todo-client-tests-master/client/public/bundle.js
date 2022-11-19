@@ -4455,9 +4455,27 @@ class RecipeList extends react_simplified__WEBPACK_IMPORTED_MODULE_1__.Component
     }
   }
   render() {
-    return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Card, {
-      title: "Recipes"
-    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Row, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Column, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Form.Input, {
+    return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", {
+      style: {
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        padding: '1rem',
+        margin: '1rem'
+      }
+    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("h1", null, "Recipes"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", {
+      style: {
+        width: '100%',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        marginBottom: '1rem'
+      }
+    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", {
+      style: {
+        margin: '0 0.5rem'
+      }
+    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Form.Input, {
       onChange: event => {
         this.searchBar = event.currentTarget.value;
         this.recipesToShow = [];
@@ -4466,7 +4484,11 @@ class RecipeList extends react_simplified__WEBPACK_IMPORTED_MODULE_1__.Component
       value: this.searchBar,
       type: "search",
       placeholder: "Search for recipes"
-    })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Column, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Form.Select, {
+    })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", {
+      style: {
+        margin: '0 0.5rem'
+      }
+    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Form.Select, {
       value: this.regionFilter,
       onChange: event => {
         this.regionFilter = event.currentTarget.value;
@@ -4476,7 +4498,11 @@ class RecipeList extends react_simplified__WEBPACK_IMPORTED_MODULE_1__.Component
     }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("option", null, "Region"), this.regions.map(region => /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("option", {
       key: region.id,
       value: region.name
-    }, region.name)))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Column, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Form.Select, {
+    }, region.name)))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", {
+      style: {
+        margin: '0 0.5rem'
+      }
+    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Form.Select, {
       value: this.recipeTypeFilter,
       onChange: event => {
         this.recipeTypeFilter = event.currentTarget.value;
@@ -4486,13 +4512,17 @@ class RecipeList extends react_simplified__WEBPACK_IMPORTED_MODULE_1__.Component
     }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("option", null, "Type"), this.types.map(type => /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("option", {
       key: type.id,
       value: type.name
-    }, type.name)))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Column, null, userData && userData.admin ? /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Button.Success, {
+    }, type.name)))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", {
+      style: {
+        margin: '0 0.5rem'
+      }
+    }, userData && userData.admin ? /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Button.Success, {
       onClick: () => {
         _service_files_recipe_service__WEBPACK_IMPORTED_MODULE_3__["default"].addRecipe(this.recipe.name, this.recipe.description, this.recipe.picture_url, this.recipe.region, this.recipe.type).then(response => this.recipe.recipe_id = response).then(() => history.push('/recipes/' + this.recipe.recipe_id + '/edit'));
       }
     }, "Add Recipe") : /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", {
       style: {
-        display: "flex",
+        display: 'flex',
         flexWrap: 'wrap'
       }
     }, this.recipesToShow.length > 0 ? this.recipesToShow.map(recipe =>
@@ -4500,6 +4530,7 @@ class RecipeList extends react_simplified__WEBPACK_IMPORTED_MODULE_1__.Component
     //Maps all the different recipes and renders them as links to their respective recipe details
     react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.PreviewCard, {
       small: true,
+      key: recipe.recipe_id,
       id: recipe.recipe_id,
       name: recipe.name,
       url: recipe.picture_url
@@ -4539,19 +4570,67 @@ class RecipeDetails extends react_simplified__WEBPACK_IMPORTED_MODULE_1__.Compon
   portions = 4;
   emailSubject = '';
   emailBody = '';
+  RecipeDetail(_ref) {
+    let {
+      name,
+      value
+    } = _ref;
+    return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", {
+      style: {
+        display: "flex",
+        flexDirection: "row"
+      }
+    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("p", {
+      style: {
+        marginRight: "0.5rem"
+      }
+    }, name, ":"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("p", null, value));
+  }
   render() {
-    return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Card, {
-      title: this.recipe.name
-    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Row, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("picture", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("img", {
+    return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", {
+      style: {
+        padding: "1rem"
+      }
+    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Row, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Row, {
+      style: {
+        display: "flex",
+        flexDirection: "row",
+        padding: "1rem"
+      }
+    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Row, {
+      style: {
+        width: "50%"
+      }
+    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("img", {
       src: this.recipe.picture_url,
-      alt: this.recipe.name
-    }))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Row, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Column, {
-      width: 2
-    }, "Region:"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Column, null, this.recipe.region)), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Row, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Column, {
-      width: 2
-    }, "Type:"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Column, null, this.recipe.type)), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Row, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Column, {
-      width: 2
-    }, "Description:"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Column, null, this.recipe.description)), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Row, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Column, null,
+      alt: this.recipe.name,
+      style: {
+        maxWidth: "100",
+        height: "auto",
+        borderRadius: "2rem"
+      }
+    })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", {
+      style: {
+        width: "50%"
+      }
+    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("h2", {
+      style: {
+        marginBottom: "1rem"
+      }
+    }, this.recipe.name), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(this.RecipeDetail, {
+      name: "Region",
+      value: this.recipe.region
+    }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(this.RecipeDetail, {
+      name: "Type",
+      value: this.recipe.type
+    }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(this.RecipeDetail, {
+      name: "Description",
+      value: this.recipe.description
+    }))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", {
+      style: {
+        marginBottom: "0.5rem"
+      }
+    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Column, null,
     //If there is a user logged in the user can like or unlike a recipe, else like button sends an alert to log in
     userData ? this.likedRecipes.some(r => this.recipe.recipe_id == r.recipe_id) ? /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Button.Danger, {
       onClick: async () => {
@@ -4560,14 +4639,14 @@ class RecipeDetails extends react_simplified__WEBPACK_IMPORTED_MODULE_1__.Compon
       }
     }, "Unlike") : /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Button.Success, {
       onClick: async () => {
-        await _service_files_recipe_service__WEBPACK_IMPORTED_MODULE_3__["default"].likeRecipe(userData.user_id, this.props.match.params.id);
+        await _service_files_user_service__WEBPACK_IMPORTED_MODULE_4__["default"].likeRecipe(userData.user_id, this.props.match.params.id);
         location.reload();
       }
     }, "Like recipe") : /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Button.Success, {
       onClick: async () => {
         _widgets__WEBPACK_IMPORTED_MODULE_2__.Alert.info('Log in to like a recipe');
       }
-    }, "Like recipe")), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Column, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Button.Success, {
+    }, "Like recipe"))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Column, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Button.Success, {
       onClick: () => {
         //If there is a user logged in the user can add recipe ingredients to cart, else button sends an alert to log in
         userData ? (_service_files_recipe_service__WEBPACK_IMPORTED_MODULE_3__["default"].addRecipeIngredientsToCart(this.ingredients, this.recipe.recipe_id, userData.user_id), _widgets__WEBPACK_IMPORTED_MODULE_2__.Alert.info('Ingredients added to cart!')) : _widgets__WEBPACK_IMPORTED_MODULE_2__.Alert.info('Log in to add ingredients to cart');
@@ -4591,22 +4670,7 @@ class RecipeDetails extends react_simplified__WEBPACK_IMPORTED_MODULE_1__.Compon
     //Maps the different ingredients of a recipe and renders their respective values
     react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Row, {
       key: ingredient.ingredients_id
-    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Column, null, ingredient.name), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Column, null, ingredient.amount * this.portions / 4), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Column, null, ingredient.unit))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Row, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Column, null, userData ? this.likedRecipes.some(r => this.recipe.recipe_id == r.recipe_id) ? /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Button.Danger, {
-      onClick: async () => {
-        await _service_files_user_service__WEBPACK_IMPORTED_MODULE_4__["default"].removeLikedRecipe(userData.user_id, this.recipe.recipe_id);
-        location.reload();
-        console.log('nei');
-      }
-    }, "Unlike") : /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Button.Success, {
-      onClick: async () => {
-        await _service_files_user_service__WEBPACK_IMPORTED_MODULE_4__["default"].likeRecipe(userData.user_id, this.props.match.params.id);
-        location.reload();
-      }
-    }, "Like recipe") : /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Button.Success, {
-      onClick: async () => {
-        _widgets__WEBPACK_IMPORTED_MODULE_2__.Alert.info('Log in to like a recipe');
-      }
-    }, "Like recipe")))),
+    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Column, null, ingredient.name), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Column, null, ingredient.amount * this.portions / 4), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Column, null, ingredient.unit)))),
     //If there is a logged in user and the user is an admin, two buttons to delete and edit a recipe is displayed
     userData ? userData.admin ? /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Row, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Column, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Button.Danger, {
       onClick: () => {
@@ -4675,7 +4739,11 @@ class RecipeEdit extends react_simplified__WEBPACK_IMPORTED_MODULE_1__.Component
   render() {
     return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Card, {
       title: "Edit recipe"
-    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Row, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Column, {
+    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Row, {
+      style: {
+        marginBottom: "0.5rem"
+      }
+    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Column, {
       width: 2
     }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Form.Label, null, "Name:")), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Column, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Form.Input, {
       type: "text",
@@ -4707,7 +4775,11 @@ class RecipeEdit extends react_simplified__WEBPACK_IMPORTED_MODULE_1__.Component
     react__WEBPACK_IMPORTED_MODULE_0__.createElement("option", {
       key: type.id,
       value: type.name
-    }, type.name))))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Row, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Column, {
+    }, type.name))))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Row, {
+      style: {
+        marginBottom: "0.5rem"
+      }
+    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Column, {
       width: 2
     }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Form.Label, null, "Description:")), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Column, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Form.Textarea, {
       value: this.recipe.description,
@@ -5012,7 +5084,7 @@ class UserLogin extends react_simplified__WEBPACK_IMPORTED_MODULE_1__.Component 
           if (this.ingredients.find(ing => ing.name == name)) {
             _widgets__WEBPACK_IMPORTED_MODULE_2__.Alert.danger('This ingredient is already available');
           } else {
-            _service_files_recipe_service__WEBPACK_IMPORTED_MODULE_5__["default"].addNewIngredient(this.newIngredient);
+            _service_files_recipe_service__WEBPACK_IMPORTED_MODULE_5__["default"].createIngredient(this.newIngredient);
             this.newIngredient = {
               name: '',
               ingredients_id: 0
@@ -5028,7 +5100,17 @@ class UserLogin extends react_simplified__WEBPACK_IMPORTED_MODULE_1__.Component 
         created = false;
         location.reload();
       }
-      return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Card, {
+      return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", {
+        style: {
+          top: '30vh',
+          width: '100%',
+          display: 'flex',
+          position: 'relative',
+          alignItems: 'center',
+          justifyContent: 'center',
+          marginBottom: '1rem'
+        }
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Card, {
         title: "Log in"
       }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Row, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Column, null, "Brukernavn:", /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Form.Input, {
         type: "text",
@@ -5063,7 +5145,7 @@ class UserLogin extends react_simplified__WEBPACK_IMPORTED_MODULE_1__.Component 
         }
       }, "Log in"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Button.Light, {
         onClick: () => history.push('/user/create')
-      }, "Create user")))));
+      }, "Create user"))))));
     }
   }
   async mounted() {
@@ -5300,7 +5382,7 @@ class RecipeService {
       user_id
     }).then(response => response.data.id).catch(error => console.log(error));
   }
-  addNewIngredient(ingredient) {
+  createIngredient(ingredient) {
     return axios__WEBPACK_IMPORTED_MODULE_0___default().post('/recipes/ingredients/edit', {
       ingredient
     }).then(response => response.data).catch(error => console.log(error));
@@ -5429,6 +5511,7 @@ function _extends() { _extends = Object.assign ? Object.assign.bind() : function
 
 
 
+//import { pizzaIcon } from './assets/pizza-icon.png';
 
 /**
  * Renders an information card using Bootstrap classes.
@@ -5451,41 +5534,41 @@ class Card extends react_simplified__WEBPACK_IMPORTED_MODULE_1__.Component {
 class PreviewCard extends react_simplified__WEBPACK_IMPORTED_MODULE_1__.Component {
   render() {
     return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", {
-      style: this.props.small ? {
-        height: "250px",
-        padding: "10px",
-        margin: "20px",
-        flexBasis: "20%",
-        flexGrow: "1"
-      } : {
-        height: "400px",
-        padding: "10px",
-        margin: "20px",
-        flexBasis: "20%",
-        flexGrow: "1"
+      style: {
+        margin: '1rem'
       }
     }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_2__.NavLink, {
       to: 'recipes/' + this.props.id
-    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("b", {
+    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", {
       style: {
-        position: "relative",
-        left: "10%",
-        right: "0",
-        width: "20%",
-        color: "black"
+        display: 'flex',
+        position: 'relative'
       }
-    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("h2", null, this.props.name)), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("img", {
+    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("h2", {
+      style: {
+        position: 'absolute',
+        left: '0',
+        top: '0',
+        color: 'black',
+        fontSize: '2rem',
+        fontWeight: 'bold',
+        margin: '1rem',
+        padding: '0.5rem',
+        backgroundColor: 'rgba(255, 255, 255, 0.5)',
+        borderRadius: '0.5rem'
+      }
+    }, this.props.name), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("img", {
       alt: this.props.name,
       src: this.props.url,
       style: {
-        height: "100%",
-        width: "auto",
-        marginLeft: "50px",
-        boxShadow: "rgba(0, 0, 0, 0.5) 0px 4px 12px",
-        borderRadius: "10px",
+        height: 'auto',
+        width: '100%',
+        objectFit: 'contain',
+        boxShadow: 'rgba(0, 0, 0, 0.5) 0px 4px 12px',
+        borderRadius: '10px',
         maxWidth: '40vw'
       }
-    })));
+    }))));
   }
 }
 class BootstrapPreviewCard extends react_simplified__WEBPACK_IMPORTED_MODULE_1__.Component {
@@ -5493,7 +5576,7 @@ class BootstrapPreviewCard extends react_simplified__WEBPACK_IMPORTED_MODULE_1__
     return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", {
       className: "card",
       style: {
-        width: "18rem;"
+        width: '18rem;'
       }
     }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("img", {
       src: "https://i.guim.co.uk/img/media/26392d05302e02f7bf4eb143bb84c8097d09144b/446_167_3683_2210/master/3683.jpg?width=1200&quality=85&auto=format&fit=max&s=a52bbe202f57ac0f5ff7f47166906403",
@@ -5518,7 +5601,8 @@ class BootstrapPreviewCard extends react_simplified__WEBPACK_IMPORTED_MODULE_1__
 class Row extends react_simplified__WEBPACK_IMPORTED_MODULE_1__.Component {
   render() {
     return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", {
-      className: "row"
+      className: "row",
+      style: this.props.style
     }, this.props.children);
   }
 }
@@ -5531,7 +5615,8 @@ class Row extends react_simplified__WEBPACK_IMPORTED_MODULE_1__.Component {
 class Column extends react_simplified__WEBPACK_IMPORTED_MODULE_1__.Component {
   render() {
     return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", {
-      className: 'col' + (this.props.width ? '-' + this.props.width : '')
+      className: 'col' + (this.props.width ? '-' + this.props.width : ''),
+      style: this.props.style
     }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", {
       className: 'float-' + (this.props.right ? 'end' : 'start')
     }, this.props.children));
@@ -5548,11 +5633,14 @@ class ButtonSuccess extends react_simplified__WEBPACK_IMPORTED_MODULE_1__.Compon
     return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("button", {
       type: "button",
       className: "btn btn-success",
-      style: this.props.small ? {
-        padding: '5px 5px',
-        fontSize: '16px',
-        lineHeight: '0.7'
-      } : {},
+      style: {
+        ...(this.props.small ? {
+          padding: '5px 5px',
+          fontSize: '16px',
+          lineHeight: '0.7'
+        } : {}),
+        ...this.props.style
+      },
       onClick: this.props.onClick
     }, this.props.children);
   }
@@ -5568,11 +5656,14 @@ class ButtonDanger extends react_simplified__WEBPACK_IMPORTED_MODULE_1__.Compone
     return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("button", {
       type: "button",
       className: "btn btn-danger",
-      style: this.props.small ? {
-        padding: '5px 5px',
-        fontSize: '16px',
-        lineHeight: '0.7'
-      } : {},
+      style: {
+        ...(this.props.small ? {
+          padding: '5px 5px',
+          fontSize: '16px',
+          lineHeight: '0.7'
+        } : {}),
+        ...this.props.style
+      },
       onClick: this.props.onClick
     }, this.props.children);
   }
@@ -5588,11 +5679,14 @@ class ButtonLight extends react_simplified__WEBPACK_IMPORTED_MODULE_1__.Componen
     return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("button", {
       type: "button",
       className: "btn btn-light",
-      style: this.props.small ? {
-        padding: '5px 5px',
-        fontSize: '16px',
-        lineHeight: '0.7'
-      } : {},
+      style: {
+        ...(this.props.small ? {
+          padding: '5px 5px',
+          fontSize: '16px',
+          lineHeight: '0.7'
+        } : {}),
+        ...this.props.style
+      },
       onClick: this.props.onClick
     }, this.props.children);
   }
@@ -5618,8 +5712,8 @@ class NavBarLink extends react_simplified__WEBPACK_IMPORTED_MODULE_1__.Component
   render() {
     return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_2__.NavLink, {
       style: this.props.left ? {
-        position: "relative",
-        left: "70vw"
+        position: 'relative',
+        left: '70vw'
       } : {},
       className: "nav-link",
       activeClassName: "active",
@@ -5636,8 +5730,12 @@ class NavBarLink extends react_simplified__WEBPACK_IMPORTED_MODULE_1__.Component
 class NavBar extends react_simplified__WEBPACK_IMPORTED_MODULE_1__.Component {
   static Link = NavBarLink;
   render() {
-    return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("nav", {
-      className: "navbar navbar-expand-sm navbar-light bg-light"
+    return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", {
+      className: "navbar navbar-expand-sm navbar-dark bg-dark",
+      style: {
+        padding: '5px',
+        borderBottom: '1px solid gray'
+      }
     }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", {
       className: "container-fluid justify-content-start"
     }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_2__.NavLink, {
@@ -5645,10 +5743,13 @@ class NavBar extends react_simplified__WEBPACK_IMPORTED_MODULE_1__.Component {
       activeClassName: "active",
       exact: true,
       to: "/"
-    }, this.props.brand), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", {
+    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("img", {
+      src: "pizzaIcon",
+      alt: "Food Junkies"
+    })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", {
       className: "navbar-nav",
       style: {
-        width: "100%"
+        width: '100%'
       }
     }, this.props.children)));
   }
@@ -5769,7 +5870,16 @@ class Alert extends react_simplified__WEBPACK_IMPORTED_MODULE_1__.Component {
   alerts = [];
   nextId = 0;
   render() {
-    return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", null, this.alerts.map((alert, i) => /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", {
+    return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", {
+      style: {
+        position: 'absolute',
+        zIndex: 100,
+        width: '100%',
+        opacity: '90%',
+        backgroundColor: "transparent",
+        padding: this.alerts.length > 0 ? "1rem" : "0"
+      }
+    }, this.alerts.map((alert, i) => /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", {
       key: alert.id,
       className: 'alert alert-dismissible alert-' + alert.type,
       role: "alert"
@@ -40729,14 +40839,43 @@ class Home extends react_simplified__WEBPACK_IMPORTED_MODULE_2__.Component {
   render() {
     return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1__.createElement("div", {
       style: {
-        backgroundColor: "#f9f5f1"
+        backgroundColor: '#f9f5f1'
       }
-    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_3__.Card, {
-      title: "Welcome"
-    }, "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent laoreet risus et nunc ultricies, a varius velit ultrices. Etiam in efficitur sem. Nulla facilisi. Curabitur nunc sem, sollicitudin ut tortor auctor, gravida dapibus dui. In auctor justo diam, ut dapibus justo ultricies a. Sed sollicitudin ipsum in velit rutrum rhoncus. Integer porttitor odio nisi, vitae rhoncus velit egestas sed. Ut lobortis lectus ut fringilla auctor. Donec rutrum eros nec nibh molestie, a molestie nibh semper. Suspendisse velit tellus, luctus sit amet lectus consectetur, tincidunt blandit metus. Curabitur vehicula fringilla erat, vel egestas urna mollis in. Nam cursus accumsan mauris eget molestie. Suspendisse suscipit porta purus, id interdum sem tempus sed. Curabitur mattis aliquam dolor. Etiam et velit eget arcu semper dapibus. Nulla sit amet auctor mi, vitae laoreet lorem. In et euismod erat, vitae eleifend tellus. Proin consectetur sit amet nunc vitae egestas. Ut ultrices, lacus a sagittis pretium, nunc dui condimentum erat, ac auctor dui ante id mi. Aliquam volutpat laoreet placerat. Ut dignissim eu enim at vulputate. Sed neque justo, mollis sit amet ligula vitae, tincidunt auctor lorem. Curabitur at augue sit amet odio cursus tristique. Nam cursus eros et neque condimentum convallis. Sed efficitur dolor ligula, sit amet faucibus odio posuere quis. Suspendisse lobortis rutrum tortor et finibus. Nam ac tincidunt felis."), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1__.createElement("div", {
+    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1__.createElement("div", {
       style: {
-        display: "flex",
-        flexWrap: 'wrap'
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        backgroundColor: 'white',
+        padding: '1rem'
+      }
+    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1__.createElement("div", {
+      style: {
+        margin: '4rem'
+      }
+    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1__.createElement("h1", null, "Welcome to"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1__.createElement("h1", {
+      style: {
+        fontSize: '3rem',
+        fontWeight: 'bold'
+      }
+    }, "Food Junkies"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_3__.NavBar.Link, {
+      left: false,
+      to: "/recipes"
+    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1__.createElement("button", {
+      type: "button",
+      className: "btn btn-primary",
+      onClick: () => {}
+    }, "To recipes!"))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1__.createElement("div", {
+      style: {
+        padding: '0 2rem'
+      }
+    }, "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent laoreet risus et nunc ultricies, a varius velit ultrices. Etiam in efficitur sem. Nulla facilisi. Curabitur nunc sem, sollicitudin ut tortor auctor, gravida dapibus dui. In auctor justo diam, ut dapibus justo ultricies a. Sed sollicitudin ipsum in velit rutrum rhoncus. Integer porttitor odio nisi, vitae rhoncus velit egestas sed. Ut lobortis lectus ut fringilla auctor. Donec rutrum eros nec nibh molestie, a molestie nibh semper. Suspendisse velit tellus, luctus sit amet lectus consectetur, tincidunt blandit metus. Curabitur vehicula fringilla erat, vel egestas urna mollis in. Nam cursus accumsan mauris eget molestie. Suspendisse suscipit porta purus, id interdum sem tempus sed. Curabitur mattis aliquam dolor. Etiam et velit eget arcu semper dapibus. Nulla sit amet auctor mi, vitae laoreet lorem. In et euismod erat, vitae eleifend tellus. Proin consectetur sit amet nunc vitae egestas. Ut ultrices, lacus a sagittis pretium, nunc dui condimentum erat, ac auctor dui ante id mi. Aliquam volutpat laoreet placerat. Ut dignissim eu enim at vulputate. Sed neque justo, mollis sit amet ligula vitae, tincidunt auctor lorem. Curabitur at augue sit amet odio cursus tristique. Nam cursus eros et neque condimentum convallis. Sed efficitur dolor ligula, sit amet faucibus odio posuere quis. Suspendisse lobortis rutrum tortor et finibus. Nam ac tincidunt felis.")), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1__.createElement("div", {
+      style: {
+        display: 'flex',
+        flexWrap: 'wrap',
+        flexDirection: 'row',
+        justifyContent: 'space-around',
+        alignItems: 'center'
       }
     }, this.recipesToShow.map(recipe => /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_3__.PreviewCard, {
       key: recipe.recipe_id,
