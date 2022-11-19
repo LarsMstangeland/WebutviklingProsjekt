@@ -20,12 +20,12 @@ jobs:
           node-version: ${{ matrix.node-version }}
           cache: "npm"
 
-      - cd: server
+      - cd: todo-client-tests-master/server
       - touch: test/config.ts
       - run: npm run start --if-present
-      - run: npm test
+      - run: npm run test
       - cd: ..
 
-      - cd: client
+      - cd: todo-client-tests-master/client
       - run: npm run start --if-present
-      - run: npm test
+      - run: npm run test
