@@ -8,7 +8,7 @@ export type CartItem = {
 };
 
 
-class Cartservice{
+class CartService{
 
     get(id: number) {
         return new Promise<CartItem[] | undefined>((resolve, reject) => {
@@ -21,7 +21,6 @@ class Cartservice{
       }
 
 
-    //burde vi bruke ingredient objekt?
     delete(id: number) {
 
         return new Promise<void>((resolve, reject) => {
@@ -33,9 +32,19 @@ class Cartservice{
         });
     }
 
+    //created only for the testing of the calls
+    createForTest(cart_id : number, user_id : number, ingredient : string) {
+      return new Promise<number>((resolve, reject) => {
+        pool.query('INSERT INTO cart (cart_id, user_id, ingredients) VALUES (?,?,?)', [cart_id, user_id, ingredient]), 
+        (error : any, results : ResultSetHeader) => {
+          if (error) return reject(error);
+          resolve(results.insertId)
+        }
+      })
+    }
 }
 
 
 
-const cartService = new Cartservice();
+const cartService = new CartService();
 export default cartService;

@@ -45,6 +45,13 @@ class UserService {
       .catch((error) => console.log(error));
   }
 
+  
+  likeRecipe(userId : number, recipeId : number){
+    return axios.post('users/' + recipeId +'/like', {userId : userId})
+    .then((response) => response.data)
+    .catch(error => console.log(error))
+  }
+
   getLikedRecipes(userId : number) {
     return axios.get<LikedRecipe[]>('/users/recipes/' + userId).then(response => response.data);
   }

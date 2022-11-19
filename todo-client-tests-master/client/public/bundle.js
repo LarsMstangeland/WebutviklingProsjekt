@@ -4584,7 +4584,22 @@ class RecipeDetails extends react_simplified__WEBPACK_IMPORTED_MODULE_1__.Compon
     //Maps the different ingredients of a recipe and renders their respective values
     react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Row, {
       key: ingredient.ingredients_id
-    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Column, null, ingredient.name), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Column, null, ingredient.amount * this.portions / 4), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Column, null, ingredient.unit)))), userData ? userData.admin ? /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Row, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Column, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Button.Danger, {
+    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Column, null, ingredient.name), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Column, null, ingredient.amount * this.portions / 4), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Column, null, ingredient.unit))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Row, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Column, null, userData ? this.likedRecipes.some(r => this.recipe.recipe_id == r.recipe_id) ? /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Button.Danger, {
+      onClick: async () => {
+        await _service_files_user_service__WEBPACK_IMPORTED_MODULE_4__["default"].removeLikedRecipe(userData.user_id, this.recipe.recipe_id);
+        location.reload();
+        console.log('nei');
+      }
+    }, "Unlike") : /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Button.Success, {
+      onClick: async () => {
+        await _service_files_user_service__WEBPACK_IMPORTED_MODULE_4__["default"].likeRecipe(userData.user_id, this.props.match.params.id);
+        location.reload();
+      }
+    }, "Like recipe") : /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Button.Success, {
+      onClick: async () => {
+        _widgets__WEBPACK_IMPORTED_MODULE_2__.Alert.info('Log in to like a recipe');
+      }
+    }, "Like recipe")))), userData ? userData.admin ? /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Row, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Column, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Button.Danger, {
       onClick: () => {
         //Deletes the recipe and pushes the path back to all recipes
         _service_files_recipe_service__WEBPACK_IMPORTED_MODULE_3__["default"]["delete"](this.recipe.recipe_id).then(() => {
@@ -5186,11 +5201,6 @@ class RecipeService {
       type: type
     }).then(response => response.data.id).catch(error => console.log(error));
   }
-  likeRecipe(userId, recipeId) {
-    return axios__WEBPACK_IMPORTED_MODULE_0___default().post('recipes/' + recipeId + '/like', {
-      userId: userId
-    }).then(response => response.data).catch(error => console.log(error));
-  }
 
   /**
    * Adds all ingredients of a spesific recipe to the cart of the current logged in user
@@ -5247,6 +5257,11 @@ class UserService {
     }).then(response => {
       response.data.id;
     }).catch(error => console.log(error));
+  }
+  likeRecipe(userId, recipeId) {
+    return axios__WEBPACK_IMPORTED_MODULE_0___default().post('users/' + recipeId + '/like', {
+      userId: userId
+    }).then(response => response.data).catch(error => console.log(error));
   }
   getLikedRecipes(userId) {
     return axios__WEBPACK_IMPORTED_MODULE_0___default().get('/users/recipes/' + userId).then(response => response.data);
