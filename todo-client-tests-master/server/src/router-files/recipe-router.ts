@@ -1,5 +1,6 @@
 import express, { request, response } from 'express';
 import recipeService, { Recipe, Ingredient, IngredientName } from '../service-files/recipe-service';
+import userService from '../service-files/user-service';
 
 /**
  * Express router containing task methods.
@@ -132,19 +133,6 @@ RecipeRouter.get('/ingredients/all', (_request, response) => {
     .catch((error) => response.status(404).send(error));
 });  
 
-
-RecipeRouter.post('/:id/edit/ingredients', (request, response) => {
-  const data = request.body.ingredients;
-  const id = Number(request.params.id);
-
-  recipeService
-    .addRecipeIngredient(id, data)
-    .then(() => {
-      response.send();
-    })
-    .catch((error) => response.status(400).send(error));
-});
-
   RecipeRouter.post('/:id/ingredients', (request, response) => {
 
     const id = Number(request.params.id)
@@ -163,7 +151,7 @@ RecipeRouter.post('/:id/edit/ingredients', (request, response) => {
     const userId = request.body.userId;
     const recipeId = Number(request.params.id);
 
-    recipeService.likeRecipe(userId, recipeId)
+    userService.likeRecipe(userId, recipeId)
     .then(() => {
       response.send();
     }).catch((error)=> response.status(400).send(error))
@@ -173,7 +161,7 @@ RecipeRouter.post('/:id/edit/ingredients', (request, response) => {
 
     const ingredient = request.body.ingredient;
     
-    recipeService.addNewIngredient(ingredient)
+    recipeService.createIngredient(ingredient)
     .then(() => response.send())
     .catch((error) => response.status(500).send(error))
   })

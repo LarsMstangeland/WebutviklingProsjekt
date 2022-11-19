@@ -103,7 +103,7 @@ export class UserLogin extends Component  {
                             if(this.ingredients.find(ing => ing.name == name)){
                                 Alert.danger('This ingredient is already available')
                             } else{
-                                recipeService.addNewIngredient(this.newIngredient);
+                                recipeService.createIngredient(this.newIngredient);
                                 this.newIngredient = {name: '', ingredients_id: 0};
                                 this.mounted();
                             }

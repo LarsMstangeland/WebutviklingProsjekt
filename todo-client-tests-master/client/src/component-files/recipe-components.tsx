@@ -178,7 +178,7 @@ export class RecipeDetails extends Component<{ match: { params: { id: number } }
                     }}>Unlike</Button.Danger>  
                     :
                    <Button.Success onClick={async ()=> {
-                    await recipeService.likeRecipe(userData.user_id, this.props.match.params.id);
+                    await userService.likeRecipe(userData.user_id, this.props.match.params.id);
                     location.reload();
                     }}>Like recipe
                   </Button.Success>)
@@ -228,30 +228,6 @@ export class RecipeDetails extends Component<{ match: { params: { id: number } }
                 <Column>{ingredient.unit}</Column>
               </Row>
               ))}
-              <Row>
-                  <Column>
-                  {
-                  userData ?
-                  (this.likedRecipes.some((r) => (this.recipe.recipe_id == r.recipe_id)) ?
-                  <Button.Danger onClick={async ()=>{
-                    await userService.removeLikedRecipe(userData.user_id, this.recipe.recipe_id)
-                    location.reload();
-                  console.log('nei')
-                    }}>Unlike</Button.Danger>  
-                    :
-                   <Button.Success onClick={async ()=> {
-                    await userService.likeRecipe(userData.user_id, this.props.match.params.id);
-                    location.reload();
-                    }}>Like recipe
-                  </Button.Success>)
-                   : 
-                   (<Button.Success onClick={async ()=> {
-                    Alert.info('Log in to like a recipe')
-                    }}>Like recipe
-                  </Button.Success>)
-                  }
-                  </Column>
-              </Row>
           </Card>
           {
           userData ? 

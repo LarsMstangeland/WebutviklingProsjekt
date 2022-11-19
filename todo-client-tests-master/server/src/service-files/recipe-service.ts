@@ -206,14 +206,12 @@ class RecipeService {
       })
     }
 
-  addNewIngredient(ingredient: IngredientName){
+  createIngredient(ingredient: string){
     return new Promise<void>((resolve, reject) => {
       pool.query(
-        'INSERT INTO ingredients (name) VALUES (?)', [ingredient.name], (error, results:ResultSetHeader) => {
+        'INSERT INTO ingredients (name) VALUES (?)', [ingredient], (error, results:ResultSetHeader) => {
           if (error) return reject(error);
-
           resolve()
-  
         }
       )
     })

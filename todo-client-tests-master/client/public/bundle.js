@@ -4556,7 +4556,7 @@ class RecipeDetails extends react_simplified__WEBPACK_IMPORTED_MODULE_1__.Compon
       }
     }, "Unlike") : /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Button.Success, {
       onClick: async () => {
-        await _service_files_recipe_service__WEBPACK_IMPORTED_MODULE_3__["default"].likeRecipe(userData.user_id, this.props.match.params.id);
+        await _service_files_user_service__WEBPACK_IMPORTED_MODULE_4__["default"].likeRecipe(userData.user_id, this.props.match.params.id);
         location.reload();
       }
     }, "Like recipe") : /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Button.Success, {
@@ -4584,22 +4584,7 @@ class RecipeDetails extends react_simplified__WEBPACK_IMPORTED_MODULE_1__.Compon
     //Maps the different ingredients of a recipe and renders their respective values
     react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Row, {
       key: ingredient.ingredients_id
-    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Column, null, ingredient.name), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Column, null, ingredient.amount * this.portions / 4), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Column, null, ingredient.unit))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Row, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Column, null, userData ? this.likedRecipes.some(r => this.recipe.recipe_id == r.recipe_id) ? /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Button.Danger, {
-      onClick: async () => {
-        await _service_files_user_service__WEBPACK_IMPORTED_MODULE_4__["default"].removeLikedRecipe(userData.user_id, this.recipe.recipe_id);
-        location.reload();
-        console.log('nei');
-      }
-    }, "Unlike") : /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Button.Success, {
-      onClick: async () => {
-        await _service_files_user_service__WEBPACK_IMPORTED_MODULE_4__["default"].likeRecipe(userData.user_id, this.props.match.params.id);
-        location.reload();
-      }
-    }, "Like recipe") : /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Button.Success, {
-      onClick: async () => {
-        _widgets__WEBPACK_IMPORTED_MODULE_2__.Alert.info('Log in to like a recipe');
-      }
-    }, "Like recipe")))), userData ? userData.admin ? /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Row, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Column, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Button.Danger, {
+    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Column, null, ingredient.name), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Column, null, ingredient.amount * this.portions / 4), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Column, null, ingredient.unit)))), userData ? userData.admin ? /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Row, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Column, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Button.Danger, {
       onClick: () => {
         //Deletes the recipe and pushes the path back to all recipes
         _service_files_recipe_service__WEBPACK_IMPORTED_MODULE_3__["default"]["delete"](this.recipe.recipe_id).then(() => {
@@ -4978,7 +4963,7 @@ class UserLogin extends react_simplified__WEBPACK_IMPORTED_MODULE_1__.Component 
           if (this.ingredients.find(ing => ing.name == name)) {
             _widgets__WEBPACK_IMPORTED_MODULE_2__.Alert.danger('This ingredient is already available');
           } else {
-            _service_files_recipe_service__WEBPACK_IMPORTED_MODULE_5__["default"].addNewIngredient(this.newIngredient);
+            _service_files_recipe_service__WEBPACK_IMPORTED_MODULE_5__["default"].createIngredient(this.newIngredient);
             this.newIngredient = {
               name: '',
               ingredients_id: 0
@@ -5266,7 +5251,7 @@ class RecipeService {
       user_id
     }).then(response => response.data.id).catch(error => console.log(error));
   }
-  addNewIngredient(ingredient) {
+  createIngredient(ingredient) {
     return axios__WEBPACK_IMPORTED_MODULE_0___default().post('/recipes/ingredients/edit', {
       ingredient
     }).then(response => response.data).catch(error => console.log(error));
