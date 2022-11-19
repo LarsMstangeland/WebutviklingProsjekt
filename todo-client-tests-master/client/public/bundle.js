@@ -4686,7 +4686,7 @@ class RecipeDetails extends react_simplified__WEBPACK_IMPORTED_MODULE_1__.Compon
       this.emailSubject = 'Recipe for ' + this.recipe.name;
       this.emailBody = 'Description: %0D%0A' + this.recipe.description + '%0D%0A %0D%0A Ingredients:  %0D%0A' + this.ingredients.map(ing => `${ing.name + ' - ' + ing.amount + ' ' + ing.unit} %0D%0A`);
       if (userData) {
-        let likedRecipes = await _service_files_user_service__WEBPACK_IMPORTED_MODULE_4__["default"].getLikedRecipes(userData.user_id);
+        let likedRecipes = await _service_files_user_service__WEBPACK_IMPORTED_MODULE_4__["default"].getLikedRecipesForUser(userData.user_id);
         this.likedRecipes = likedRecipes;
       }
     } catch (error) {
@@ -5118,7 +5118,7 @@ class UserLogin extends react_simplified__WEBPACK_IMPORTED_MODULE_1__.Component 
       let users = await _service_files_user_service__WEBPACK_IMPORTED_MODULE_3__["default"].getAll();
       this.users = users;
       if (userData) {
-        let likedRecipes = await _service_files_user_service__WEBPACK_IMPORTED_MODULE_3__["default"].getLikedRecipes(userData.user_id);
+        let likedRecipes = await _service_files_user_service__WEBPACK_IMPORTED_MODULE_3__["default"].getLikedRecipesForUser(userData.user_id);
         this.likedRecipes = likedRecipes;
         let ingredients = await _service_files_recipe_service__WEBPACK_IMPORTED_MODULE_5__["default"].getIngredients();
         //@ts-ignore
@@ -5404,7 +5404,7 @@ class UserService {
       userId: userId
     }).then(response => response.data).catch(error => console.log(error));
   }
-  getLikedRecipes(userId) {
+  getLikedRecipesForUser(userId) {
     return axios__WEBPACK_IMPORTED_MODULE_0___default().get('/users/recipes/' + userId).then(response => response.data);
   }
   removeLikedRecipe(userId, recipeId) {
@@ -5465,6 +5465,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "Card": () => (/* binding */ Card),
 /* harmony export */   "Column": () => (/* binding */ Column),
 /* harmony export */   "Form": () => (/* binding */ Form),
+/* harmony export */   "InfoCard": () => (/* binding */ InfoCard),
 /* harmony export */   "NavBar": () => (/* binding */ NavBar),
 /* harmony export */   "PreviewCard": () => (/* binding */ PreviewCard),
 /* harmony export */   "Row": () => (/* binding */ Row)
@@ -5494,6 +5495,18 @@ class Card extends react_simplified__WEBPACK_IMPORTED_MODULE_1__.Component {
     }, this.props.title), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", {
       className: "card-text"
     }, this.props.children)));
+  }
+}
+class InfoCard extends Card {
+  render() {
+    return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(Card, {
+      title: this.props.children
+    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", {
+      style: {
+        height: "550px",
+        border: "2px solid black"
+      }
+    }), "dette er et infocard");
   }
 }
 class PreviewCard extends react_simplified__WEBPACK_IMPORTED_MODULE_1__.Component {
@@ -40830,11 +40843,7 @@ class Home extends react_simplified__WEBPACK_IMPORTED_MODULE_2__.Component {
       type: "button",
       className: "btn btn-primary",
       onClick: () => {}
-    }, "To recipes!"))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1__.createElement("div", {
-      style: {
-        padding: '0 2rem'
-      }
-    }, "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent laoreet risus et nunc ultricies, a varius velit ultrices. Etiam in efficitur sem. Nulla facilisi. Curabitur nunc sem, sollicitudin ut tortor auctor, gravida dapibus dui. In auctor justo diam, ut dapibus justo ultricies a. Sed sollicitudin ipsum in velit rutrum rhoncus. Integer porttitor odio nisi, vitae rhoncus velit egestas sed. Ut lobortis lectus ut fringilla auctor. Donec rutrum eros nec nibh molestie, a molestie nibh semper. Suspendisse velit tellus, luctus sit amet lectus consectetur, tincidunt blandit metus. Curabitur vehicula fringilla erat, vel egestas urna mollis in. Nam cursus accumsan mauris eget molestie. Suspendisse suscipit porta purus, id interdum sem tempus sed. Curabitur mattis aliquam dolor. Etiam et velit eget arcu semper dapibus. Nulla sit amet auctor mi, vitae laoreet lorem. In et euismod erat, vitae eleifend tellus. Proin consectetur sit amet nunc vitae egestas. Ut ultrices, lacus a sagittis pretium, nunc dui condimentum erat, ac auctor dui ante id mi. Aliquam volutpat laoreet placerat. Ut dignissim eu enim at vulputate. Sed neque justo, mollis sit amet ligula vitae, tincidunt auctor lorem. Curabitur at augue sit amet odio cursus tristique. Nam cursus eros et neque condimentum convallis. Sed efficitur dolor ligula, sit amet faucibus odio posuere quis. Suspendisse lobortis rutrum tortor et finibus. Nam ac tincidunt felis.")), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1__.createElement("div", {
+    }, "To recipes!")))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_3__.InfoCard, null, "Test"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1__.createElement("div", {
       style: {
         display: 'flex',
         flexWrap: 'wrap',

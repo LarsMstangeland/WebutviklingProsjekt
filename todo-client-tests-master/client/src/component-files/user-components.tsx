@@ -197,7 +197,7 @@ export class UserLogin extends Component  {
             this.users = users 
 
             if(userData){
-                let likedRecipes = await userService.getLikedRecipes(userData.user_id)
+                let likedRecipes = await userService.getLikedRecipesForUser(userData.user_id)
                 this.likedRecipes = likedRecipes
                 let ingredients = await recipeService.getIngredients();
                 //@ts-ignore

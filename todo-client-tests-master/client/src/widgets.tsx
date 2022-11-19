@@ -22,6 +22,20 @@ export class Card extends Component<{ title: ReactNode; inline?: boolean}> {
   }
 }
 
+export class InfoCard extends Card{
+
+  render(){
+    return(
+      <Card title={this.props.children}>
+        
+        <div style={{height:"550px", border: "2px solid black"}}></div>
+        dette er et infocard
+        
+        </Card>
+    )
+  }
+}
+
 export class PreviewCard extends Component<{
   name: string;
   url: string;

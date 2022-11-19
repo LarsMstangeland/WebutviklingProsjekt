@@ -52,7 +52,7 @@ class UserService {
     .catch(error => console.log(error))
   }
 
-  getLikedRecipes(userId : number) {
+  getLikedRecipesForUser(userId : number) {
     return axios.get<LikedRecipe[]>('/users/recipes/' + userId).then(response => response.data);
   }
 

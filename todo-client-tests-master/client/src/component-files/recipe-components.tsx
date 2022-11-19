@@ -295,7 +295,7 @@ export class RecipeDetails extends Component<{ match: { params: { id: number } }
       this.emailBody = 'Description: %0D%0A' + this.recipe.description + '%0D%0A %0D%0A Ingredients:  %0D%0A' + this.ingredients.map(ing => `${ing.name + ' - ' + ing.amount + ' ' + ing.unit} %0D%0A`)
 
       if(userData) {
-        let likedRecipes = await userService.getLikedRecipes(userData.user_id)
+        let likedRecipes = await userService.getLikedRecipesForUser(userData.user_id)
         this.likedRecipes = likedRecipes
       }
 
