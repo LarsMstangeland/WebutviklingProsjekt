@@ -58,7 +58,7 @@ class RecipeService {
 
   getIngredients() {
     return axios
-      .get<Ingredient[]>('/recipes/ingredients')
+      .get<Ingredient[]>('/recipes/ingredients/all')
       .then((response) => response.data)
       .catch((error) => console.log(error));
   }
@@ -140,6 +140,13 @@ class RecipeService {
       .post('/recipes/' + id + '/ingredients', {ingredients, user_id})
       .then((response) => response.data.id)
       .catch((error) => console.log(error));
+  }
+
+  addNewIngredient(ingredient: IngredientName){
+    return axios
+      .post('/recipes/ingredients/edit', {ingredient})
+      .then((response) => response.data)
+      .catch((error) => console.log(error))
   }
 }
 

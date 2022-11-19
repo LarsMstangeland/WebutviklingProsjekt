@@ -94,7 +94,7 @@ RecipeRouter.get('/:id/edit/ingredients', (_request, response) => {
     .catch((error) => response.status(404).send(error));
 });
 
-RecipeRouter.get('/ingredients', (_request, response) => {
+RecipeRouter.get('/ingredients/all', (_request, response) => {
   recipeService
     .getIngredients()
     .then((rows) => response.send(rows))
@@ -138,6 +138,13 @@ RecipeRouter.post('/:id/edit/ingredients', (request, response) => {
     }).catch((error)=> response.status(400).send(error))
   })
 
+  RecipeRouter.post('/ingredients/edit', (request, response) => {
 
+    const ingredient = request.body.ingredient;
+    
+    recipeService.addNewIngredient(ingredient)
+    .then(() => response.send())
+    .catch((error) => response.status(500).send(error))
+  })
 
 export default RecipeRouter;
