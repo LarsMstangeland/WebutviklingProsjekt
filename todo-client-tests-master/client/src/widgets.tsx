@@ -12,7 +12,7 @@ import { NavLink } from 'react-router-dom';
 export class Card extends Component<{ title: ReactNode; inline?: boolean}> {
   render() {
     return (
-      <div className="card">
+      <div className="card" style={{padding: '1rem', paddingLeft: '2rem'}}>
         <div className="card-body">
           <h5 className="card-title">{this.props.title}</h5>
           <div className="card-text">{this.props.children}</div>
@@ -43,7 +43,7 @@ export class PreviewCard extends Component<{
                 fontWeight: 'bold',
                 margin: '1rem',
                 padding: '0.5rem',
-                backgroundColor: 'rgba(255, 255, 255, 0.5)',
+                backgroundColor: 'rgba(255, 255, 255, 0.7)',
                 borderRadius: '0.5rem',
               }}
             >
@@ -389,7 +389,7 @@ export class Alert extends Component {
 
   render() {
     return (
-      <div style={{ position: 'absolute', zIndex: 100, width: '100%', opacity: '90%', backgroundColor: "transparent", padding: this.alerts.length > 0 ? "1rem" : "0" }}>
+      <div style={{ position: 'sticky', top: '0', zIndex: 100, width: '20%', left: '75%', opacity: '90%', backgroundColor: "transparent", padding: this.alerts.length > 0 ? "1rem" : "0" }}>
         {this.alerts.map((alert, i) => (
           <div
             key={alert.id}

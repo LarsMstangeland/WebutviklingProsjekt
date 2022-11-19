@@ -40,7 +40,8 @@ export class UserLogin extends Component  {
         // if userdata exists the page that renders is the one with your information
         if(userData) {
             return ( 
-            <div style={{display: 'flex', alignItems: '', flexWrap: 'wrap', flexGrow: 4}}>
+                <>
+            <div style={{display: 'flex', flexWrap: 'wrap', flexDirection: 'column', marginLeft: '1vw'}}>
                 <div style={{width: '45vw', margin: '1vw'}}>
                 <Card title="Your user information">
                     <Row>
@@ -69,27 +70,6 @@ export class UserLogin extends Component  {
                     </Row>
                 </Card>
             </div>
-            <div style={{width: '45vw', margin: '1vw'}}>
-                <Card title="Your Cart">
-                    <Button.Danger onClick={() => {
-                        this.CartItemsToShow.map((cartitem) => {
-                        cartService.deleteIngredientFromCart(cartitem.cart_id)
-                        })
-                        this.mounted()
-                    }}>Clear All</Button.Danger>
- 
-                    {this.CartItemsToShow.map((cart: CartItem) => (
-                    //Maps all the different cart and renders them as links to their respective cart details
-                        <Row key={cart.cart_id}>
-                            <Column>{cart.ingredients}</Column>
-                            <Column><Button.Danger onClick={() => {
-                                cartService.deleteIngredientFromCart(cart.cart_id).then(() => {
-                                this.mounted();
-                                })
-                            }}>X</Button.Danger></Column>
-                        </Row>))}
-                </Card>
-            </div>
             {userData.admin ? (<div style={{width: '45vw', margin: '1vw'}}>
                 <Card title='Add ingredients'>
                     <Row>
@@ -112,6 +92,31 @@ export class UserLogin extends Component  {
                 </Card>
             </div>) : (<></>)}
             </div>
+            <div style={{position: 'absolute', top: '5vh', left: '50vw', width: '45vw', marginTop: '2vw'}}>
+                <Card title="Your Cart">
+                    <br/>
+                    {this.CartItemsToShow.map((cart: CartItem) => (
+                    //Maps all the different cart and renders them as links to their respective cart details
+                        <Row key={cart.cart_id}>
+                            <Column>{cart.ingredients.charAt(0).toUpperCase() + cart.ingredients.slice(1)}</Column>
+                            <Column><Button.Danger small onClick={() => {
+                                cartService.deleteIngredientFromCart(cart.cart_id).then(() => {
+                                this.mounted();
+                                })
+                            }}>X</Button.Danger></Column>
+                        </Row>))
+                    }
+
+                    <Button.Danger onClick={() => {
+                        this.CartItemsToShow.map((cartitem) => {
+                        cartService.deleteIngredientFromCart(cartitem.cart_id)
+                        })
+                        this.mounted()
+                    }}>Clear All</Button.Danger>
+                </Card>
+            </div>
+            
+            </>
             )
         }
         //if userdata does not exist, the page that renders is a login-page

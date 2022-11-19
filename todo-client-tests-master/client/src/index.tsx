@@ -119,8 +119,8 @@ class Home extends Component {
 ReactDOM.render(
   <HashRouter>
     <div>
-      <Alert />
       <Menu />
+      <Alert />
       <Route exact path="/" component={Home} />
       <Route exact path="/recipes" component={RecipeList} />
       <Route exact path="/recipes/:id(\d+)" component={RecipeDetails} /> {/* id must be number */}

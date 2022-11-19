@@ -233,6 +233,7 @@ export class RecipeDetails extends Component<{ match: { params: { id: number } }
             }}>Add ingredients to cart</Button.Success></Column> 
             <Column><Button.Light onClick={() => {window.open(`mailto:example@mail.com?subject=${this.emailSubject}&body=${this.emailBody}`)}}>Share</Button.Light></Column>
           </Row>
+          <br/>
         </div>
           <Card title='Ingredients'>
             <Row>
@@ -252,21 +253,24 @@ export class RecipeDetails extends Component<{ match: { params: { id: number } }
                 ></Form.Input>
               </Column>
             </Row>
+            <br/>
             <Row>
-              <Column>Ingredients name:</Column>
-              <Column>Amount:</Column>
-              <Column>Unit:</Column>
+              <Column><b>Ingredients name:</b></Column>
+              <Column><b>Amount:</b></Column>
+              <Column><b>Unit:</b></Column>
             </Row>
+
             {this.ingredients.map((ingredient) => (
               //Maps the different ingredients of a recipe and renders their respective values
               <Row key={ingredient.ingredients_id}>
-                <Column>{ingredient.name}</Column>
+                <Column>{ingredient.name.charAt(0).toUpperCase() + ingredient.name.slice(1)}</Column>
                 <Column>{(ingredient.amount * this.portions) / 4}</Column>
                 <Column>{ingredient.unit}</Column>
               </Row>
               ))}
               
           </Card>
+          <br/>
           {//If there is a logged in user and the user is an admin, two buttons to delete and edit a recipe is displayed
           userData ? 
           (userData.admin ? (<Row>
@@ -405,16 +409,17 @@ export class RecipeEdit extends Component<{ match: { params: { id: number } } }>
               ></Form.Input>
             </Column>
           </Row>
+          <br/>
           <Row>
-            <Column>Ingredients name:</Column>
-            <Column>Amount:</Column>
-            <Column>Unit:</Column>
+            <Column><b>Ingredients name:</b></Column>
+            <Column><b>Amount:</b></Column>
+            <Column><b>Unit:</b></Column>
             <Column></Column>
           </Row>
           {this.recipeIngredients.map((ingredient) => (
             //Maps all the ingredients of a recipe and displays them in custom rows, such that they may be edited or deleted
             <Row key={ingredient.ingredients_id}>
-              <Column>{ingredient.name}</Column>
+              <Column>{ingredient.name.charAt(0).toUpperCase() + ingredient.name.slice(1)}</Column>
               <Column>
                 <Form.Input
                   type="number"
@@ -476,6 +481,7 @@ export class RecipeEdit extends Component<{ match: { params: { id: number } } }>
               </Column>
             </Row>
           ))}
+          <br/>
           <h4>Add ingredient</h4>
           <Row>
             <Column>
