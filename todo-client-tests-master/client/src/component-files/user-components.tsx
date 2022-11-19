@@ -121,8 +121,20 @@ export class UserLogin extends Component  {
                 location.reload();
             }
             return (
-                <>  
+                <> 
+                      <div
+            style={{
+                top : '30vh',
+              width: '100%',
+              display: 'flex',
+              position : 'relative',
+              alignItems: 'center',
+              justifyContent: 'center',
+              marginBottom: '1rem',
+            }}
+          > 
                     <Card title="Log in">
+              
                         <Row>
                             <Column>
                                 Brukernavn: 
@@ -173,6 +185,7 @@ export class UserLogin extends Component  {
                             </Column> 
                         </Row>
                     </Card>
+                    </div>
                 </>
             )
         }
