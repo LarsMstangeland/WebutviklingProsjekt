@@ -7,8 +7,10 @@
     "strict": true,
     "sourceMap": true,
     "baseUrl": ".",
+    "typeRoots" : ["node_modules/@types", "src/types"],
     "paths": {
-      "react-simplified": ["@types/react-simplified.d.ts"]
+      "react-simplified": ["@types/react-simplified.d.ts"],
+      "crypto":["node_modules/crypto-js"]
     }
-  }
+  },
 }

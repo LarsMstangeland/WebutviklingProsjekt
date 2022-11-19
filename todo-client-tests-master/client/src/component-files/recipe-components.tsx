@@ -50,73 +50,101 @@ export class RecipeList extends Component {
   }
 
   render() {
-      return (
-        <>
-          <Card title="Recipes">
-            <Row>
-              <Column><Form.Input 
-              onChange={(event) => {
-                this.searchBar = event.currentTarget.value;
-                this.recipesToShow = [];
+    return (
+      <div>
+        <div
+          style={{
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            padding: '1rem',
+            margin: '1rem',
+          }}
+        >
+          <h1>Recipes</h1>
+          <div
+            style={{
+              width: '100%',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              marginBottom: '1rem',
+            }}
+          >
+            <div style={{ margin: '0 0.5rem' }}>
+              <Form.Input
+                onChange={(event) => {
+                  this.searchBar = event.currentTarget.value;
+                  this.recipesToShow = [];
                 this.filter()
-              }} 
-              value={this.searchBar}
-              type='search'
-              placeholder='Search for recipes'
-              ></Form.Input></Column>
-              <Column><Form.Select 
-              value={this.regionFilter} 
-              onChange={(event) => {
-                this.regionFilter = event.currentTarget.value;
-                this.recipesToShow = [];
-                this.filter()
+                }}
+                value={this.searchBar}
+                type="search"
+                placeholder="Search for recipes"
+              ></Form.Input>
+            </div>
+            <div style={{ margin: '0 0.5rem' }}>
+              <Form.Select
+                value={this.regionFilter}
+                onChange={(event) => {
+                  this.regionFilter = event.currentTarget.value;
+                  this.recipesToShow = [];
+                  this.filter()
                 }}>
-               <option>Region</option>
+                <option>Region</option>
                 {this.regions.map((region) => (
                   <option key={region.id} value={region.name}>{region.name}</option>
                 ))}
-                </Form.Select></Column>
-              <Column><Form.Select 
-              value={this.recipeTypeFilter} 
-              onChange={(event) => {
-                this.recipeTypeFilter = event.currentTarget.value;
-                this.recipesToShow = [];
+              </Form.Select>
+            </div>
+            <div style={{ margin: '0 0.5rem' }}>
+              <Form.Select
+                value={this.recipeTypeFilter}
+                onChange={(event) => {
+                  this.recipeTypeFilter = event.currentTarget.value;
+                  this.recipesToShow = [];
                 this.filter()
                 }}>
-               <option>Type</option>
+                <option>Type</option>
                 {this.types.map((type) => (
                   <option key={type.id} value={type.name}>{type.name}</option>
                 ))}
-                </Form.Select>
-                </Column>
-              <Column>
-              {userData && userData.admin ? 
-              
-              <Button.Success onClick={() => {
+              </Form.Select>
+            </div>
+            <div style={{ margin: '0 0.5rem' }}>
+              {userData && userData.admin ? (
+                <Button.Success
+                  onClick={() => {
+                    recipeService
+                      .addRecipe(
+                        this.recipe.name,
+                        this.recipe.description,
+                        this.recipe.picture_url,
+                        this.recipe.region,
+                        this.recipe.type
+                      )
+                      .then((response) => (this.recipe.recipe_id = response))
+                      .then(() => history.push('/recipes/' + this.recipe.recipe_id + '/edit'));
+                  }}
+                >
+                  Add Recipe
+                </Button.Success>
+              ) : (
+                <></>
+              )}
+            </div>
+          </div>
+          <div style={{ display: 'flex', flexWrap: 'wrap' }}>
+            {this.recipesToShow.length > 0 ? (
+              this.recipesToShow.map((recipe) => (
+                //Maps all the different recipes and renders them as links to their respective recipe details
 
-                recipeService
-                        .addRecipe(
-                          this.recipe.name,
-                          this.recipe.description,
-                          this.recipe.picture_url,
-                          this.recipe.region,
-                          this.recipe.type
-                        )
-                        .then((response) => (this.recipe.recipe_id = response))
-                        .then(() => history.push('/recipes/' + this.recipe.recipe_id + '/edit'));
-              }
-              }>Add Recipe</Button.Success> : <></>}</Column>
-            </Row>
-            <div style={{display: "flex", flexWrap: 'wrap'}}>
-            {this.recipesToShow.length > 0 ? (this.recipesToShow.map((recipe) => (
-              //Maps all the different recipes and renders them as links to their respective recipe details
-              
               <PreviewCard small id={recipe.recipe_id} name={recipe.name} url={recipe.picture_url}></PreviewCard>
               ))) : (<h3>No results</h3>)}
-            </div>
-          </Card>
-        </>
-      );
+          </div>
+        </div>
+      </div>
+    );
   }
 
   async mounted() {
@@ -146,29 +174,33 @@ export class RecipeDetails extends Component<{ match: { params: { id: number } }
   portions: number = 4;
   emailSubject: string = '';
   emailBody: string = '';
+   
+  RecipeDetail({name, value}: any) {
+    return (
+      <div style={{display: "flex", flexDirection: "row"}}>
+        <p style={{marginRight: "0.5rem"}}>{name}:</p>
+        <p>{value}</p>
+      </div>
+    )
+  }
 
   render() {
-      return (
-        <>
-          <Card title={this.recipe.name}>
-            <Row>
-              <picture>
-                <img src={this.recipe.picture_url} alt={this.recipe.name} />
-              </picture>
+    return (
+    <>
+      <div style={{padding: "1rem"}}>
+        <Row>
+          <Row style={{display: "flex", flexDirection: "row", padding: "1rem"}}>
+            <Row style={{width: "50%"}}>
+              <img src={this.recipe.picture_url} alt={this.recipe.name} style={{maxWidth: "100", height: "auto", borderRadius: "2rem"}}/>
             </Row>
-            <Row>
-              <Column width={2}>Region:</Column>
-              <Column>{this.recipe.region}</Column>
-            </Row>
-            <Row>
-              <Column width={2}>Type:</Column>
-              <Column>{this.recipe.type}</Column>
-            </Row>
-            <Row>
-              <Column width={2}>Description:</Column>
-              <Column>{this.recipe.description}</Column>
-            </Row>
-            <Row>
+            <div style={{width: "50%"}}>
+              <h2 style={{marginBottom: "1rem"}}>{this.recipe.name}</h2>
+              <this.RecipeDetail name="Region" value={this.recipe.region}/>
+              <this.RecipeDetail name="Type" value={this.recipe.type}/>
+              <this.RecipeDetail name="Description" value={this.recipe.description}/>
+            </div>
+          </Row>
+          <div style={{marginBottom: "0.5rem"}}>
             <Column>
                   {//If there is a user logged in the user can like or unlike a recipe, else like button sends an alert to log in
                   userData ?
@@ -179,7 +211,7 @@ export class RecipeDetails extends Component<{ match: { params: { id: number } }
                     }}>Unlike</Button.Danger>  
                     :
                    <Button.Success onClick={async ()=> {
-                    await recipeService.likeRecipe(userData.user_id, this.props.match.params.id);
+                    await userService.likeRecipe(userData.user_id, this.props.match.params.id);
                     location.reload();
                     }}>Like recipe
                   </Button.Success>)
@@ -189,8 +221,10 @@ export class RecipeDetails extends Component<{ match: { params: { id: number } }
                     }}>Like recipe
                   </Button.Success>)
                   }
-                  </Column>
-            <Column><Button.Success onClick={() => {
+            </Column>
+          </div>
+            <Column>
+              <Button.Success onClick={() => {
               //If there is a user logged in the user can add recipe ingredients to cart, else button sends an alert to log in
               userData ? 
                 (recipeService.addRecipeIngredientsToCart(this.ingredients, this.recipe.recipe_id, userData.user_id),
@@ -199,7 +233,7 @@ export class RecipeDetails extends Component<{ match: { params: { id: number } }
             }}>Add ingredients to cart</Button.Success></Column> 
             <Column><Button.Light onClick={() => {window.open(`mailto:example@mail.com?subject=${this.emailSubject}&body=${this.emailBody}`)}}>Share</Button.Light></Column>
           </Row>
-        </Card>
+        </div>
           <Card title='Ingredients'>
             <Row>
               <Column>Portions:</Column>
@@ -231,30 +265,7 @@ export class RecipeDetails extends Component<{ match: { params: { id: number } }
                 <Column>{ingredient.unit}</Column>
               </Row>
               ))}
-              <Row>
-                  <Column>
-                  {
-                  userData ?
-                  (this.likedRecipes.some((r) => (this.recipe.recipe_id == r.recipe_id)) ?
-                  <Button.Danger onClick={async ()=>{
-                    await userService.removeLikedRecipe(userData.user_id, this.recipe.recipe_id)
-                    location.reload();
-                  console.log('nei')
-                    }}>Unlike</Button.Danger>  
-                    :
-                   <Button.Success onClick={async ()=> {
-                    await userService.likeRecipe(userData.user_id, this.props.match.params.id);
-                    location.reload();
-                    }}>Like recipe
-                  </Button.Success>)
-                   : 
-                   (<Button.Success onClick={async ()=> {
-                    Alert.info('Log in to like a recipe')
-                    }}>Like recipe
-                  </Button.Success>)
-                  }
-                  </Column>
-              </Row>
+              
           </Card>
           {//If there is a logged in user and the user is an admin, two buttons to delete and edit a recipe is displayed
           userData ? 
@@ -276,8 +287,6 @@ export class RecipeDetails extends Component<{ match: { params: { id: number } }
     
   }
 
-
-    
   async mounted() {
     //Gets spesific recipe and it´s ingredients, and pass them to
     try {
@@ -296,7 +305,7 @@ export class RecipeDetails extends Component<{ match: { params: { id: number } }
 
     } catch (error: any) {
       Alert.danger('Error getting recipe or ingredients: ' + error.message)
-     }  
+    }
   }
 }
 
@@ -320,9 +329,9 @@ export class RecipeEdit extends Component<{ match: { params: { id: number } } }>
 
   render() {
     return (
-      <> 
+      <>
         <Card title="Edit recipe">
-          <Row>
+          <Row style={{marginBottom: "0.5rem"}}>
             <Column width={2}>
               <Form.Label>Name:</Form.Label>
             </Column>
@@ -343,12 +352,12 @@ export class RecipeEdit extends Component<{ match: { params: { id: number } } }>
                 value={this.recipe.region}
                 onChange={(event) => (this.recipe.region = event.currentTarget.value)}
               >
-                  <option value={'Regions'}>Regions</option>
+                <option value={'Regions'}>Regions</option>
                 {this.regions.map((region) => (
                   //Maps all the regions and displays them as options in a select element
                   <option key={region.id} value={region.name}>
                     {region.name}
-                    </option>
+                  </option>
                 ))}
               </Form.Select>
             </Column>
@@ -358,21 +367,21 @@ export class RecipeEdit extends Component<{ match: { params: { id: number } } }>
               <Form.Label>Type:</Form.Label>
             </Column>
             <Column>
-              <Form.Select 
-                value={this.recipe.type} 
+              <Form.Select
+                value={this.recipe.type}
                 onChange={(event) => (this.recipe.type = event.currentTarget.value)}>
 
-                  <option value={'Types'}>Types</option>
+                <option value={'Types'}>Types</option>
                 {this.types.map((type) => (
                   //Maps all the types and displays them as options in a select element
                   <option key={type.id} value={type.name}>
-                  {type.name}
-                </option>
+                    {type.name}
+                  </option>
                 ))}
               </Form.Select>
             </Column>
           </Row>
-          <Row>
+          <Row style={{marginBottom: "0.5rem"}}>
             <Column width={2}>
               <Form.Label>Description:</Form.Label>
             </Column>
@@ -416,8 +425,8 @@ export class RecipeEdit extends Component<{ match: { params: { id: number } } }>
                 />
               </Column>
               <Column>
-                <Form.Select 
-                  value={ingredient.unit} 
+                <Form.Select
+                  value={ingredient.unit}
                   onChange={(event) => (ingredient.unit = event.currentTarget.value)} >
                   {this.units.map((unit) => (
                     <option key={unit.id} value={unit.unit}>
@@ -487,7 +496,7 @@ export class RecipeEdit extends Component<{ match: { params: { id: number } } }>
                         this.ingredientsToShow.push(this.ingredients[i]);
                       }
                     }
-                  } 
+                  }
                 }
               }></Form.Input>
               <datalist id='searchList'>
@@ -496,7 +505,7 @@ export class RecipeEdit extends Component<{ match: { params: { id: number } } }>
                   <option key={ingredient.ingredients_id} value={ingredient.name}>{ingredient.name}</option>
                 ))}
               </datalist>
-              </Column>
+            </Column>
             <Column>
               <Form.Input
                 type="number"
@@ -504,9 +513,9 @@ export class RecipeEdit extends Component<{ match: { params: { id: number } } }>
                 value={this.newIngredient.amount}
                 onChange={(event) => (this.newIngredient.amount = Number(event.currentTarget.value))}
               /></Column>
-              <Column>
-                <Form.Select 
-                  value={this.newIngredient.unit} 
+            <Column>
+              <Form.Select
+                value={this.newIngredient.unit}
                   onChange={(event) => (this.newIngredient.unit = event.currentTarget.value)} >
                   <option>Select Unit</option>
                   {this.units.map((unit) => (
@@ -566,21 +575,21 @@ export class RecipeEdit extends Component<{ match: { params: { id: number } } }>
                 {if(this.ingredientsToDelete.length > 0){
                   this.recipeIngredients = this.recipeIngredients.filter((ingredient) => !this.ingredientsToDelete.includes(ingredient))
                   recipeService.deleteRecipeIngredients(this.ingredientsToDelete, this.recipe.recipe_id)
-                } 
+                    }
                 if(this.newIngredients.length > 0){
                   recipeService.addRecipeIngredient(this.newIngredients, this.recipe.recipe_id)
-                }
-                recipeService.updateRecipeIngredients(
-                  this.recipeIngredients,
-                  this.recipe.recipe_id
-                );
-                recipeService.update(this.recipe).then(() => {
-                  history.push('/recipes/' + this.recipe.recipe_id);
+                    }
+                    recipeService.updateRecipeIngredients(
+                      this.recipeIngredients,
+                      this.recipe.recipe_id
+                    );
+                    recipeService.update(this.recipe).then(() => {
+                      history.push('/recipes/' + this.recipe.recipe_id);
                 })}
               } else{
                 Alert.danger('Unvalid values for recipe')
-              } 
-              }
+                  }
+                }
               }
             >
               Save

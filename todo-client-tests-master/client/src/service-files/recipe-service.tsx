@@ -136,7 +136,7 @@ class RecipeService {
       .catch((error) => console.log(error));
   }
 
-  addNewIngredient(ingredient: IngredientName){
+  createIngredient(ingredient: IngredientName){
     return axios
       .post('/recipes/ingredients/edit', {ingredient})
       .then((response) => response.data)
