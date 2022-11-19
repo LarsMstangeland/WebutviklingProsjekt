@@ -4463,7 +4463,7 @@ class RecipeList extends react_simplified__WEBPACK_IMPORTED_MODULE_1__.Component
         padding: '1rem',
         margin: '1rem'
       }
-    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("h1", null, "Recipes"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", {
+    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("h1", null, "Recipes"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("br", null), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", {
       style: {
         width: '100%',
         display: 'flex',
@@ -4497,7 +4497,8 @@ class RecipeList extends react_simplified__WEBPACK_IMPORTED_MODULE_1__.Component
       style: {
         width: '12vw',
         height: '5.5vh',
-        border: '2px solid black'
+        border: '2px solid black',
+        borderRadius: '5px'
       },
       value: this.regionFilter,
       onChange: event => {
@@ -4510,14 +4511,14 @@ class RecipeList extends react_simplified__WEBPACK_IMPORTED_MODULE_1__.Component
       value: region.name
     }, region.name)))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", {
       style: {
-        margin: '0 0.5rem',
-        width: '2vw'
+        margin: '0 0.5rem'
       }
     }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Form.Select, {
       style: {
         width: '12vw',
         height: '5.5vh',
-        border: '2px solid black'
+        border: '2px solid black',
+        borderRadius: '5px'
       },
       value: this.recipeTypeFilter,
       onChange: event => {
@@ -4528,18 +4529,11 @@ class RecipeList extends react_simplified__WEBPACK_IMPORTED_MODULE_1__.Component
     }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("option", null, "Type"), this.types.map(type => /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("option", {
       key: type.id,
       value: type.name
-    }, type.name)))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", {
-      style: {
-        margin: '0 0.5rem'
-      }
-    }, userData && userData.admin ? /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Button.Success, {
-      onClick: () => {
-        _service_files_recipe_service__WEBPACK_IMPORTED_MODULE_3__["default"].addRecipe(this.recipe.name, this.recipe.description, this.recipe.picture_url, this.recipe.region, this.recipe.type).then(response => this.recipe.recipe_id = response).then(() => history.push('/recipes/' + this.recipe.recipe_id + '/edit'));
-      }
-    }, "Add Recipe") : /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", {
+    }, type.name))))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", {
       style: {
         display: 'flex',
-        flexWrap: 'wrap'
+        flexWrap: 'wrap',
+        justifyContent: 'center'
       }
     }, this.recipesToShow.length > 0 ? this.recipesToShow.map(recipe =>
     /*#__PURE__*/
@@ -4556,8 +4550,9 @@ class RecipeList extends react_simplified__WEBPACK_IMPORTED_MODULE_1__.Component
     //Gets all recipes and pass them to recipe array
     try {
       let recipes = await _service_files_recipe_service__WEBPACK_IMPORTED_MODULE_3__["default"].getAll();
-      this.recipes = recipes;
-      this.recipesToShow = recipes;
+      let validRecipe = recipes.filter(recipe => recipe.name != '');
+      this.recipes = validRecipe;
+      this.recipesToShow = validRecipe;
       let regions = await _service_files_utility_service__WEBPACK_IMPORTED_MODULE_5__["default"].getAllRegions();
       this.regions = regions;
       let types = await _service_files_utility_service__WEBPACK_IMPORTED_MODULE_5__["default"].getAllTypes();
@@ -4586,6 +4581,15 @@ class RecipeDetails extends react_simplified__WEBPACK_IMPORTED_MODULE_1__.Compon
   portions = 4;
   emailSubject = '';
   emailBody = '';
+  relatedRecipes = [];
+  filterRelated(recipes) {
+    let related = [];
+    let count = 0;
+    let typeAndRegion = recipes.filter(recipe => recipe.region == this.recipe.region && recipe.type == this.recipe.type);
+    let type = recipes.filter(recipe => recipe.type == this.recipe.type);
+    let regions = recipes.filter(recipe => recipe.region == this.recipe.region);
+    return related;
+  }
   RecipeDetail(_ref) {
     let {
       name,
@@ -4607,7 +4611,7 @@ class RecipeDetails extends react_simplified__WEBPACK_IMPORTED_MODULE_1__.Compon
       style: {
         padding: "1rem"
       }
-    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Row, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Row, {
+    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Row, {
       style: {
         display: "flex",
         flexDirection: "row",
@@ -4644,9 +4648,12 @@ class RecipeDetails extends react_simplified__WEBPACK_IMPORTED_MODULE_1__.Compon
       value: this.recipe.description
     }))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", {
       style: {
-        marginBottom: "0.5rem"
+        marginBottom: "0.5rem",
+        display: 'flex',
+        justifyContent: 'space-around',
+        width: '27.5vw'
       }
-    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Column, null,
+    },
     //If there is a user logged in the user can like or unlike a recipe, else like button sends an alert to log in
     userData ? this.likedRecipes.some(r => this.recipe.recipe_id == r.recipe_id) ? /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Button.Danger, {
       onClick: async () => {
@@ -4662,18 +4669,16 @@ class RecipeDetails extends react_simplified__WEBPACK_IMPORTED_MODULE_1__.Compon
       onClick: async () => {
         _widgets__WEBPACK_IMPORTED_MODULE_2__.Alert.info('Log in to like a recipe');
       }
-    }, "Like recipe"))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Column, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Button.Success, {
+    }, "Like recipe"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Button.Success, {
       onClick: () => {
         //If there is a user logged in the user can add recipe ingredients to cart, else button sends an alert to log in
         userData ? (_service_files_recipe_service__WEBPACK_IMPORTED_MODULE_3__["default"].addRecipeIngredientsToCart(this.ingredients, this.recipe.recipe_id, userData.user_id), _widgets__WEBPACK_IMPORTED_MODULE_2__.Alert.info('Ingredients added to cart!')) : _widgets__WEBPACK_IMPORTED_MODULE_2__.Alert.info('Log in to add ingredients to cart');
       }
-    }, "Add ingredients to cart")), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Column, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Button.Light, {
+    }, "Add ingredients to cart"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Button.Light, {
       onClick: () => {
         window.open(`mailto:example@mail.com?subject=${this.emailSubject}&body=${this.emailBody}`);
       }
-    }, "Share"))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("br", null)), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Card, {
-      title: "Ingredients"
-    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Row, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Column, null, "Portions:"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Column, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Form.Input, {
+    }, "Share")), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("br", null), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("h4", null, "Ingredients"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Row, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Column, null, "Portions:"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Column, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Form.Input, {
       type: "number",
       max: "50",
       min: "1",
@@ -4686,27 +4691,49 @@ class RecipeDetails extends react_simplified__WEBPACK_IMPORTED_MODULE_1__.Compon
     //Maps the different ingredients of a recipe and renders their respective values
     react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Row, {
       key: ingredient.ingredients_id
-    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Column, null, ingredient.name.charAt(0).toUpperCase() + ingredient.name.slice(1)), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Column, null, ingredient.amount * this.portions / 4), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Column, null, ingredient.unit)))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("br", null),
+    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Column, null, ingredient.name.charAt(0).toUpperCase() + ingredient.name.slice(1)), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Column, null, ingredient.amount * this.portions / 4), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Column, null, ingredient.unit))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("br", null),
     //If there is a logged in user and the user is an admin, two buttons to delete and edit a recipe is displayed
-    userData ? userData.admin ? /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Row, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Column, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Button.Danger, {
+    userData ? userData.admin ? /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", {
+      style: {
+        display: 'flex',
+        justifyContent: 'space-around',
+        width: '10vw'
+      }
+    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Button.Danger, {
       onClick: () => {
         //Deletes the recipe and pushes the path back to all recipes
         _service_files_recipe_service__WEBPACK_IMPORTED_MODULE_3__["default"]["delete"](this.recipe.recipe_id).then(() => {
           history.push('/recipes');
         });
       }
-    }, "Delete")), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Column, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Button.Success, {
+    }, "Delete"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Button.Success, {
       onClick: () => {
         //Pushes the path to edit page of recipe
         history.push('/recipes/' + this.props.match.params.id + '/edit');
       }
-    }, "Edit"))) : /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, " ") : /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, " "));
+    }, "Edit")) : /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, " ") : /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, " ")), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("br", null)), this.relatedRecipes.length > 1 ? /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("h4", null, "Related Recipes"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", {
+      style: {
+        display: 'flex',
+        justifyContent: 'center'
+      }
+    }, this.relatedRecipes.map(recipe =>
+    /*#__PURE__*/
+    //Maps all the different recipes and renders them as links to their respective recipe details
+    react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.PreviewCard, {
+      small: true,
+      key: recipe.recipe_id,
+      id: recipe.recipe_id,
+      name: recipe.name,
+      url: recipe.picture_url
+    })))) : /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null));
   }
   async mounted() {
     //Gets spesific recipe and it´s ingredients, and pass them to
     try {
       let recipe = await _service_files_recipe_service__WEBPACK_IMPORTED_MODULE_3__["default"].get(this.props.match.params.id);
       this.recipe = recipe;
+      let recipes = await _service_files_recipe_service__WEBPACK_IMPORTED_MODULE_3__["default"].getAll();
+      this.relatedRecipes = this.filterRelated(recipes);
       let ingredients = await _service_files_recipe_service__WEBPACK_IMPORTED_MODULE_3__["default"].getRecipeIngredients(this.props.match.params.id);
       this.ingredients = ingredients;
       this.emailSubject = 'Recipe for ' + this.recipe.name;
@@ -5029,6 +5056,14 @@ class UserLogin extends react_simplified__WEBPACK_IMPORTED_MODULE_1__.Component 
     name: '',
     ingredients_id: 0
   };
+  recipe = {
+    recipe_id: 0,
+    name: '',
+    description: '',
+    region: '',
+    picture_url: '',
+    type: ''
+  };
   render() {
     // if userdata exists the page that renders is the one with your information
     if (userData) {
@@ -5083,7 +5118,11 @@ class UserLogin extends react_simplified__WEBPACK_IMPORTED_MODULE_1__.Component 
             this.mounted();
           }
         }
-      }, "Add"))))) : /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null)), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", {
+      }, "Add")), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Column, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Button.Success, {
+        onClick: () => {
+          _service_files_recipe_service__WEBPACK_IMPORTED_MODULE_5__["default"].addRecipe(this.recipe.name, this.recipe.description, this.recipe.picture_url, this.recipe.region, this.recipe.type).then(response => this.recipe.recipe_id = response).then(() => history.push('/recipes/' + this.recipe.recipe_id + '/edit'));
+        }
+      }, "Add Recipe"))))) : /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null)), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", {
         style: {
           position: 'absolute',
           top: '5vh',
@@ -5581,7 +5620,18 @@ class PreviewCard extends react_simplified__WEBPACK_IMPORTED_MODULE_1__.Componen
         position: 'relative'
       }
     }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("h2", {
-      style: {
+      style: this.props.small ? {
+        position: 'absolute',
+        left: '0',
+        top: '0',
+        color: 'black',
+        fontSize: '1.5rem',
+        fontWeight: 'bold',
+        margin: '1rem',
+        padding: '0.5rem',
+        backgroundColor: 'rgba(255, 255, 255, 0.7)',
+        borderRadius: '0.5rem'
+      } : {
         position: 'absolute',
         left: '0',
         top: '0',
@@ -5596,13 +5646,18 @@ class PreviewCard extends react_simplified__WEBPACK_IMPORTED_MODULE_1__.Componen
     }, this.props.name), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("img", {
       alt: this.props.name,
       src: this.props.url,
-      style: {
-        height: 'auto',
-        width: '100%',
-        objectFit: 'contain',
+      style: this.props.small ? {
+        height: '30vh',
+        width: '25vw',
+        objectFit: 'cover',
         boxShadow: 'rgba(0, 0, 0, 0.5) 0px 4px 12px',
-        borderRadius: '10px',
-        maxWidth: '40vw'
+        borderRadius: '10px'
+      } : {
+        height: '50vh',
+        width: '40vw',
+        objectFit: 'cover',
+        boxShadow: 'rgba(0, 0, 0, 0.5) 0px 4px 12px',
+        borderRadius: '10px'
       }
     }))));
   }

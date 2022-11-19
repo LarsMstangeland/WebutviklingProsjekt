@@ -4,7 +4,7 @@ import { Alert, Card, Row, Column, Form, Button } from '../widgets';
 import { NavLink } from 'react-router-dom';
 import userService, {User, LikedRecipe} from '../service-files/user-service';
 import cartService, {CartItem} from '../service-files/cart-service';
-import recipeService, {Ingredient, IngredientName} from '../service-files/recipe-service';
+import recipeService, {Ingredient, IngredientName, Recipe} from '../service-files/recipe-service';
 import utilityService, {Region, Unit, Type} from '../service-files/utility-service';
 import { createHashHistory } from 'history';
 import bcrypt from 'bcryptjs';
@@ -35,6 +35,14 @@ export class UserLogin extends Component  {
     CartItemsToShow:CartItem[] = [];
     ingredients: Ingredient[] = [];
     newIngredient: IngredientName = {name: '', ingredients_id: 0}
+    recipe: Recipe = {
+        recipe_id: 0,
+        name: '',
+        description: '',
+        region: '',
+        picture_url: '',
+        type: ''
+      };
 
     render() {
         // if userdata exists the page that renders is the one with your information
@@ -88,6 +96,23 @@ export class UserLogin extends Component  {
                                 this.mounted();
                             }
                             }}>Add</Button.Light></Column>
+                        <Column>
+                        <Button.Success
+                  onClick={() => {
+                    recipeService
+                      .addRecipe(
+                        this.recipe.name,
+                        this.recipe.description,
+                        this.recipe.picture_url,
+                        this.recipe.region,
+                        this.recipe.type
+                      )
+                      .then((response) => (this.recipe.recipe_id = response))
+                      .then(() => history.push('/recipes/' + this.recipe.recipe_id + '/edit'));
+                  }}
+                >
+                  Add Recipe
+                </Button.Success></Column>
                     </Row>
                 </Card>
             </div>) : (<></>)}
