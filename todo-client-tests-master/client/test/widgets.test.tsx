@@ -326,19 +326,6 @@ describe('Button tests', () => {
           ));
           done();
         });
-
-        test('Form input updates correctly', () => {
-          
-          //@ts-ignore
-          const wrapper = shallow(<Form.Input value={} onChange={(event) =>  event.currentTarget.value}></Form.Input>);
-          //@ts-ignore
-          expect(wrapper.containsMatchingElement(<input value="" />)).toEqual(true);
-
-          wrapper.find('input').simulate('change', {CurrentTarget : {value : "changetest"}});
-
-          // //@ts-ignore
-          expect(wrapper.containsMatchingElement(<input value="changetest"/>)).toEqual(true);
-        })
 });
 
 describe('PreviewCard tests', () => {

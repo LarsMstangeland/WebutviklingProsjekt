@@ -5108,7 +5108,7 @@ class UserLogin extends react_simplified__WEBPACK_IMPORTED_MODULE_1__.Component 
             _widgets__WEBPACK_IMPORTED_MODULE_2__.Alert.danger('Username does not exist');
           }
         }
-      }, "Log in"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Button.Light, {
+      }, "Log in"), " ", ' ', /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Button.Light, {
         onClick: () => history.push('/user/create')
       }, "Create user"))))));
     }
@@ -5146,7 +5146,17 @@ class NewUser extends react_simplified__WEBPACK_IMPORTED_MODULE_1__.Component {
   };
   passwordCheck = '';
   render() {
-    return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Card, {
+    return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", {
+      style: {
+        top: '30vh',
+        width: '100%',
+        display: 'flex',
+        position: 'relative',
+        alignItems: 'center',
+        justifyContent: 'center',
+        marginBottom: '1rem'
+      }
+    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Card, {
       title: "Create new user"
     }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Row, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Column, null, "Username:", /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Form.Input, {
       type: "text",
@@ -5197,7 +5207,9 @@ class NewUser extends react_simplified__WEBPACK_IMPORTED_MODULE_1__.Component {
           _widgets__WEBPACK_IMPORTED_MODULE_2__.Alert.danger('Username already exists. Try another one');
         }
       }
-    }, "Create user")))));
+    }, "Create user"), ' ', /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Button.Danger, {
+      onClick: () => history.push('/user/login')
+    }, "Cancel"))))));
   }
   async mounted() {
     try {
