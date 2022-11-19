@@ -160,7 +160,7 @@ describe("Create new user (POST)", () => {
     const user_id = 1
 
     userService.likeRecipe = jest.fn(() => Promise.resolve());
-    const response = await axios.post('recipes/'+testid+'/like', {testid: testid, user_id: user_id})
+    const response = await axios.post('users/'+testid+'/like', {testid: testid, user_id: user_id})
     expect(response.status).toEqual(200);
 
 })
