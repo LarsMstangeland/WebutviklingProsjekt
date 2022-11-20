@@ -10,7 +10,10 @@ import { createHashHistory } from 'history';
 import bcrypt from 'bcryptjs';
 
 const history = createHashHistory(); // Use history.push(...) to programmatically change path, for instance after successfully saving a student
+
+//using this variable to check its value and then location.reload when true to make the user-info appear after creating new user
 let created : boolean = false;
+
 //@ts-ignore This is the userdata that gets added to sessionstorage if you log in. Ts-ignore because it can be empty
 const userData = JSON.parse(sessionStorage.getItem('user')); 
 
@@ -146,6 +149,7 @@ export class UserLogin extends Component  {
         }
         //if userdata does not exist, the page that renders is a login-page
         else{ 
+
             if(created == true){
                 created = false;
                 location.reload();
@@ -192,7 +196,7 @@ export class UserLogin extends Component  {
                                 <Button.Success onClick={async ()=>{
                                 if(this.users.find(u => u.username == this.user.username)){
                                     let hashPass = this.users.find(u => u.username == this.user.username)?.password                                    
-                                    //@ts-ignore because hashpass can be undefined if the username typed in is not already an user
+                                    //@ts-ignore because hashpass can be undefined if the username typed in is not already a user
                                     let hashCheck = await compareHash(this.user.password, hashPass);
                                     if(hashCheck){
                                         //if the password is correct, pushes the info on a user to the sessionstorage.
@@ -206,7 +210,7 @@ export class UserLogin extends Component  {
                                     else Alert.danger('Wrong username or password. Try again')
                                 }
                                 else{
-                                    Alert.danger('Username does not exist')
+                                    Alert.danger('Wrong username or password. Try again')
                                 }
                                 
                                 }}>Log in
@@ -326,6 +330,8 @@ export class NewUser extends Component {
                                                  let u = await userService.get(this.user.username)
                                                  this.user = u       
                                                  sessionStorage.setItem('user', JSON.stringify(this.user));
+
+                                                 // sets created to be true and then pushes to the UserLogin component. The UserLogin component will then be refreshed with the if-sentence on line 153
                                                  created = true;
                                                  history.push('/user/login')                                  
     

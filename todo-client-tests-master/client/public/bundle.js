@@ -5024,7 +5024,10 @@ __webpack_require__.r(__webpack_exports__);
 
 
 const history = (0,history__WEBPACK_IMPORTED_MODULE_7__.createHashHistory)(); // Use history.push(...) to programmatically change path, for instance after successfully saving a student
+
+//using this variable to check its value and then location.reload when true to make the user-info appear after creating new user
 let created = false;
+
 //@ts-ignore This is the userdata that gets added to sessionstorage if you log in. Ts-ignore because it can be empty
 const userData = JSON.parse(sessionStorage.getItem('user'));
 
@@ -5187,7 +5190,7 @@ class UserLogin extends react_simplified__WEBPACK_IMPORTED_MODULE_1__.Component 
         onClick: async () => {
           if (this.users.find(u => u.username == this.user.username)) {
             let hashPass = this.users.find(u => u.username == this.user.username)?.password;
-            //@ts-ignore because hashpass can be undefined if the username typed in is not already an user
+            //@ts-ignore because hashpass can be undefined if the username typed in is not already a user
             let hashCheck = await compareHash(this.user.password, hashPass);
             if (hashCheck) {
               //if the password is correct, pushes the info on a user to the sessionstorage.
@@ -5199,7 +5202,7 @@ class UserLogin extends react_simplified__WEBPACK_IMPORTED_MODULE_1__.Component 
               location.reload();
             } else _widgets__WEBPACK_IMPORTED_MODULE_2__.Alert.danger('Wrong username or password. Try again');
           } else {
-            _widgets__WEBPACK_IMPORTED_MODULE_2__.Alert.danger('Username does not exist');
+            _widgets__WEBPACK_IMPORTED_MODULE_2__.Alert.danger('Wrong username or password. Try again');
           }
         }
       }, "Log in"), " ", ' ', /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Button.Light, {
@@ -5286,6 +5289,8 @@ class NewUser extends react_simplified__WEBPACK_IMPORTED_MODULE_1__.Component {
                 let u = await _service_files_user_service__WEBPACK_IMPORTED_MODULE_3__["default"].get(this.user.username);
                 this.user = u;
                 sessionStorage.setItem('user', JSON.stringify(this.user));
+
+                // sets created to be true and then pushes to the UserLogin component. The UserLogin component will then be refreshed with the if-sentence on line 153
                 created = true;
                 history.push('/user/login');
               } else {
