@@ -22,6 +22,13 @@ export type IngredientName = {
   name: string;
 };
 
+export type RecipeToIngredient = {
+  ingredients_id: number;
+  recipe_id: number;
+  amount: number;
+  unit: string;
+};
+
 class RecipeService {
   /**
    * Get recipe with given id.
@@ -44,6 +51,13 @@ class RecipeService {
     return axios
       .get<Ingredient[]>('/recipes/' + id + '/ingredients')
       .then((response) => response.data);
+  }
+
+  getAllRecipeIngredients() {
+    return axios
+      .get<RecipeToIngredient[]>('/recipes/ingredients/allid')
+      .then((response) => response.data)
+      .catch((error) => console.log(error));
   }
 
   /**
@@ -94,7 +108,7 @@ class RecipeService {
         data: { ingredientsToDelete },
       })
       .then((response) => response.data)
-      .catch((error) => console.log(error))  
+      .catch((error) => console.log(error));
   }
 
   updateRecipeIngredients(ingredients: Ingredient[], id: number) {
@@ -106,7 +120,7 @@ class RecipeService {
       .catch((error) => console.log(error));
   }
 
-  addRecipeIngredient(ingredients: Ingredient[], id: number){ 
+  addRecipeIngredient(ingredients: Ingredient[], id: number) {
     return axios
       .post('/recipes/' + id + '/edit/ingredients', { ingredients })
       .then((response) => response.data.id)
@@ -120,7 +134,7 @@ class RecipeService {
         description: description,
         picture_url: picture_url,
         region: region,
-        type: type
+        type: type,
       })
       .then((response) => response.data.id)
       .catch((error) => console.log(error));
@@ -129,18 +143,18 @@ class RecipeService {
   /**
    * Adds all ingredients of a spesific recipe to the cart of the current logged in user
    */
-  addRecipeIngredientsToCart(ingredients: Ingredient[], id: number, user_id: number){
+  addRecipeIngredientsToCart(ingredients: Ingredient[], id: number, user_id: number) {
     return axios
-      .post('/recipes/' + id + '/ingredients', {ingredients, user_id})
+      .post('/recipes/' + id + '/ingredients', { ingredients, user_id })
       .then((response) => response.data.id)
       .catch((error) => console.log(error));
   }
 
-  createIngredient(ingredient: IngredientName){
+  createIngredient(ingredient: IngredientName) {
     return axios
-      .post('/recipes/ingredients/edit', {ingredient})
+      .post('/recipes/ingredients/edit', { ingredient })
       .then((response) => response.data)
-      .catch((error) => console.log(error))
+      .catch((error) => console.log(error));
   }
 }
 

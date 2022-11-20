@@ -5,22 +5,23 @@ import { HashRouter, Route } from 'react-router-dom';
 import { NavBar, Card, Alert, PreviewCard, BootstrapPreviewCard, Button } from './widgets';
 import { RecipeList, RecipeDetails, RecipeEdit } from './component-files/recipe-components';
 import recipeService, { Recipe, Ingredient, IngredientName } from './service-files/recipe-service';
-import {NewUser, UserLogin} from './component-files/user-components';
+import { NewUser, UserLogin } from './component-files/user-components';
 import { CartContent } from './component-files/cart-components';
-
-
 
 class Menu extends Component {
   render() {
     return (
       <div>
         <NavBar brand="Food Junkies">
-          <NavBar.Link left={false} to="/recipes">Recipes</NavBar.Link>
-          <NavBar.Link left={false} to="/user/login">My Profile</NavBar.Link>
+          <NavBar.Link left={false} to="/recipes">
+            Recipes
+          </NavBar.Link>
+          <NavBar.Link left={false} to="/user/login">
+            My Profile
+          </NavBar.Link>
           {/*<NavBar.Link left={true} to="/cart"><Button.Light left={true} small={true} onClick={() => {}}>Jeg vil være et icon</Button.Light></NavBar.Link>*/}
         </NavBar>
       </div>
-      
     );
   }
 }
@@ -30,8 +31,6 @@ class Home extends Component {
   recipesToShow: Recipe[] = [];
 
   render() {
-
-
     return (
       <div style={{ backgroundColor: '#f9f5f1' }}>
         <div
@@ -91,7 +90,7 @@ class Home extends Component {
           ))}
         </div>
       </div>
-    )
+    );
   }
 
   async mounted() {
@@ -99,19 +98,19 @@ class Home extends Component {
     try {
       let recipes = await recipeService.getAll();
       this.recipes = recipes;
-      for(let i = 0; i < 2; i++){
-        let index = Math.floor(this.recipes.length * Math.random())
+      for (let i = 0; i < 2; i++) {
+        let index = Math.floor(this.recipes.length * Math.random());
         let recipe = this.recipes[index];
-        if(!this.recipesToShow.find(rec => rec.recipe_id == recipe.recipe_id)){
-          this.recipesToShow.push(recipe)
-        } else if(recipe.recipe_id == 1){
-          this.recipesToShow.push(this.recipes[2])
-        } else{
-          this.recipesToShow.push(this.recipes[index - 1])
+        if (!this.recipesToShow.find((rec) => rec.recipe_id == recipe.recipe_id)) {
+          this.recipesToShow.push(recipe);
+        } else if (recipe.recipe_id == 1) {
+          this.recipesToShow.push(this.recipes[2]);
+        } else {
+          this.recipesToShow.push(this.recipes[index - 1]);
         }
       }
-    } catch (error: any){
-      Alert.danger('Error getting recipes: ' + error.message)
+    } catch (error: any) {
+      Alert.danger('Error getting recipes: ' + error.message);
     }
   }
 }
@@ -124,11 +123,9 @@ ReactDOM.render(
       <Route exact path="/" component={Home} />
       <Route exact path="/recipes" component={RecipeList} />
       <Route exact path="/recipes/:id(\d+)" component={RecipeDetails} /> {/* id must be number */}
-      <Route exact path='/recipes/:id(\d+)/edit' component={RecipeEdit} />
-      <Route exact path='/user/login' component={UserLogin}/>
-      <Route exact path='/user/create' component={NewUser}/>
-      {/*<Route exact path='/cart' component={CartContent}/>*/}
-
+      <Route exact path="/recipes/:id(\d+)/edit" component={RecipeEdit} />
+      <Route exact path="/user/login" component={UserLogin} />
+      <Route exact path="/user/create" component={NewUser} />
     </div>
   </HashRouter>,
   document.getElementById('root')

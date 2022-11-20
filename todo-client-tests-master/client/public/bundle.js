@@ -5092,6 +5092,14 @@ class UserLogin extends react_simplified__WEBPACK_IMPORTED_MODULE_1__.Component 
     name: '',
     ingredients_id: 0
   };
+  newFridgeIngredient = {
+    name: '',
+    ingredients_id: 0
+  };
+  searchBar = '';
+  recipesToShow = [];
+  ingredientsToShow = [];
+  fridgeIngredients = [];
   recipe = {
     recipe_id: 0,
     name: '',
@@ -5100,27 +5108,59 @@ class UserLogin extends react_simplified__WEBPACK_IMPORTED_MODULE_1__.Component 
     picture_url: '',
     type: ''
   };
+  recipes = [];
+  recipeIngredients = [];
+  filterFridge() {
+    let filteredRecipes = [];
+    for (let i = 0; i < this.fridgeIngredients.length; i++) {
+      if (i == 0) {
+        for (let j = 0; j < this.recipes.length; j++) {
+          let recipeId = this.recipes[j].recipe_id;
+          let ingredients = this.recipeIngredients.filter(row => row.recipe_id == recipeId);
+          for (let k = 0; k < ingredients.length; k++) {
+            if (ingredients[k].ingredients_id == this.fridgeIngredients[i].ingredients_id) {
+              filteredRecipes.push(this.recipes[j]);
+            }
+          }
+        }
+      } else {
+        for (let j = 0; j < filteredRecipes.length; j++) {
+          let recipeId = filteredRecipes[j].recipe_id;
+          let ingredients = this.recipeIngredients.filter(row => row.recipe_id == recipeId);
+          if (ingredients.some(ing => ing.ingredients_id == this.fridgeIngredients[i].ingredients_id) == false) {
+            filteredRecipes.splice(j, 1);
+          }
+        }
+      }
+    }
+    filteredRecipes.map(recipe => this.recipesToShow.push(recipe));
+  }
   render() {
     // if userdata exists the page that renders is the one with your information
     if (userData) {
-      return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", {
+      return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", {
         style: {
           display: 'flex',
-          flexWrap: 'wrap',
+          justifyContent: 'space-evenly',
+          margin: '1vw'
+        }
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", {
+        style: {
+          display: 'flex',
           flexDirection: 'column',
           marginLeft: '1vw'
         }
       }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", {
         style: {
           width: '45vw',
-          margin: '1vw'
+          marginTop: '2rem'
         }
       }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Card, {
         title: "Your user information"
       }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Row, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Column, null, "Brukernavn: "), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Column, null, userData.username)), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Row, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Column, null, "Access type: "), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Column, null, userData.admin ? 'Admin' : 'User')), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("br", null), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Row, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Column, null, "Your liked recipes:")), this.likedRecipes.length > 0 ? this.likedRecipes.map(recipe => /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Row, {
         key: recipe.recipe_id
       }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_8__.NavLink, {
-        to: "/recipes/" + recipe.recipe_id
+        to: '/recipes/' + recipe.recipe_id
       }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Column, null, recipe.name)))) : 'You have no liked recipes', /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("br", null), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Row, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Column, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Button.Danger, {
         onClick: () => {
           sessionStorage.clear();
@@ -5129,7 +5169,7 @@ class UserLogin extends react_simplified__WEBPACK_IMPORTED_MODULE_1__.Component 
       }, "Log out"))))), userData.admin ? /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", {
         style: {
           width: '45vw',
-          margin: '1vw'
+          marginTop: '2rem'
         }
       }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Card, {
         title: "Add ingredients"
@@ -5160,11 +5200,14 @@ class UserLogin extends react_simplified__WEBPACK_IMPORTED_MODULE_1__.Component 
         }
       }, "Add Recipe"))))) : /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null)), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", {
         style: {
-          position: 'absolute',
-          top: '5vh',
-          left: '50vw',
-          width: '45vw',
-          marginTop: '2vw'
+          display: 'flex',
+          flexDirection: 'column',
+          marginLeft: '1vw'
+        }
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", {
+        style: {
+          marginTop: '2rem',
+          width: '45vw'
         }
       }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Card, {
         title: "Your Cart"
@@ -5187,7 +5230,79 @@ class UserLogin extends react_simplified__WEBPACK_IMPORTED_MODULE_1__.Component 
           });
           this.mounted();
         }
-      }, "Clear All"))));
+      }, "Clear All"))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", {
+        style: {
+          width: '45vw',
+          marginTop: '2rem'
+        }
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Card, {
+        title: "My Fridge"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("span", null, "Find recipes based on the ingredients in your fridge!"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Row, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Column, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Form.Input, {
+        type: "search",
+        value: this.searchBar,
+        placeholder: "Search for ingredient",
+        list: 'searchList',
+        onChange: event => {
+          this.searchBar = event.currentTarget.value;
+          //Filter function that finds the recipe which contain the same string as the searchbar, when there is more
+          //than one character in the searchbar
+          if (this.searchBar.length > 1) {
+            this.ingredientsToShow = [];
+            for (let i = 0; i < this.ingredients.length; i++) {
+              const name = this.ingredients[i].name.toUpperCase();
+              if (name.indexOf(this.searchBar.toUpperCase()) > -1) {
+                this.ingredientsToShow.push(this.ingredients[i]);
+              }
+            }
+          }
+        }
+      }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("datalist", {
+        id: "searchList"
+      }, this.ingredientsToShow.map(ingredient =>
+      /*#__PURE__*/
+      //Maps all the ingredients that the filter function above selects and displays them as options in a datalist
+      react__WEBPACK_IMPORTED_MODULE_0__.createElement("option", {
+        key: ingredient.ingredients_id,
+        value: ingredient.name
+      }, ingredient.name)))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Column, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Button.Light, {
+        onClick: () => {
+          if (this.ingredients.find(ing => ing.name == this.searchBar.toLowerCase())) {
+            let ingredient = this.ingredients.find(ing => ing.name == this.searchBar.toLowerCase());
+            if (this.fridgeIngredients.find(ing => ing.ingredients_id == ingredient?.ingredients_id)) {
+              _widgets__WEBPACK_IMPORTED_MODULE_2__.Alert.danger('This ingredient is already in your fridge');
+            } else {
+              this.fridgeIngredients.push(ingredient);
+              this.newFridgeIngredient = {
+                name: '',
+                ingredients_id: 0
+              };
+              this.recipesToShow = [];
+              this.filterFridge();
+            }
+          } else if (userData.admin) {
+            _widgets__WEBPACK_IMPORTED_MODULE_2__.Alert.danger('This is not an ingredient, you can add ingredients in the left section of the page');
+          } else _widgets__WEBPACK_IMPORTED_MODULE_2__.Alert.danger('This is not a ingredient');
+        }
+      }, "Add"))), this.fridgeIngredients.map(ingredient =>
+      /*#__PURE__*/
+      //Maps all the different fridge ingredients and renders them as strings with button to remove
+      react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Row, {
+        key: ingredient.ingredients_id
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Column, null, ingredient.name.charAt(0).toUpperCase() + ingredient.name.slice(1)), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Column, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Button.Danger, {
+        small: true,
+        onClick: () => {
+          let index = this.fridgeIngredients.findIndex(ing => ing.ingredients_id == ingredient.ingredients_id);
+          this.fridgeIngredients.splice(index, 1);
+          this.recipesToShow = [];
+          this.filterFridge();
+        }
+      }, "X")))), this.recipesToShow.map(recipe => /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.PreviewCard, {
+        small: true,
+        key: recipe.recipe_id,
+        name: recipe.name,
+        url: recipe.picture_url,
+        id: recipe.recipe_id
+      })))))));
     }
     //if userdata does not exist, the page that renders is a login-page
     else {
@@ -5231,14 +5346,14 @@ class UserLogin extends react_simplified__WEBPACK_IMPORTED_MODULE_1__.Component 
               let loggedInUser = this.users.find(u => u.username == this.user.username);
               let userData = JSON.stringify(loggedInUser);
               sessionStorage.setItem('user', userData);
-              //location.reload so that the page is drawn again, and the userinfo is portrayed instead of the login page                                        location.reload(); 
+              //location.reload so that the page is drawn again, and the userinfo is portrayed instead of the login page                                        location.reload();
               location.reload();
             } else _widgets__WEBPACK_IMPORTED_MODULE_2__.Alert.danger('Wrong username or password. Try again');
           } else {
             _widgets__WEBPACK_IMPORTED_MODULE_2__.Alert.danger('Wrong username or password. Try again');
           }
         }
-      }, "Log in"), " ", ' ', /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Button.Light, {
+      }, "Log in"), ' ', /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Button.Light, {
         onClick: () => history.push('/user/create')
       }, "Create user"))))));
     }
@@ -5247,12 +5362,17 @@ class UserLogin extends react_simplified__WEBPACK_IMPORTED_MODULE_1__.Component 
     try {
       let users = await _service_files_user_service__WEBPACK_IMPORTED_MODULE_3__["default"].getAll();
       this.users = users;
+      let recipes = await _service_files_recipe_service__WEBPACK_IMPORTED_MODULE_5__["default"].getAll();
+      this.recipes = recipes;
+      let recipeIngredients = await _service_files_recipe_service__WEBPACK_IMPORTED_MODULE_5__["default"].getAllRecipeIngredients();
+      //@ts-ignore
+      this.recipeIngredients = recipeIngredients;
+      let ingredients = await _service_files_recipe_service__WEBPACK_IMPORTED_MODULE_5__["default"].getIngredients();
+      //@ts-ignore
+      this.ingredients = ingredients;
       if (userData) {
         let likedRecipes = await _service_files_user_service__WEBPACK_IMPORTED_MODULE_3__["default"].getLikedRecipes(userData.user_id);
         this.likedRecipes = likedRecipes;
-        let ingredients = await _service_files_recipe_service__WEBPACK_IMPORTED_MODULE_5__["default"].getIngredients();
-        //@ts-ignore
-        this.ingredients = ingredients;
         try {
           let cart = await _service_files_cart_service__WEBPACK_IMPORTED_MODULE_4__["default"].get(userData.user_id);
           this.cart = cart;
@@ -5306,7 +5426,7 @@ class NewUser extends react_simplified__WEBPACK_IMPORTED_MODULE_1__.Component {
       onChange: event => {
         this.passwordCheck = event.currentTarget.value;
       }
-    }))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Row, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Column, null, "Admin: ", ' ', /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Form.Checkbox, {
+    }))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Row, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Column, null, "Admin:", ' ', /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Form.Checkbox, {
       checked: this.user.admin,
       onChange: () => {
         this.user.admin == false ? this.user.admin = true : this.user.admin = false;
@@ -5424,6 +5544,9 @@ class RecipeService {
    */
   getRecipeIngredients(id) {
     return axios__WEBPACK_IMPORTED_MODULE_0___default().get('/recipes/' + id + '/ingredients').then(response => response.data);
+  }
+  getAllRecipeIngredients() {
+    return axios__WEBPACK_IMPORTED_MODULE_0___default().get('/recipes/ingredients/allid').then(response => response.data).catch(error => console.log(error));
   }
 
   /**
