@@ -280,6 +280,8 @@ export class NewUser extends Component {
                             <Column>
                                 Username: 
                                 <Form.Input 
+                                // added id to find specific input for testing
+                                id="username"
                                 type="text" 
                                 value={this.user.username} 
                                 onChange={(event)=>{
@@ -290,7 +292,9 @@ export class NewUser extends Component {
                         <Row>
                             <Column>
                                 Password:
-                                <Form.Input 
+                                <Form.Input
+                                //using id in testing 
+                                id="password"
                                 type="password" 
                                 value={this.user.password} 
                                 onChange={(event)=>{
@@ -302,6 +306,9 @@ export class NewUser extends Component {
                             <Column>
                                 Confirm password:
                                 <Form.Input 
+                                //using id in testing 
+
+                                id="passwordCheck"
                                 type="password" 
                                 value={this.passwordCheck} 
                                 onChange={(event)=>{
