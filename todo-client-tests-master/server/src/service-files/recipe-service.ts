@@ -25,6 +25,13 @@ export type IngredientName = {
   name: string;
 };
 
+export type RecipeToIngredient = {
+  ingredients_id: number;
+  recipe_id: number;
+  amount: number;
+  unit: string;
+}
+
 class RecipeService {
   /**
    * Get task with given id.
@@ -56,7 +63,7 @@ class RecipeService {
     });
   }
 
-  getAllRecipeIngredients(id: number) {
+  getRecipeIngredients(id: number) {
     return new Promise<Ingredient[]>((resolve, reject) => {
       pool.query(
         'SELECT i.ingredients_id, i.name, itr.amount, itr.unit FROM `ingredients_to_recipe` itr, `recipes` r, `ingredients` i WHERE r.recipe_id = itr.recipe_id AND i.ingredients_id = itr.ingredients_id AND r.recipe_id = ?',
@@ -206,12 +213,23 @@ class RecipeService {
       })
     }
 
-  createIngredient(ingredient: string){
+  createIngredient(ingredient: IngredientName){
     return new Promise<void>((resolve, reject) => {
       pool.query(
-        'INSERT INTO ingredients (name) VALUES (?)', [ingredient], (error, results:ResultSetHeader) => {
+        'INSERT INTO ingredients (name) VALUES (?)', [ingredient.name], (error: any) => {
           if (error) return reject(error);
           resolve()
+        }
+      )
+    })
+  }
+
+  getAllRecipeIngredients(){
+    return new Promise<RecipeToIngredient[]>((resolve, reject) => {
+      pool.query(
+        'SELECT * FROM ingredients_to_recipe', (error: any, results: RowDataPacket[]) => {
+          if (error) return reject(error);
+          resolve(results as RecipeToIngredient[])
         }
       )
     })

@@ -24,7 +24,6 @@ class Menu extends Component {
           {/*<NavBar.Link left={true} to="/cart"><Button.Light left={true} small={true} onClick={() => {}}>Jeg vil være et icon</Button.Light></NavBar.Link>*/}
         </NavBar>
       </div>
-      
     );
   }
 }
@@ -51,7 +50,9 @@ class Home extends Component {
     },5000);
   }
 
-  async render() {
+  
+
+   render() {
     return (
       <div style={{ backgroundColor: '#f9f5f1' }}>
         <div
@@ -103,17 +104,8 @@ class Home extends Component {
           </div>
           </SlideShowCard>
         </div>        
-        <div>
-
-          {this.UsersLikedRecipes.map((recipe) => {
-
-            <Card title={recipe.name}></Card>
-          })}   
-
-
-        </div>
       </div>
-    )
+    );
   }
 
   async mounted() {
@@ -148,7 +140,7 @@ class Home extends Component {
             this.RecipesThatWasLikedByUser.push(newrecipe)
           })
         })
-        ) : this.RecipesThatWasLikedByUser = [];
+        ) : this.RecipesThatWasLikedByUser = [{recipe_id: 0, name: "", description: "", picture_url: "", region: "", type:""}];
 
       for(let i = 0; i < 2; i++){
         let index = Math.floor(this.recipes.length * Math.random())

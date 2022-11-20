@@ -1,0 +1,138 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Components draw correctly tests NewUser draws correctly 1`] = `
+<Fragment>
+  <div
+    style={
+      {
+        "alignItems": "center",
+        "display": "flex",
+        "justifyContent": "center",
+        "marginBottom": "1rem",
+        "position": "relative",
+        "top": "30vh",
+        "width": "100%",
+      }
+    }
+  >
+    <Card
+      title="Create new user"
+    >
+      <Row>
+        <Column>
+          Username:
+          <FormInput
+            onChange={[Function]}
+            type="text"
+            value=""
+          />
+        </Column>
+      </Row>
+      <Row>
+        <Column>
+          Password:
+          <FormInput
+            onChange={[Function]}
+            type="password"
+            value=""
+          />
+        </Column>
+      </Row>
+      <Row>
+        <Column>
+          Confirm password:
+          <FormInput
+            onChange={[Function]}
+            type="password"
+            value=""
+          />
+        </Column>
+      </Row>
+      <Row>
+        <Column>
+          Admin: 
+           
+          <FormCheckbox
+            checked={false}
+            onChange={[Function]}
+          />
+        </Column>
+      </Row>
+      <Row>
+        <Column>
+          <ButtonSuccess
+            onClick={[Function]}
+          >
+            Create user
+          </ButtonSuccess>
+           
+          <ButtonDanger
+            onClick={[Function]}
+          >
+            Cancel
+          </ButtonDanger>
+        </Column>
+      </Row>
+    </Card>
+  </div>
+</Fragment>
+`;
+
+exports[`Components draw correctly tests UserLogin draws correctly 1`] = `
+<Fragment>
+  <div
+    style={
+      {
+        "alignItems": "center",
+        "display": "flex",
+        "justifyContent": "center",
+        "marginBottom": "1rem",
+        "position": "relative",
+        "top": "30vh",
+        "width": "100%",
+      }
+    }
+  >
+    <Card
+      title="Log in"
+    >
+      <Row>
+        <Column>
+          Brukernavn:
+          <FormInput
+            onChange={[Function]}
+            type="text"
+            value=""
+          />
+        </Column>
+      </Row>
+      <Row>
+        <Column>
+          Passord:
+          <FormInput
+            onChange={[Function]}
+            type="password"
+            value=""
+          />
+        </Column>
+      </Row>
+      <Row>
+        <Column>
+          <ButtonSuccess
+            onClick={[Function]}
+          >
+            Log in
+          </ButtonSuccess>
+           
+           
+          <ButtonLight
+            onClick={[Function]}
+          >
+            Create user
+          </ButtonLight>
+        </Column>
+      </Row>
+    </Card>
+  </div>
+</Fragment>
+`;
