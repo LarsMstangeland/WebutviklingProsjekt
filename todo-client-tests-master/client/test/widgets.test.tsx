@@ -141,7 +141,7 @@ describe('Row tests', () => {
   });
 });
 
-describe('Collumn tests', () => {
+describe('Column tests', () => {
   test('Draws collum correctly', (done) => {
 
       const wrapper = shallow(<Column>test</Column>);
