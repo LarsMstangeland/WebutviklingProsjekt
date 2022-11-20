@@ -31,7 +31,7 @@ export class PreviewCard extends Component<{
   render() {
     return (
       <div style={{ margin: '1rem' }}>
-        <NavLink to={'recipes/' + this.props.id}>
+        <NavLink to={'/recipes/' + this.props.id}>
           <div style={{ display: 'flex', position: 'relative' }}>
             <h2
               style={this.props.small ? {

@@ -27,7 +27,7 @@ RecipeRouter.get('/:id', (request, response) => {
 RecipeRouter.get('/:id/ingredients', (request, response) => {
   const id = Number(request.params.id);
   recipeService
-    .getAllRecipeIngredients(id)
+    .getRecipeIngredients(id)
     .then((recipeIngredients) =>
       recipeIngredients
         ? response.send(recipeIngredients)
@@ -163,6 +163,12 @@ RecipeRouter.get('/ingredients/all', (_request, response) => {
     
     recipeService.createIngredient(ingredient)
     .then(() => response.send())
+    .catch((error) => response.status(500).send(error))
+  })
+
+  RecipeRouter.get('/ingredients/allid', (request, response) => {
+    recipeService.getAllRecipeIngredients()
+    .then((rows) => rows  ? response.send(rows) : response.status(404).send('Not Found'))
     .catch((error) => response.status(500).send(error))
   })
 

@@ -173,7 +173,6 @@ export class RecipeDetails extends Component<{ match: { params: { id: number } }
     }
   
     for(let i = 0; i < 3; i++){
-      console.log(i, count);
       if(count >= 3){
         console.log(related);
         return related.slice(0, 3)
@@ -201,17 +200,17 @@ export class RecipeDetails extends Component<{ match: { params: { id: number } }
     return (
     <>
       <div style={{padding: "1rem", marginLeft: '5rem', marginTop: '2rem'}}>
-          <Row style={{display: "flex", flexDirection: "row", padding: "1rem"}}>
-            <Row style={{width: "50%"}}>
-              <img src={this.recipe.picture_url} alt={this.recipe.name} style={{maxWidth: "100", height: "auto", borderRadius: "2rem"}}/>
-            </Row>
-            <div style={{width: "50%"}}>
+          
+          <div style={{display: 'flex', marginBottom: '2rem'}}>
+            <img src={this.recipe.picture_url} alt={this.recipe.name} style={{width: "50%", height: "auto", borderRadius: "2rem"}}/>
+            
+            <div style={{ width: "50%", display: "flex", flexDirection: "column", marginLeft: '2rem'}}>
               <h2 style={{marginBottom: "1rem"}}>{this.recipe.name}</h2>
               <this.RecipeDetail name="Region" value={this.recipe.region}/>
               <this.RecipeDetail name="Type" value={this.recipe.type}/>
               <this.RecipeDetail name="Description" value={this.recipe.description}/>
             </div>
-          </Row>
+            </div>
           <div style={{marginBottom: "0.5rem", display: 'flex', justifyContent: 'space-around', width: '27.5vw'}}>
                   {//If there is a user logged in the user can like or unlike a recipe, else like button sends an alert to log in
                   userData ?
