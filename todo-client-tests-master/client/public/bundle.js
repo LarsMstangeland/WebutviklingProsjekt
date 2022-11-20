@@ -4596,7 +4596,6 @@ class RecipeDetails extends react_simplified__WEBPACK_IMPORTED_MODULE_1__.Compon
       }
     }
     for (let i = 0; i < 3; i++) {
-      console.log(i, count);
       if (count >= 3) {
         console.log(related);
         return related.slice(0, 3);
@@ -4633,27 +4632,25 @@ class RecipeDetails extends react_simplified__WEBPACK_IMPORTED_MODULE_1__.Compon
         marginLeft: '5rem',
         marginTop: '2rem'
       }
-    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Row, {
+    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", {
       style: {
-        display: "flex",
-        flexDirection: "row",
-        padding: "1rem"
-      }
-    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Row, {
-      style: {
-        width: "50%"
+        display: 'flex',
+        marginBottom: '2rem'
       }
     }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("img", {
       src: this.recipe.picture_url,
       alt: this.recipe.name,
       style: {
-        maxWidth: "100",
+        width: "50%",
         height: "auto",
         borderRadius: "2rem"
       }
-    })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", {
+    }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", {
       style: {
-        width: "50%"
+        width: "50%",
+        display: "flex",
+        flexDirection: "column",
+        marginLeft: '2rem'
       }
     }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("h2", {
       style: {
@@ -5654,7 +5651,7 @@ class PreviewCard extends react_simplified__WEBPACK_IMPORTED_MODULE_1__.Componen
         margin: '1rem'
       }
     }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_2__.NavLink, {
-      to: 'recipes/' + this.props.id
+      to: '/recipes/' + this.props.id
     }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", {
       style: {
         display: 'flex',
