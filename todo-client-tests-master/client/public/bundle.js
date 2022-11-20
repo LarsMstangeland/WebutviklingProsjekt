@@ -5577,7 +5577,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "InfoCard": () => (/* binding */ InfoCard),
 /* harmony export */   "NavBar": () => (/* binding */ NavBar),
 /* harmony export */   "PreviewCard": () => (/* binding */ PreviewCard),
-/* harmony export */   "Row": () => (/* binding */ Row)
+/* harmony export */   "Row": () => (/* binding */ Row),
+/* harmony export */   "SlideShowCard": () => (/* binding */ SlideShowCard)
 /* harmony export */ });
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 /* harmony import */ var react_simplified__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-simplified */ "./node_modules/react-simplified/lib/index.js");
@@ -5620,6 +5621,79 @@ class InfoCard extends Card {
         border: "2px solid black"
       }
     }), "dette er et infocard");
+  }
+}
+class SlideShowCard extends react_simplified__WEBPACK_IMPORTED_MODULE_1__.Component {
+  render() {
+    return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", {
+      style: {
+        margin: '1rem',
+        borderRadius: "0.5rem",
+        display: 'flex',
+        flexDirection: 'row'
+      }
+    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_2__.NavLink, {
+      to: 'recipes/' + this.props.recipe.recipe_id
+    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", {
+      style: {
+        display: 'flex',
+        position: 'relative'
+      }
+    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("h2", {
+      style: {
+        position: 'absolute',
+        left: '0',
+        top: '0',
+        color: 'black',
+        fontSize: '2rem',
+        fontWeight: 'bold',
+        margin: '1rem',
+        padding: '0.5rem',
+        backgroundColor: 'rgba(255, 255, 255, 0.7)',
+        borderRadius: '0.5rem'
+      }
+    }, this.props.recipe.name), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("img", {
+      style: {
+        height: '50vh',
+        width: '40vw',
+        objectFit: 'cover',
+        boxShadow: 'rgba(0, 0, 0, 0.5) 0px 4px 12px',
+        borderRadius: '10px'
+      },
+      alt: this.props.recipe.name,
+      src: this.props.recipe.picture_url
+    }))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(Card, {
+      title: "Our five most popular recipes!"
+    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", {
+      style: {
+        maxWidth: "20vw"
+      }
+    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("i", null, "If you wish to learn more about the recipe displayed, click on the image!"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("p", {
+      style: {
+        marginTop: "40px"
+      }
+    }, "We have a plethora, of different ingredients ranging from all over the world. To explore all these, click the button under!")), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", {
+      style: {
+        position: "relative",
+        width: "20vw",
+        top: "15vh",
+        right: "25vw",
+        display: "flex",
+        justifyContent: "space-between"
+      }
+    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", null, this.props.children), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(NavBar.Link, {
+      left: false,
+      to: "/recipes"
+    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("button", {
+      style: {
+        width: "10vw",
+        position: "relative",
+        left: "15vw"
+      },
+      type: "button",
+      className: "btn btn-primary",
+      onClick: () => {}
+    }, "To recipes!")))));
   }
 }
 class PreviewCard extends react_simplified__WEBPACK_IMPORTED_MODULE_1__.Component {
@@ -40931,6 +41005,9 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
+
+//@ts-ignore
+const userData = JSON.parse(sessionStorage.getItem('user'));
 class Menu extends react_simplified__WEBPACK_IMPORTED_MODULE_2__.Component {
   render() {
     return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1__.createElement("div", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_3__.NavBar, {
@@ -40948,7 +41025,35 @@ class Home extends react_simplified__WEBPACK_IMPORTED_MODULE_2__.Component {
   recipes = [];
   recipesToShow = [];
   MostLikedRecipes = [];
-  render() {
+  UsersLikedRecipes = [];
+  RecipesThatWasLikedByUser = [{
+    recipe_id: 0,
+    name: "",
+    description: "",
+    picture_url: "",
+    region: "",
+    type: ""
+  }];
+  slidenr = 0;
+  CurrentlyInSlide = {
+    recipe_id: 0,
+    name: "",
+    description: "",
+    picture_url: "",
+    region: "",
+    type: ""
+  };
+
+  /**@ts-ignore */
+  timer = () => {};
+  hermansMetodeStartTheTimeout() {
+    this.timer = setInterval(() => {
+      console.log(this.slidenr);
+      this.slidenr == 4 ? this.slidenr = 0 : this.slidenr++;
+      this.CurrentlyInSlide = this.MostLikedRecipes[this.slidenr];
+    }, 5000);
+  }
+  async render() {
     return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1__.createElement("div", {
       style: {
         backgroundColor: '#f9f5f1'
@@ -40965,53 +41070,93 @@ class Home extends react_simplified__WEBPACK_IMPORTED_MODULE_2__.Component {
       style: {
         margin: '4rem'
       }
-    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1__.createElement("h1", null, "Welcome to"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1__.createElement("h1", {
+    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1__.createElement("h1", null, "Welcome to ", /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1__.createElement("span", {
       style: {
         fontSize: '3rem',
         fontWeight: 'bold'
       }
-    }, "Food Junkies"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_3__.NavBar.Link, {
-      left: false,
-      to: "/recipes"
-    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1__.createElement("button", {
-      type: "button",
-      className: "btn btn-primary",
-      onClick: () => {}
-    }, "To recipes!")))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_3__.InfoCard, null, "Test"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1__.createElement("div", {
+    }, "Food Junkies")))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1__.createElement("div", {
       style: {
         display: 'flex',
         flexWrap: 'wrap',
-        flexDirection: 'row',
-        justifyContent: 'space-around',
+        flexDirection: 'column',
+        justifyContent: 'center',
         alignItems: 'center'
       }
-    }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1__.createElement("div", {
+    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_3__.SlideShowCard, {
+      recipe: this.CurrentlyInSlide
+    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1__.createElement("div", {
       style: {
-        display: 'flex',
-        flexWrap: 'wrap',
-        flexDirection: 'row',
-        justifyContent: 'space-around',
-        alignItems: 'center'
+        left: "80%",
+        top: "80%"
       }
-    }, this.MostLikedRecipes.map(recipe => /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_3__.PreviewCard, {
-      small: true,
-      key: recipe.recipe_id,
-      id: recipe.recipe_id,
-      name: recipe.name,
-      url: recipe.picture_url
-    }))));
+    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_3__.Button.Light, {
+      onClick: () => {
+        //onlick slide should increment and re-define the recipe to be shown
+        this.slidenr == 0 ? this.slidenr = 4 : this.slidenr--;
+        this.CurrentlyInSlide = this.MostLikedRecipes[this.slidenr];
+        clearInterval(this.timer);
+        this.hermansMetodeStartTheTimeout();
+      }
+    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1__.createElement("svg", {
+      xmlns: "http://www.w3.org/2000/svg",
+      width: "20",
+      height: "20",
+      className: "bi bi-arrow-left",
+      viewBox: "0 0 16 16"
+    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1__.createElement("path", {
+      fillRule: "evenodd",
+      d: "M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8z"
+    }))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_3__.Button.Light, {
+      onClick: () => {
+        //onlick slide should increment and re-define the recipe to be shown
+        this.slidenr == 4 ? this.slidenr = 0 : this.slidenr++;
+        this.CurrentlyInSlide = this.MostLikedRecipes[this.slidenr];
+        clearInterval(this.timer);
+        this.hermansMetodeStartTheTimeout();
+      }
+    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1__.createElement("svg", {
+      xmlns: "http://www.w3.org/2000/svg",
+      width: "20",
+      height: "20",
+      fill: "currentColor",
+      className: "bi bi-arrow-right",
+      viewBox: "0 0 16 16"
+    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1__.createElement("path", {
+      fillRule: "evenodd",
+      d: "M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 0 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8z"
+    })))))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1__.createElement("div", null, this.UsersLikedRecipes.map(recipe => {
+      /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_3__.Card, {
+        title: recipe.name
+      });
+    })));
   }
   async mounted() {
-    //Gets all recipes and pass them to recipe array
     try {
+      //Gets all recipes and pass them to recipe array
       let recipes = await _service_files_recipe_service__WEBPACK_IMPORTED_MODULE_5__["default"].getAll();
       this.recipes = recipes;
-      this.MostLikedRecipes;
+
+      //get a filtered list of the liked recipes in the whole db
+      //and define how big the slide show should be
       let bestrecipes = await _service_files_user_service__WEBPACK_IMPORTED_MODULE_7__["default"].getMostLikedRecipes();
-      for (let i = 0; i <= 5; i++) {
+      let sizeOfSlide = 5;
+
+      //fill up the array with the specified top % of liked recipes
+      for (let i = 0; i < sizeOfSlide; i++) {
         let PopularRecipe = await _service_files_recipe_service__WEBPACK_IMPORTED_MODULE_5__["default"].get(bestrecipes[i].recipe_id);
         this.MostLikedRecipes.push(PopularRecipe);
       }
+
+      //initiialize the first slide and start timer
+      this.CurrentlyInSlide = this.MostLikedRecipes[this.slidenr];
+      this.hermansMetodeStartTheTimeout();
+      userData ? await _service_files_user_service__WEBPACK_IMPORTED_MODULE_7__["default"].getLikedRecipesForUser(userData.user_id).then(recipes => {
+        recipes.map(async recipe => {
+          let newrecipe = await _service_files_recipe_service__WEBPACK_IMPORTED_MODULE_5__["default"].get(recipe.recipe_id);
+          this.RecipesThatWasLikedByUser.push(newrecipe);
+        });
+      }) : this.RecipesThatWasLikedByUser = [];
       for (let i = 0; i < 2; i++) {
         let index = Math.floor(this.recipes.length * Math.random());
         let recipe = this.recipes[index];

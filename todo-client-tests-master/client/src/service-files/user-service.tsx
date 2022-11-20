@@ -65,7 +65,6 @@ class UserService {
   getMostLikedRecipes(){
     return axios.get<LikedRecipe[]>('/users/recipes/all/MostLikedRecipes').then((response) => response.data);
   }
-
 }
 
 const userService = new UserService();
