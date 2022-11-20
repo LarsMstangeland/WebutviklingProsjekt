@@ -20,10 +20,13 @@ jest.mock('../src/service-files/user-service', () => {
         }
 
         create() {
-            return Promise.resolve({
-                user_id: 3, username : 'lars', password : 'larsy', admin : true
-            })
+            return Promise.resolve(3);
         }
+
+        delete() {
+            return Promise.resolve();
+        }
+
     }
 })
 
@@ -31,15 +34,16 @@ describe('Components draw correctly tests' , () => {
     test('UserLogin draws correctly' , () => {
         const wrapper = shallow(<UserLogin/>);
 
-        expect(wrapper).toMatchSnapshot();
+            expect(wrapper).toMatchSnapshot();
     });
 
     test('NewUser draws correctly' , () => {
         const wrapper = shallow(<NewUser/>);
 
-        expect(wrapper).toMatchSnapshot();
+            expect(wrapper).toMatchSnapshot();
     });
-
-    
 });
 
+describe('Testing func', () => {
+
+})
