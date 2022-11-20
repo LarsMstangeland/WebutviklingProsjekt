@@ -39,7 +39,7 @@ export class PreviewCard extends Component<{
                 left: '0',
                 top: '0',
                 color: 'black',
-                fontSize: '1.5rem',
+                fontSize: '1.25rem',
                 fontWeight: 'bold',
                 margin: '1rem',
                 padding: '0.5rem',
@@ -64,8 +64,8 @@ export class PreviewCard extends Component<{
               alt={this.props.name}
               src={this.props.url}
               style={this.props.small ? {
-                height: '30vh',
-                width: '25vw',
+                height: '25vh',
+                width: '20vw',
                 objectFit: 'cover',
                 boxShadow: 'rgba(0, 0, 0, 0.5) 0px 4px 12px',
                 borderRadius: '10px',

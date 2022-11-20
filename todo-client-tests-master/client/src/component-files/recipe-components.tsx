@@ -112,8 +112,7 @@ export class RecipeList extends Component {
                   <option key={type.id} value={type.name}>{type.name}</option>
                 ))}
               </Form.Select>
-            </div>
-            
+            </div>     
           </div>
           <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center' }}>
             {this.recipesToShow.length > 0 ? (
@@ -161,11 +160,32 @@ export class RecipeDetails extends Component<{ match: { params: { id: number } }
   filterRelated(recipes: Recipe[]){
     let related: Recipe[] = [];
     let count: number = 0;
-    let typeAndRegion: Recipe[] = recipes.filter(recipe => recipe.region == this.recipe.region && recipe.type == this.recipe.type)
-    let type: Recipe[] = recipes.filter(recipe => recipe.type == this.recipe.type)
-    let regions: Recipe[] = recipes.filter(recipe => recipe.region == this.recipe.region)
-    
-    return related
+    let typeAndRegion: Recipe[] = recipes.filter(recipe => recipe.region == this.recipe.region && recipe.type == this.recipe.type && recipe.recipe_id != this.recipe.recipe_id)
+    let type: Recipe[] = recipes.filter(recipe => recipe.type == this.recipe.type && recipe.recipe_id != this.recipe.recipe_id)
+    let regions: Recipe[] = recipes.filter(recipe => recipe.region == this.recipe.region && recipe.recipe_id != this.recipe.recipe_id)  
+
+    function pushAll(filterArray: Recipe[]){
+      for(let j = 0; j < filterArray.length; j++){
+        if(related.find(recipe => recipe.recipe_id == Number(filterArray[j].recipe_id)) == undefined){
+          related.push(filterArray[j])
+        } 
+      }
+    }
+  
+    for(let i = 0; i < 3; i++){
+      console.log(i, count);
+      if(count >= 3){
+        console.log(related);
+        return related.slice(0, 3)
+      } else if(i == 0){
+        pushAll(typeAndRegion)
+      } else if(i == 1){
+        pushAll(type)
+      } else if(i == 2){
+        pushAll(regions)
+      }
+    }
+    return related.slice(0, 3)
   }
    
   RecipeDetail({name, value}: any) {
@@ -180,7 +200,7 @@ export class RecipeDetails extends Component<{ match: { params: { id: number } }
   render() {
     return (
     <>
-      <div style={{padding: "1rem"}}>
+      <div style={{padding: "1rem", marginLeft: '5rem', marginTop: '2rem'}}>
           <Row style={{display: "flex", flexDirection: "row", padding: "1rem"}}>
             <Row style={{width: "50%"}}>
               <img src={this.recipe.picture_url} alt={this.recipe.name} style={{maxWidth: "100", height: "auto", borderRadius: "2rem"}}/>
@@ -222,7 +242,6 @@ export class RecipeDetails extends Component<{ match: { params: { id: number } }
             <Button.Light onClick={() => {
               window.open(`mailto:example@mail.com?subject=${this.emailSubject}&body=${this.emailBody}`)}
             }>Share</Button.Light>
-            
           </div>
           <div>
           <br/>
@@ -277,23 +296,21 @@ export class RecipeDetails extends Component<{ match: { params: { id: number } }
             </div>) : ( <> </>
             )): <> </>}
           </div>
-          
           <br/>
         </div>
-        {this.relatedRecipes.length > 1 ? ( <div>
-          <h4>Related Recipes</h4>
+        
+        {this.relatedRecipes.length > 1 ? ( <div style={{margin: 0}}><hr style={{width: '90vw', left: '5vw', position: 'relative'}}/>
+          <h4 style={{textAlign: 'center'}}>Related Recipes</h4>
           <div style={{display: 'flex', justifyContent: 'center'}}>
           {this.relatedRecipes.map((recipe) => (
                 //Maps all the different recipes and renders them as links to their respective recipe details
-
               <PreviewCard small key={recipe.recipe_id} id={recipe.recipe_id} name={recipe.name} url={recipe.picture_url}></PreviewCard>
-              ))}
+          ))}
         </div>
+        <br/>
         </div>) : (<></>)}
-        
         </>
       )
-    
   }
 
   async mounted() {
@@ -302,7 +319,7 @@ export class RecipeDetails extends Component<{ match: { params: { id: number } }
       let recipe = await recipeService.get(this.props.match.params.id);
       this.recipe = recipe;
       let recipes = await recipeService.getAll();
-      this.relatedRecipes = this.filterRelated(recipes)
+      this.relatedRecipes = this.filterRelated(recipes)      
       let ingredients = await recipeService.getRecipeIngredients(this.props.match.params.id);
       this.ingredients = ingredients;
       this.emailSubject = 'Recipe for ' + this.recipe.name;

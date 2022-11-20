@@ -131,7 +131,7 @@ export class UserLogin extends Component  {
                             }}>X</Button.Danger></Column>
                         </Row>))
                     }
-
+                    <br/>
                     <Button.Danger onClick={() => {
                         this.CartItemsToShow.map((cartitem) => {
                         cartService.deleteIngredientFromCart(cartitem.cart_id)
