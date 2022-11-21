@@ -18,9 +18,6 @@ const history = createHashHistory(); // Use history.push(...) to programmaticall
 //using this variable to check its value and then location.reload when true to make the user-info appear after creating new user
 let created: boolean = false;
 
-//@ts-ignore This is the userdata that gets added to sessionstorage if you log in. Ts-ignore because it can be empty
-const userData = JSON.parse(sessionStorage.getItem('user'));
-
 //function to hash password. To be done before adding password to database
 export async function generateHash(password: string) {
   const salt = bcrypt.genSaltSync(10);
@@ -34,6 +31,8 @@ export async function compareHash(password: string, hashed: string) {
 }
 
 export class UserLogin extends Component {
+    //@ts-ignore
+    userData = JSON.parse(sessionStorage.getItem('user'));
   likedRecipes: LikedRecipe[] = [];
   users: User[] = [];
   loggedIn: boolean = false;
@@ -90,7 +89,7 @@ export class UserLogin extends Component {
 
   render() {
     // if userdata exists the page that renders is the one with your information
-    if (userData) {
+    if (this.userData) {
       return (
         <div style={{ display: 'flex', justifyContent: 'space-evenly', margin: '1vw' }}>
           <div style={{ display: 'flex', flexDirection: 'column', marginLeft: '1vw' }}>
@@ -98,11 +97,11 @@ export class UserLogin extends Component {
               <Card title="Your user information">
                 <Row>
                   <Column>Brukernavn: </Column>
-                  <Column>{userData.username}</Column>
+                  <Column>{this.userData.username}</Column>
                 </Row>
                 <Row>
                   <Column>Access type: </Column>
-                  <Column>{userData.admin ? 'Admin' : 'User'}</Column>
+                  <Column>{this.userData.admin ? 'Admin' : 'User'}</Column>
                 </Row>
                 <br />
                 <Row>
@@ -132,7 +131,7 @@ export class UserLogin extends Component {
                 </Row>
               </Card>
             </div>
-            {userData.admin ? (
+            {this.userData.admin ? (
               <div style={{ width: '45vw', marginTop: '2rem' }}>
                 <Card title="Add ingredients">
                   <Row>
@@ -282,7 +281,7 @@ export class UserLogin extends Component {
                               this.recipesToShow = [];
                               this.filterFridge();
                             }
-                          } else if (userData.admin) {
+                          } else if (this.userData.admin) {
                             Alert.danger(
                               'This is not an ingredient, you can add ingredients in the left section of the page'
                             );
@@ -430,12 +429,12 @@ export class UserLogin extends Component {
       //@ts-ignore
       this.ingredients = ingredients;
 
-      if (userData) {
-        let likedRecipes = await userService.getLikedRecipes(userData.user_id);
+      if (this.userData) {
+        let likedRecipes = await userService.getLikedRecipes(this.userData.user_id);
         this.likedRecipes = likedRecipes;
 
         try {
-          let cart = await cartService.get(userData.user_id);
+          let cart = await cartService.get(this.userData.user_id);
           this.cart = cart;
           this.CartItemsToShow = cart;
         } catch (error: any) {

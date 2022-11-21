@@ -78,7 +78,178 @@ exports[`Components draw correctly tests NewUser draws correctly 1`] = `
 </Fragment>
 `;
 
-exports[`Components draw correctly tests UserLogin draws correctly 1`] = `
+exports[`Components draw correctly tests UserLogin draws correctly when logged in 1`] = `
+<div
+  style={
+    {
+      "display": "flex",
+      "justifyContent": "space-evenly",
+      "margin": "1vw",
+    }
+  }
+>
+  <div
+    style={
+      {
+        "display": "flex",
+        "flexDirection": "column",
+        "marginLeft": "1vw",
+      }
+    }
+  >
+    <div
+      style={
+        {
+          "marginTop": "2rem",
+          "width": "45vw",
+        }
+      }
+    >
+      <Card
+        title="Your user information"
+      >
+        <Row>
+          <Column>
+            Brukernavn: 
+          </Column>
+          <Column />
+        </Row>
+        <Row>
+          <Column>
+            Access type: 
+          </Column>
+          <Column>
+            Admin
+          </Column>
+        </Row>
+        <br />
+        <Row>
+          <Column>
+            Your liked recipes:
+          </Column>
+        </Row>
+        You have no liked recipes
+        <br />
+        <Row>
+          <Column>
+            <ButtonDanger
+              onClick={[Function]}
+            >
+              Log out
+            </ButtonDanger>
+          </Column>
+        </Row>
+      </Card>
+    </div>
+    <div
+      style={
+        {
+          "marginTop": "2rem",
+          "width": "45vw",
+        }
+      }
+    >
+      <Card
+        title="Add ingredients"
+      >
+        <Row>
+          <Column>
+            <FormInput
+              onChange={[Function]}
+              placeholder="Ingredient"
+              type="text"
+              value=""
+            />
+          </Column>
+          <Column>
+            <ButtonLight
+              onClick={[Function]}
+            >
+              Add
+            </ButtonLight>
+          </Column>
+          <Column>
+            <ButtonSuccess
+              onClick={[Function]}
+            >
+              Add Recipe
+            </ButtonSuccess>
+          </Column>
+        </Row>
+      </Card>
+    </div>
+  </div>
+  <div
+    style={
+      {
+        "display": "flex",
+        "flexDirection": "column",
+        "marginLeft": "1vw",
+      }
+    }
+  >
+    <div
+      style={
+        {
+          "marginTop": "2rem",
+          "width": "45vw",
+        }
+      }
+    >
+      <Card
+        title="Your Cart"
+      >
+        <br />
+        <br />
+        <ButtonDanger
+          onClick={[Function]}
+        >
+          Clear All
+        </ButtonDanger>
+      </Card>
+    </div>
+    <div
+      style={
+        {
+          "marginTop": "2rem",
+          "width": "45vw",
+        }
+      }
+    >
+      <Card
+        title="My Fridge"
+      >
+        <span>
+          Find recipes based on the ingredients in your fridge!
+        </span>
+        <Row>
+          <Column>
+            <FormInput
+              list="searchList"
+              onChange={[Function]}
+              placeholder="Search for ingredient"
+              type="search"
+              value=""
+            />
+            <datalist
+              id="searchList"
+            />
+          </Column>
+          <Column>
+            <ButtonLight
+              onClick={[Function]}
+            >
+              Add
+            </ButtonLight>
+          </Column>
+        </Row>
+      </Card>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`Components draw correctly tests UserLogin draws correctly when not logged in 1`] = `
 <Fragment>
   <div
     style={

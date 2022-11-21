@@ -5061,9 +5061,6 @@ const history = (0,history__WEBPACK_IMPORTED_MODULE_7__.createHashHistory)(); //
 //using this variable to check its value and then location.reload when true to make the user-info appear after creating new user
 let created = false;
 
-//@ts-ignore This is the userdata that gets added to sessionstorage if you log in. Ts-ignore because it can be empty
-const userData = JSON.parse(sessionStorage.getItem('user'));
-
 //function to hash password. To be done before adding password to database
 async function generateHash(password) {
   const salt = bcryptjs__WEBPACK_IMPORTED_MODULE_6___default().genSaltSync(10);
@@ -5076,6 +5073,8 @@ async function compareHash(password, hashed) {
   return bcryptjs__WEBPACK_IMPORTED_MODULE_6___default().compareSync(password, hashed);
 }
 class UserLogin extends react_simplified__WEBPACK_IMPORTED_MODULE_1__.Component {
+  //@ts-ignore
+  userData = JSON.parse(sessionStorage.getItem('user'));
   likedRecipes = [];
   users = [];
   loggedIn = false;
@@ -5137,7 +5136,7 @@ class UserLogin extends react_simplified__WEBPACK_IMPORTED_MODULE_1__.Component 
   }
   render() {
     // if userdata exists the page that renders is the one with your information
-    if (userData) {
+    if (this.userData) {
       return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", {
         style: {
           display: 'flex',
@@ -5157,7 +5156,7 @@ class UserLogin extends react_simplified__WEBPACK_IMPORTED_MODULE_1__.Component 
         }
       }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Card, {
         title: "Your user information"
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Row, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Column, null, "Brukernavn: "), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Column, null, userData.username)), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Row, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Column, null, "Access type: "), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Column, null, userData.admin ? 'Admin' : 'User')), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("br", null), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Row, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Column, null, "Your liked recipes:")), this.likedRecipes.length > 0 ? this.likedRecipes.map(recipe => /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Row, {
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Row, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Column, null, "Brukernavn: "), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Column, null, this.userData.username)), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Row, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Column, null, "Access type: "), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Column, null, this.userData.admin ? 'Admin' : 'User')), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("br", null), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Row, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Column, null, "Your liked recipes:")), this.likedRecipes.length > 0 ? this.likedRecipes.map(recipe => /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Row, {
         key: recipe.recipe_id
       }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_8__.NavLink, {
         to: '/recipes/' + recipe.recipe_id
@@ -5166,7 +5165,7 @@ class UserLogin extends react_simplified__WEBPACK_IMPORTED_MODULE_1__.Component 
           sessionStorage.clear();
           location.reload();
         }
-      }, "Log out"))))), userData.admin ? /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", {
+      }, "Log out"))))), this.userData.admin ? /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", {
         style: {
           width: '45vw',
           marginTop: '2rem'
@@ -5279,7 +5278,7 @@ class UserLogin extends react_simplified__WEBPACK_IMPORTED_MODULE_1__.Component 
               this.recipesToShow = [];
               this.filterFridge();
             }
-          } else if (userData.admin) {
+          } else if (this.userData.admin) {
             _widgets__WEBPACK_IMPORTED_MODULE_2__.Alert.danger('This is not an ingredient, you can add ingredients in the left section of the page');
           } else _widgets__WEBPACK_IMPORTED_MODULE_2__.Alert.danger('This is not an ingredient');
         }
@@ -5370,11 +5369,11 @@ class UserLogin extends react_simplified__WEBPACK_IMPORTED_MODULE_1__.Component 
       let ingredients = await _service_files_recipe_service__WEBPACK_IMPORTED_MODULE_5__["default"].getIngredients();
       //@ts-ignore
       this.ingredients = ingredients;
-      if (userData) {
-        let likedRecipes = await _service_files_user_service__WEBPACK_IMPORTED_MODULE_3__["default"].getLikedRecipes(userData.user_id);
+      if (this.userData) {
+        let likedRecipes = await _service_files_user_service__WEBPACK_IMPORTED_MODULE_3__["default"].getLikedRecipes(this.userData.user_id);
         this.likedRecipes = likedRecipes;
         try {
-          let cart = await _service_files_cart_service__WEBPACK_IMPORTED_MODULE_4__["default"].get(userData.user_id);
+          let cart = await _service_files_cart_service__WEBPACK_IMPORTED_MODULE_4__["default"].get(this.userData.user_id);
           this.cart = cart;
           this.CartItemsToShow = cart;
         } catch (error) {
