@@ -4360,7 +4360,7 @@ class SlideShowCard extends react_simplified__WEBPACK_IMPORTED_MODULE_1__.Compon
     return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", {
       style: {
         margin: '1rem',
-        borderRadius: "0.5rem",
+        borderRadius: '0.5rem',
         display: 'flex',
         flexDirection: 'row'
       }
@@ -4398,16 +4398,16 @@ class SlideShowCard extends react_simplified__WEBPACK_IMPORTED_MODULE_1__.Compon
       title: "Our five most popular recipes!"
     }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", {
       style: {
-        maxWidth: "20vw"
+        maxWidth: '20vw'
       }
     }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("i", null, "If you wish to learn more about the recipe displayed, click on the image!"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("p", {
       style: {
-        marginTop: "40px"
+        marginTop: '40px'
       }
     }, "We have a plethora, of different ingredients ranging from all over the world. To explore all these, click the button under!"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", {
       style: {
-        display: "flex",
-        justifyContent: "space-between"
+        display: 'flex',
+        justifyContent: 'space-between'
       }
     }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(NavBar.Link, {
       left: false,
@@ -4418,8 +4418,8 @@ class SlideShowCard extends react_simplified__WEBPACK_IMPORTED_MODULE_1__.Compon
       onClick: () => {}
     }, "To recipes!")), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", {
       style: {
-        display: "flex",
-        justifyContent: "space-between"
+        display: 'flex',
+        justifyContent: 'space-between'
       }
     }, this.props.children)))));
   }
@@ -4652,10 +4652,7 @@ class NavBar extends react_simplified__WEBPACK_IMPORTED_MODULE_1__.Component {
       activeClassName: "active",
       exact: true,
       to: "/"
-    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("img", {
-      src: "pizzaIcon",
-      alt: "Food Junkies"
-    })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", {
+    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("b", null, "Food Junkies ")), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", {
       className: "navbar-nav",
       style: {
         width: '100%'
@@ -4787,8 +4784,8 @@ class Alert extends react_simplified__WEBPACK_IMPORTED_MODULE_1__.Component {
         width: '20%',
         left: '75%',
         opacity: '90%',
-        backgroundColor: "transparent",
-        padding: this.alerts.length > 0 ? "1rem" : "0"
+        backgroundColor: 'transparent',
+        padding: this.alerts.length > 0 ? '1rem' : '0'
       }
     }, this.alerts.map((alert, i) => /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", {
       key: alert.id,
@@ -41146,11 +41143,11 @@ class Home extends react_simplified__WEBPACK_IMPORTED_MODULE_2__.Component {
   slidenr = 0;
   CurrentlyInSlide = {
     recipe_id: 0,
-    name: "",
-    description: "",
-    picture_url: "",
-    region: "",
-    type: ""
+    name: '',
+    description: '',
+    picture_url: '',
+    region: '',
+    type: ''
   };
   TypeRecommendedOnLikes = [];
   RegionRecommendedOnLikes = [];
@@ -41178,13 +41175,13 @@ class Home extends react_simplified__WEBPACK_IMPORTED_MODULE_2__.Component {
       }
     }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1__.createElement("h1", {
       style: {
-        marginLeft: "35vw",
-        height: "20vh",
-        width: "30vw",
+        marginLeft: '35vw',
+        height: '20vh',
+        width: '50vw',
         position: 'relative',
         top: '5vh'
       }
-    }, "Welcome to ", /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1__.createElement("span", {
+    }, "Welcome to ", /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1__.createElement("br", null), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1__.createElement("span", {
       style: {
         fontSize: '3rem',
         fontWeight: 'bold'
@@ -41236,8 +41233,8 @@ class Home extends react_simplified__WEBPACK_IMPORTED_MODULE_2__.Component {
       d: "M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 0 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8z"
     }))))), userData ? /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1__.createElement("div", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1__.createElement("h2", {
       style: {
-        marginLeft: "15vw",
-        marginTop: "5vw"
+        marginLeft: '15vw',
+        marginTop: '5vw'
       }
     }, "Based on your likes you should like recipes with these types:"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1__.createElement("div", {
       style: {
@@ -41253,10 +41250,10 @@ class Home extends react_simplified__WEBPACK_IMPORTED_MODULE_2__.Component {
       name: recipe.type,
       url: recipe.picture_url,
       id: recipe.recipe_id
-    })) : /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1__.createElement("b", null, "You should Like some recipes to get a custom recommendation based on the type of dish")), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1__.createElement("h2", {
+    })) : /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1__.createElement("b", null, "You should like som recipes to get custom recommendation based on the type of dish")), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1__.createElement("h2", {
       style: {
-        marginLeft: "15vw",
-        marginTop: "5vw"
+        marginLeft: '15vw',
+        marginTop: '5vw'
       }
     }, "Based on your likes you should like recipes with these Regions:"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1__.createElement("div", {
       style: {
@@ -41271,12 +41268,12 @@ class Home extends react_simplified__WEBPACK_IMPORTED_MODULE_2__.Component {
       name: recipe.region,
       url: recipe.picture_url,
       id: recipe.recipe_id
-    })) : /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1__.createElement("b", null, "You should Like some recipes to get a custom recommendation based on the type of dish"))) : /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1__.createElement("h2", {
+    })) : /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1__.createElement("b", null, "You should like som recipes to get custom recommendation based on the type of dish"))) : /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1__.createElement("h2", {
       style: {
-        marginLeft: "35vw",
-        marginTop: "5vw"
+        marginLeft: '35vw',
+        marginTop: '5vw'
       }
-    }, "Log in to view many more things!"));
+    }, " Login to get view more"));
   }
   async mounted() {
     try {
@@ -41304,14 +41301,14 @@ class Home extends react_simplified__WEBPACK_IMPORTED_MODULE_2__.Component {
           this.RecipesThatWasLikedByUser.push(newrecipe);
           let recomendedType = this.recipes.filter(recipe => recipe.type == newrecipe.type && recipe.recipe_id != newrecipe.recipe_id);
           let recomendedRegion = this.recipes.filter(recipe => recipe.region == newrecipe.region && recipe.recipe_id != newrecipe.recipe_id);
-          recomendedRegion.map(RegionRecipe => {
+          recomendedRegion.map(RecipeRegion => {
             if (this.RegionRecommendedOnLikes.length < 3) {
-              this.RegionRecommendedOnLikes.push(RegionRecipe);
+              this.RegionRecommendedOnLikes.push(RecipeRegion);
             }
           });
-          recomendedType.map(TypeRecipe => {
+          recomendedType.map(RecipeType => {
             if (this.TypeRecommendedOnLikes.length < 3) {
-              this.TypeRecommendedOnLikes.push(TypeRecipe);
+              this.TypeRecommendedOnLikes.push(RecipeType);
             }
           });
         });
