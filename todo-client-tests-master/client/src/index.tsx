@@ -65,7 +65,7 @@ class Home extends Component {
    render() {
     return (
       <div style={{ backgroundColor: '#f9f5f1' }}>
-        <h1 style={{marginLeft:"35vw", height:"30vh", width:"30vw", position:'relative', top:'5vh'}}>Welcome to <span style={{ fontSize: '3rem', fontWeight: 'bold' }}>Food Junkies</span></h1>
+        <h1 style={{marginLeft:"35vw", height:"20vh", width:"30vw", position:'relative', top:'5vh'}}>Welcome to <span style={{ fontSize: '3rem', fontWeight: 'bold' }}>Food Junkies</span></h1>
         <div
           style={{
             display: 'flex',
@@ -163,8 +163,6 @@ class Home extends Component {
             let recomendedT = this.recipes.filter((recipe) => recipe.type == newrecipe.type && recipe.recipe_id != newrecipe.recipe_id)
             let recomendedR = this.recipes.filter((recipe) => recipe.region == newrecipe.region && recipe.recipe_id != newrecipe.recipe_id)
 
-
-
             recomendedR.map((R) => {
               if(this.RegionRecommendedOnLikes.length < 3){
                 this.RegionRecommendedOnLikes.push(R)
@@ -178,8 +176,6 @@ class Home extends Component {
           })
         })
         ) : this.RecipesThatWasLikedByUser = [];
-
- 
     } catch (error: any){
       Alert.danger('Error getting recipes: ' + error.message)
     }
@@ -196,8 +192,6 @@ ReactDOM.render(
       <Route exact path='/recipes/:id(\d+)/edit' component={RecipeEdit} />
       <Route exact path='/user/login' component={UserLogin}/>
       <Route exact path='/user/create' component={NewUser}/>
-      {/*<Route exact path='/cart' component={CartContent}/>*/}
-
     </div>
   </HashRouter>,
   document.getElementById('root')

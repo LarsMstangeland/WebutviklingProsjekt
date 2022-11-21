@@ -41215,7 +41215,7 @@ class Home extends react_simplified__WEBPACK_IMPORTED_MODULE_2__.Component {
     }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1__.createElement("h1", {
       style: {
         marginLeft: "35vw",
-        height: "30vh",
+        height: "20vh",
         width: "30vw",
         position: 'relative',
         top: '5vh'
