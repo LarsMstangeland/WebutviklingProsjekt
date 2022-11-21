@@ -5132,7 +5132,6 @@ class UserLogin extends react_simplified__WEBPACK_IMPORTED_MODULE_1__.Component 
         }
       }
     }
-    console.log(filteredRecipes);
     filteredRecipes.map(recipe => this.recipesToShow.push(recipe));
   }
   render() {
@@ -5362,12 +5361,17 @@ class UserLogin extends react_simplified__WEBPACK_IMPORTED_MODULE_1__.Component 
     try {
       let users = await _service_files_user_service__WEBPACK_IMPORTED_MODULE_3__["default"].getAll();
       this.users = users;
+      let recipes = await _service_files_recipe_service__WEBPACK_IMPORTED_MODULE_5__["default"].getAll();
+      this.recipes = recipes;
+      let recipeIngredients = await _service_files_recipe_service__WEBPACK_IMPORTED_MODULE_5__["default"].getAllRecipeIngredients();
+      //@ts-ignore
+      this.recipeIngredients = recipeIngredients;
+      let ingredients = await _service_files_recipe_service__WEBPACK_IMPORTED_MODULE_5__["default"].getIngredients();
+      //@ts-ignore
+      this.ingredients = ingredients;
       if (this.userData) {
         let likedRecipes = await _service_files_user_service__WEBPACK_IMPORTED_MODULE_3__["default"].getLikedRecipesForUser(this.userData.user_id);
         this.likedRecipes = likedRecipes;
-        let ingredients = await _service_files_recipe_service__WEBPACK_IMPORTED_MODULE_5__["default"].getIngredients();
-        //@ts-ignore
-        this.ingredients = ingredients;
         try {
           let cart = await _service_files_cart_service__WEBPACK_IMPORTED_MODULE_4__["default"].get(this.userData.user_id);
           this.cart = cart;
@@ -5421,7 +5425,7 @@ class NewUser extends react_simplified__WEBPACK_IMPORTED_MODULE_1__.Component {
       onChange: event => {
         this.passwordCheck = event.currentTarget.value;
       }
-    }))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Row, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Column, null, "Admin: ", ' ', /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Form.Checkbox, {
+    }))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Row, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Column, null, "Admin:", ' ', /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Form.Checkbox, {
       checked: this.user.admin,
       onChange: () => {
         this.user.admin == false ? this.user.admin = true : this.user.admin = false;
