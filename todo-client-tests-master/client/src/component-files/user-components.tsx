@@ -31,12 +31,14 @@ export async function compareHash(password: string, hashed: string) {
 }
 
 export class UserLogin extends Component {
-  // @ts-ignore
-  userData = JSON.parse(sessionStorage.getItem('user'));
+    // @ts-ignore gets the logged in user from sessionstorage
+    userData = JSON.parse(sessionStorage.getItem('user'));
   likedRecipes: LikedRecipe[] = [];
+  //imported to check the username entered in input-field with the usernames in the database
   users: User[] = [];
-  loggedIn: boolean = false;
+  //the user-object that gets altered with the input-fields
   user: User = { user_id: 0, username: '', password: '', admin: false };
+
   cart: CartItem[] = [];
   CartItemsToShow: CartItem[] = [];
   ingredients: Ingredient[] = [];
@@ -448,8 +450,11 @@ export class UserLogin extends Component {
 }
 
 export class NewUser extends Component {
+  //users used to check if the username trying to be created already exist
   users: User[] = [];
+  //the standardised object that gets altered with the inputs
   user: User = { user_id: 0, username: '', password: '', admin: false };
+  //extra password-variable to compare both typed in
   passwordCheck: string = '';
 
   render() {
