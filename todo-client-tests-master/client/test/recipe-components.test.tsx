@@ -113,7 +113,7 @@ describe('RecipeList tests', () => {
     });
 
     wrapper
-      .find(Form.Input)
+      .find(Form.Select)
       .at(0)
       .simulate('change', { currentTarget: { value: 'Asia' } });
 
@@ -125,6 +125,49 @@ describe('RecipeList tests', () => {
         ])
       ).toEqual(true);
     });
+    done();
+  });
+
+  test('Type input filters correct', (done) => {
+    const wrapper = shallow(<RecipeList />);
+
+    setTimeout(() => {
+      expect(
+        wrapper.containsAllMatchingElements([
+          <PreviewCard id={1} url="" name="Hotdog"></PreviewCard>,
+          <PreviewCard id={2} url="" name="Hamburger"></PreviewCard>,
+          <PreviewCard id={3} url="" name="Pizza"></PreviewCard>,
+        ])
+      ).toEqual(true);
+    });
+
+    wrapper
+      .find(Form.Select)
+      .at(1)
+      .simulate('change', { currentTarget: { value: 'Beef' } });
+
+    setTimeout(() => {
+      expect(
+        wrapper.containsAllMatchingElements([
+          <PreviewCard id={1} url="" name="Hotdog"></PreviewCard>,
+          <PreviewCard id={2} url="" name="Hamburger"></PreviewCard>,
+        ])
+      ).toEqual(true);
+    });
+    done();
+  });
+
+  test('Test to see if recipe in list push correct location', (done) => {
+    const wrapper = shallow(<RecipeList />);
+
+    setTimeout(() => {
+      wrapper.find(PreviewCard).at(0).simulate('click');
+    });
+
+    setTimeout(() => {
+      expect(location.hash).toEqual('#/recipes/1');
+    });
+
     done();
   });
 });
@@ -193,6 +236,74 @@ describe('RecipeDetails tests', () => {
           //@ts-ignore
           <Button.Success>Edit</Button.Success>
         )
+      );
+    });
+
+    done();
+  });
+
+  test('Sets location to edit page on click', (done) => {
+    const wrapper = shallow(<RecipeDetails match={{ params: { id: 2 } }} />);
+
+    wrapper.find(Button.Success).at(2).simulate('click');
+
+    setTimeout(() => {
+      expect(location.hash).toEqual('#/recipes/2/edit');
+    });
+
+    done();
+  });
+
+  test('Sets location to recipe list page on click', (done) => {
+    const wrapper = shallow(<RecipeDetails match={{ params: { id: 2 } }} />);
+
+    setTimeout(() => {
+      wrapper.find(Button.Danger).at(0).simulate('click');
+    });
+
+    setTimeout(() => {
+      expect(location.hash).toEqual('#/recipes');
+    });
+
+    done();
+  });
+
+  test('Test if amount in ingredients is responsive', () => {
+    const wrapper = shallow(<RecipeDetails match={{ params: { id: 2 } }} />);
+
+    setTimeout(() => {
+      expect(wrapper.containsAllMatchingElements([<Column>1</Column>, <Column>200</Column>]));
+    });
+
+    wrapper.find(Form.Input).simulate('change', { currentTarget: { value: 2 } });
+
+    setTimeout(() => {
+      expect(wrapper.containsAllMatchingElements([<Column>0.5</Column>, <Column>100</Column>]));
+    });
+  });
+
+  test('Test like button', (done) => {
+    const wrapper = shallow(<RecipeDetails match={{ params: { id: 2 } }} />);
+
+    setTimeout(() => {
+      wrapper.find(Button.Success).at(0).simulate('click');
+    });
+
+    setTimeout(() => {
+      expect(
+        //@ts-ignore
+        wrapper.containsMatchingElement(<Button.Danger>Unlike</Button.Danger>)
+      );
+    });
+
+    setTimeout(() => {
+      wrapper.find(Button.Danger).at(0).simulate('click');
+    });
+
+    setTimeout(() => {
+      expect(
+        //@ts-ignore
+        wrapper.containsMatchingElement(<Button.Success>Like</Button.Success>)
       );
     });
 
@@ -339,15 +450,33 @@ describe('RecipeEdit tests', () => {
     done();
   });
 
-  /*test('Delete and add ingredient to recipe', (done) => {
+  test('Delete and add ingredient to recipe', (done) => {
     const wrapper = shallow(<RecipeEdit match={{ params: { id: 2 } }} />);
 
-    wrapper.find(Button.Danger).at(0).simulate('click');
+    setTimeout(() => {
+      wrapper.find(Button.Danger).at(0).simulate('click');
+    });
 
     setTimeout(() => {
-      wrapper.containsMatchingElement(Button.Success)
+      expect(
+        //@ts-ignore
+        wrapper.containsMatchingElement(<Button.Success>Add</Button.Success>)
+      );
+    });
+
+    wrapper.find(Button.Success).simulate('click');
+
+    setTimeout(() => {
+      expect(
+        wrapper.containsAllMatchingElements(
+          //@ts-ignore
+          <Button.Danger>X</Button.Danger>,
+          //@ts-ignore
+          <Button.Danger>X</Button.Danger>
+        )
+      );
     });
 
     done();
-  });*/
+  });
 });
