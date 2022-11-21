@@ -1,0 +1,429 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`RecipeDetails tests RecipeDetails draws correctly - snapshot 1`] = `
+<Fragment>
+  <div
+    style={
+      {
+        "marginLeft": "5rem",
+        "marginTop": "2rem",
+        "padding": "1rem",
+      }
+    }
+  >
+    <div
+      style={
+        {
+          "display": "flex",
+          "marginBottom": "2rem",
+        }
+      }
+    >
+      <img
+        alt=""
+        src=""
+        style={
+          {
+            "borderRadius": "2rem",
+            "height": "auto",
+            "width": "50%",
+          }
+        }
+      />
+      <div
+        style={
+          {
+            "display": "flex",
+            "flexDirection": "column",
+            "marginLeft": "2rem",
+            "width": "50%",
+          }
+        }
+      >
+        <h2
+          style={
+            {
+              "marginBottom": "1rem",
+            }
+          }
+        />
+        <bound RecipeDetail
+          name="Region"
+          value=""
+        />
+        <bound RecipeDetail
+          name="Type"
+          value=""
+        />
+        <bound RecipeDetail
+          name="Description"
+          value=""
+        />
+      </div>
+    </div>
+    <div
+      style={
+        {
+          "display": "flex",
+          "justifyContent": "space-around",
+          "marginBottom": "0.5rem",
+          "width": "27.5vw",
+        }
+      }
+    >
+      <ButtonSuccess
+        onClick={[Function]}
+      >
+        Like recipe
+      </ButtonSuccess>
+      <ButtonSuccess
+        onClick={[Function]}
+      >
+        Add ingredients to cart
+      </ButtonSuccess>
+      <ButtonLight
+        onClick={[Function]}
+      >
+        Share
+      </ButtonLight>
+    </div>
+    <div>
+      <br />
+      <h4>
+        Ingredients
+      </h4>
+      <Row>
+        <Column>
+          Portions:
+        </Column>
+        <Column>
+          <FormInput
+            max="50"
+            min="1"
+            onChange={[Function]}
+            type="number"
+            value={4}
+          />
+        </Column>
+      </Row>
+      <br />
+      <Row>
+        <Column>
+          <b>
+            Ingredients name:
+          </b>
+        </Column>
+        <Column>
+          <b>
+            Amount:
+          </b>
+        </Column>
+        <Column>
+          <b>
+            Unit:
+          </b>
+        </Column>
+      </Row>
+      <br />
+       
+    </div>
+    <br />
+  </div>
+</Fragment>
+`;
+
+exports[`RecipeEdit tests RecipeEdit draws correctly - snapshot 1`] = `
+<Fragment>
+  <Card
+    title="Edit recipe"
+  >
+    <Row
+      style={
+        {
+          "marginBottom": "0.5rem",
+        }
+      }
+    >
+      <Column
+        width={2}
+      >
+        <FormLabel>
+          Name:
+        </FormLabel>
+      </Column>
+      <Column>
+        <FormInput
+          onChange={[Function]}
+          type="text"
+          value=""
+        />
+      </Column>
+    </Row>
+    <Row>
+      <Column
+        width={2}
+      >
+        <FormLabel>
+          Region:
+        </FormLabel>
+      </Column>
+      <Column>
+        <FormSelect
+          onChange={[Function]}
+          value=""
+        >
+          <option
+            value="Regions"
+          >
+            Regions
+          </option>
+        </FormSelect>
+      </Column>
+    </Row>
+    <Row>
+      <Column
+        width={2}
+      >
+        <FormLabel>
+          Type:
+        </FormLabel>
+      </Column>
+      <Column>
+        <FormSelect
+          onChange={[Function]}
+          value=""
+        >
+          <option
+            value="Types"
+          >
+            Types
+          </option>
+        </FormSelect>
+      </Column>
+    </Row>
+    <Row
+      style={
+        {
+          "marginBottom": "0.5rem",
+        }
+      }
+    >
+      <Column
+        width={2}
+      >
+        <FormLabel>
+          Description:
+        </FormLabel>
+      </Column>
+      <Column>
+        <FormTextarea
+          onChange={[Function]}
+          rows={10}
+          value=""
+        />
+      </Column>
+    </Row>
+    <Row>
+      <Column
+        width={2}
+      >
+        Image URL:
+      </Column>
+      <Column>
+        <FormInput
+          onChange={[Function]}
+          type="text"
+          value=""
+        />
+      </Column>
+    </Row>
+    <br />
+    <Row>
+      <Column>
+        <b>
+          Ingredients name:
+        </b>
+      </Column>
+      <Column>
+        <b>
+          Amount:
+        </b>
+      </Column>
+      <Column>
+        <b>
+          Unit:
+        </b>
+      </Column>
+      <Column />
+    </Row>
+    <br />
+    <h4>
+      Add ingredient
+    </h4>
+    <Row>
+      <Column>
+        <FormInput
+          list="searchList"
+          onChange={[Function]}
+          placeholder="Search for ingredient"
+          type="search"
+          value=""
+        />
+        <datalist
+          id="searchList"
+        />
+      </Column>
+      <Column>
+        <FormInput
+          max="1000"
+          onChange={[Function]}
+          type="number"
+          value={0}
+        />
+      </Column>
+      <Column>
+        <FormSelect
+          onChange={[Function]}
+          value=""
+        >
+          <option>
+            Select Unit
+          </option>
+        </FormSelect>
+      </Column>
+      <Column>
+        <ButtonLight
+          onClick={[Function]}
+          small={true}
+        >
+          Add
+        </ButtonLight>
+      </Column>
+    </Row>
+  </Card>
+  <Row>
+    <Column>
+      <ButtonSuccess
+        onClick={[Function]}
+      >
+        Save
+      </ButtonSuccess>
+    </Column>
+  </Row>
+</Fragment>
+`;
+
+exports[`RecipeList tests RecipeList draws correctly - snapshot 1`] = `
+<div>
+  <div
+    style={
+      {
+        "alignItems": "center",
+        "display": "flex",
+        "flexDirection": "column",
+        "margin": "1rem",
+        "padding": "1rem",
+      }
+    }
+  >
+    <h1>
+      Recipes
+    </h1>
+    <br />
+    <div
+      style={
+        {
+          "alignItems": "center",
+          "display": "flex",
+          "justifyContent": "center",
+          "marginBottom": "1rem",
+          "width": "100%",
+        }
+      }
+    >
+      <div
+        style={
+          {
+            "margin": "0 0.5rem",
+          }
+        }
+      >
+        <FormInput
+          onChange={[Function]}
+          placeholder="Search for recipes"
+          style={
+            {
+              "border": "2px solid black",
+              "height": "5.5vh",
+              "width": "12vw",
+            }
+          }
+          type="search"
+          value=""
+        />
+      </div>
+      <div
+        style={
+          {
+            "margin": "0 0.5rem",
+          }
+        }
+      >
+        <FormSelect
+          onChange={[Function]}
+          style={
+            {
+              "border": "2px solid black",
+              "borderRadius": "5px",
+              "height": "5.5vh",
+              "width": "12vw",
+            }
+          }
+          value="Region"
+        >
+          <option>
+            Region
+          </option>
+        </FormSelect>
+      </div>
+      <div
+        style={
+          {
+            "margin": "0 0.5rem",
+          }
+        }
+      >
+        <FormSelect
+          onChange={[Function]}
+          style={
+            {
+              "border": "2px solid black",
+              "borderRadius": "5px",
+              "height": "5.5vh",
+              "width": "12vw",
+            }
+          }
+          value="Type"
+        >
+          <option>
+            Type
+          </option>
+        </FormSelect>
+      </div>
+    </div>
+    <div
+      style={
+        {
+          "display": "flex",
+          "flexWrap": "wrap",
+          "justifyContent": "center",
+        }
+      }
+    >
+      <h3>
+        No results
+      </h3>
+    </div>
+  </div>
+</div>
+`;
