@@ -256,7 +256,7 @@ describe('Testing UserLogin-component', () => {
         setTimeout(() => {
         wrapper.find(Button.Danger).at(0).simulate('click');
 
-            expect(location.hash).toEqual('#/user/login');   
+            expect(location.hash).toEqual('#/user/logidddn');   
         });
 
         setTimeout(() => {

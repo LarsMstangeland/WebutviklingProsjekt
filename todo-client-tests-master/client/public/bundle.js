@@ -5730,7 +5730,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "Card": () => (/* binding */ Card),
 /* harmony export */   "Column": () => (/* binding */ Column),
 /* harmony export */   "Form": () => (/* binding */ Form),
-/* harmony export */   "InfoCard": () => (/* binding */ InfoCard),
 /* harmony export */   "NavBar": () => (/* binding */ NavBar),
 /* harmony export */   "PreviewCard": () => (/* binding */ PreviewCard),
 /* harmony export */   "Row": () => (/* binding */ Row),
@@ -5765,18 +5764,6 @@ class Card extends react_simplified__WEBPACK_IMPORTED_MODULE_1__.Component {
     }, this.props.title), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", {
       className: "card-text"
     }, this.props.children)));
-  }
-}
-class InfoCard extends Card {
-  render() {
-    return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(Card, {
-      title: this.props.children
-    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", {
-      style: {
-        height: "550px",
-        border: "2px solid black"
-      }
-    }), "dette er et infocard");
   }
 }
 class SlideShowCard extends react_simplified__WEBPACK_IMPORTED_MODULE_1__.Component {
@@ -6226,21 +6213,6 @@ class Alert extends react_simplified__WEBPACK_IMPORTED_MODULE_1__.Component {
   }
 
   /**
-   * Show success alert.
-   */
-  static success(text) {
-    // To avoid 'Cannot update during an existing state transition' errors, run after current event through setTimeout
-    setTimeout(() => {
-      let instance = Alert.instance(); // Get rendered Alert component instance
-      if (instance) instance.alerts.push({
-        id: instance.nextId++,
-        text: text,
-        type: 'success'
-      });
-    });
-  }
-
-  /**
    * Show info alert.
    */
   static info(text) {
@@ -6254,22 +6226,6 @@ class Alert extends react_simplified__WEBPACK_IMPORTED_MODULE_1__.Component {
       });
     });
   }
-
-  /**
-   * Show warning alert.
-   */
-  static warning(text) {
-    // To avoid 'Cannot update during an existing state transition' errors, run after current event through setTimeout
-    setTimeout(() => {
-      let instance = Alert.instance(); // Get rendered Alert component instance
-      if (instance) instance.alerts.push({
-        id: instance.nextId++,
-        text: text,
-        type: 'warning'
-      });
-    });
-  }
-
   /**
    * Show danger alert.
    */
@@ -41270,7 +41226,7 @@ class Home extends react_simplified__WEBPACK_IMPORTED_MODULE_2__.Component {
     }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1__.createElement("path", {
       fillRule: "evenodd",
       d: "M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 0 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8z"
-    }))))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1__.createElement("h2", {
+    }))))), userData ? /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1__.createElement("div", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1__.createElement("h2", {
       style: {
         marginLeft: "15vw",
         marginTop: "5vw"
@@ -41283,13 +41239,13 @@ class Home extends react_simplified__WEBPACK_IMPORTED_MODULE_2__.Component {
         justifyContent: 'center',
         alignItems: 'center'
       }
-    }, this.TypeRecommendedOnLikes.map(recipe => /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_3__.PreviewCard, {
+    }, this.TypeRecommendedOnLikes.length > 0 ? this.TypeRecommendedOnLikes.map(recipe => /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_3__.PreviewCard, {
       small: true,
       key: recipe.recipe_id,
       name: recipe.type,
       url: recipe.picture_url,
       id: recipe.recipe_id
-    }))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1__.createElement("h2", {
+    })) : /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1__.createElement("b", null, "You should Like some recipes to get a custom recommendation based on the type of dish")), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1__.createElement("h2", {
       style: {
         marginLeft: "15vw",
         marginTop: "5vw"
@@ -41301,13 +41257,18 @@ class Home extends react_simplified__WEBPACK_IMPORTED_MODULE_2__.Component {
         justifyContent: 'center',
         alignItems: 'center'
       }
-    }, this.RegionRecommendedOnLikes.map(recipe => /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_3__.PreviewCard, {
+    }, this.RegionRecommendedOnLikes.length > 0 ? this.RegionRecommendedOnLikes.map(recipe => /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_3__.PreviewCard, {
       small: true,
       key: recipe.recipe_id,
       name: recipe.region,
       url: recipe.picture_url,
       id: recipe.recipe_id
-    }))));
+    })) : /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1__.createElement("b", null, "You should Like some recipes to get a custom recommendation based on the type of dish"))) : /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1__.createElement("h2", {
+      style: {
+        marginLeft: "35vw",
+        marginTop: "5vw"
+      }
+    }, "Log in to view many more things!"));
   }
   async mounted() {
     try {
@@ -41333,16 +41294,16 @@ class Home extends react_simplified__WEBPACK_IMPORTED_MODULE_2__.Component {
         recipes.map(async recipe => {
           let newrecipe = await _service_files_recipe_service__WEBPACK_IMPORTED_MODULE_5__["default"].get(recipe.recipe_id);
           this.RecipesThatWasLikedByUser.push(newrecipe);
-          let recomendedT = this.recipes.filter(recipe => recipe.type == newrecipe.type && recipe.recipe_id != newrecipe.recipe_id);
-          let recomendedR = this.recipes.filter(recipe => recipe.region == newrecipe.region && recipe.recipe_id != newrecipe.recipe_id);
-          recomendedR.map(R => {
+          let recomendedType = this.recipes.filter(recipe => recipe.type == newrecipe.type && recipe.recipe_id != newrecipe.recipe_id);
+          let recomendedRegion = this.recipes.filter(recipe => recipe.region == newrecipe.region && recipe.recipe_id != newrecipe.recipe_id);
+          recomendedRegion.map(RegionRecipe => {
             if (this.RegionRecommendedOnLikes.length < 3) {
-              this.RegionRecommendedOnLikes.push(R);
+              this.RegionRecommendedOnLikes.push(RegionRecipe);
             }
           });
-          recomendedT.map(T => {
+          recomendedType.map(TypeRecipe => {
             if (this.TypeRecommendedOnLikes.length < 3) {
-              this.TypeRecommendedOnLikes.push(T);
+              this.TypeRecommendedOnLikes.push(TypeRecipe);
             }
           });
         });
