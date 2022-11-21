@@ -79,17 +79,16 @@ export class SlideShowCard extends Component<{
             <p style={{marginTop:"40px"}}>We have a plethora, of different ingredients ranging from all over the world.
               To explore all these, click the button under!
             </p>
-          </div>
-          <div  style={{position:"relative", width:"20vw",top:"15vh", right:"25vw", display:"flex", justifyContent:"space-between"}}>
-          <div>
-            {this.props.children}
-          </div>
-          <NavBar.Link left={false} to="/recipes">
-              <button style={{width: "10vw", position:"relative", left:"15vw"}} type="button" className="btn btn-primary" onClick={() => {}}>
+            <div style={{display:"flex", justifyContent:"space-between"}}>
+            <NavBar.Link left={false} to="/recipes">
+              <button type="button" className="btn btn-primary" onClick={() => {}}>
                 To recipes!
               </button>
-          </NavBar.Link>
-  
+            </NavBar.Link>
+            <div style={{display:"flex", justifyContent:"space-between"}}>
+              {this.props.children}
+            </div>
+            </div>
           </div>
         </Card>
 

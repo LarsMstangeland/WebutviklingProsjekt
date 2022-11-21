@@ -86,6 +86,7 @@ export class UserLogin extends Component {
         }
       }
     }
+    console.log(filteredRecipes)
     filteredRecipes.map((recipe) => this.recipesToShow.push(recipe));
   }
 

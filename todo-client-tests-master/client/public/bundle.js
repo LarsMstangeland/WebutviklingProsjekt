@@ -5133,6 +5133,7 @@ class UserLogin extends react_simplified__WEBPACK_IMPORTED_MODULE_1__.Component 
         }
       }
     }
+    console.log(filteredRecipes);
     filteredRecipes.map(recipe => this.recipesToShow.push(recipe));
   }
   render() {
@@ -5362,17 +5363,12 @@ class UserLogin extends react_simplified__WEBPACK_IMPORTED_MODULE_1__.Component 
     try {
       let users = await _service_files_user_service__WEBPACK_IMPORTED_MODULE_3__["default"].getAll();
       this.users = users;
-      let recipes = await _service_files_recipe_service__WEBPACK_IMPORTED_MODULE_5__["default"].getAll();
-      this.recipes = recipes;
-      let recipeIngredients = await _service_files_recipe_service__WEBPACK_IMPORTED_MODULE_5__["default"].getAllRecipeIngredients();
-      //@ts-ignore
-      this.recipeIngredients = recipeIngredients;
-      let ingredients = await _service_files_recipe_service__WEBPACK_IMPORTED_MODULE_5__["default"].getIngredients();
-      //@ts-ignore
-      this.ingredients = ingredients;
       if (userData) {
         let likedRecipes = await _service_files_user_service__WEBPACK_IMPORTED_MODULE_3__["default"].getLikedRecipesForUser(userData.user_id);
         this.likedRecipes = likedRecipes;
+        let ingredients = await _service_files_recipe_service__WEBPACK_IMPORTED_MODULE_5__["default"].getIngredients();
+        //@ts-ignore
+        this.ingredients = ingredients;
         try {
           let cart = await _service_files_cart_service__WEBPACK_IMPORTED_MODULE_4__["default"].get(userData.user_id);
           this.cart = cart;
@@ -5433,7 +5429,7 @@ class NewUser extends react_simplified__WEBPACK_IMPORTED_MODULE_1__.Component {
       onChange: event => {
         this.passwordCheck = event.currentTarget.value;
       }
-    }))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Row, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Column, null, "Admin:", ' ', /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Form.Checkbox, {
+    }))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Row, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Column, null, "Admin: ", ' ', /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Form.Checkbox, {
       checked: this.user.admin,
       onChange: () => {
         this.user.admin == false ? this.user.admin = true : this.user.admin = false;
@@ -5840,28 +5836,24 @@ class SlideShowCard extends react_simplified__WEBPACK_IMPORTED_MODULE_1__.Compon
       style: {
         marginTop: "40px"
       }
-    }, "We have a plethora, of different ingredients ranging from all over the world. To explore all these, click the button under!")), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", {
+    }, "We have a plethora, of different ingredients ranging from all over the world. To explore all these, click the button under!"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", {
       style: {
-        position: "relative",
-        width: "20vw",
-        top: "15vh",
-        right: "25vw",
         display: "flex",
         justifyContent: "space-between"
       }
-    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", null, this.props.children), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(NavBar.Link, {
+    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(NavBar.Link, {
       left: false,
       to: "/recipes"
     }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("button", {
-      style: {
-        width: "10vw",
-        position: "relative",
-        left: "15vw"
-      },
       type: "button",
       className: "btn btn-primary",
       onClick: () => {}
-    }, "To recipes!")))));
+    }, "To recipes!")), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", {
+      style: {
+        display: "flex",
+        justifyContent: "space-between"
+      }
+    }, this.props.children)))));
   }
 }
 class PreviewCard extends react_simplified__WEBPACK_IMPORTED_MODULE_1__.Component {
@@ -41194,14 +41186,7 @@ class Home extends react_simplified__WEBPACK_IMPORTED_MODULE_2__.Component {
   recipesToShow = [];
   MostLikedRecipes = [];
   UsersLikedRecipes = [];
-  RecipesThatWasLikedByUser = [{
-    recipe_id: 0,
-    name: "",
-    description: "",
-    picture_url: "",
-    region: "",
-    type: ""
-  }];
+  RecipesThatWasLikedByUser = [];
   slidenr = 0;
   CurrentlyInSlide = {
     recipe_id: 0,
@@ -41211,39 +41196,44 @@ class Home extends react_simplified__WEBPACK_IMPORTED_MODULE_2__.Component {
     region: "",
     type: ""
   };
+  TypeRecommendedOnLikes = [];
+  RegionRecommendedOnLikes = [];
 
   /**@ts-ignore */
   timer = () => {};
   hermansMetodeStartTheTimeout() {
     this.timer = setInterval(() => {
-      console.log(this.slidenr);
       this.slidenr == 4 ? this.slidenr = 0 : this.slidenr++;
       this.CurrentlyInSlide = this.MostLikedRecipes[this.slidenr];
     }, 5000);
   }
-  async render() {
+  filterOnRelated(ListToBeFilter, relation) {
+    let RelatedToLiked = [];
+    ListToBeFilter.map(LikedRecipe => {
+      relation == 'region' ? RelatedToLiked = this.recipes.filter(recipe => recipe.region == LikedRecipe.region) : [];
+      relation == 'type' ? RelatedToLiked = this.recipes.filter(recipe => recipe.type == LikedRecipe.type) : [];
+    });
+    return RelatedToLiked;
+  }
+  render() {
     return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1__.createElement("div", {
       style: {
         backgroundColor: '#f9f5f1'
       }
-    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1__.createElement("div", {
+    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1__.createElement("h1", {
       style: {
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        backgroundColor: 'white',
-        padding: '1rem'
+        marginLeft: "35vw",
+        height: "30vh",
+        width: "30vw",
+        position: 'relative',
+        top: '5vh'
       }
-    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1__.createElement("div", {
-      style: {
-        margin: '4rem'
-      }
-    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1__.createElement("h1", null, "Welcome to ", /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1__.createElement("span", {
+    }, "Welcome to ", /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1__.createElement("span", {
       style: {
         fontSize: '3rem',
         fontWeight: 'bold'
       }
-    }, "Food Junkies")))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1__.createElement("div", {
+    }, "Food Junkies")), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1__.createElement("div", {
       style: {
         display: 'flex',
         flexWrap: 'wrap',
@@ -41253,11 +41243,6 @@ class Home extends react_simplified__WEBPACK_IMPORTED_MODULE_2__.Component {
       }
     }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_3__.SlideShowCard, {
       recipe: this.CurrentlyInSlide
-    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1__.createElement("div", {
-      style: {
-        left: "80%",
-        top: "80%"
-      }
     }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_3__.Button.Light, {
       onClick: () => {
         //onlick slide should increment and re-define the recipe to be shown
@@ -41293,11 +41278,44 @@ class Home extends react_simplified__WEBPACK_IMPORTED_MODULE_2__.Component {
     }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1__.createElement("path", {
       fillRule: "evenodd",
       d: "M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 0 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8z"
-    })))))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1__.createElement("div", null, this.UsersLikedRecipes.map(recipe => {
-      /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_3__.Card, {
-        title: recipe.name
-      });
-    })));
+    }))))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1__.createElement("h2", {
+      style: {
+        marginLeft: "15vw",
+        marginTop: "5vw"
+      }
+    }, "Based on your likes you should like recipes with these types:"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1__.createElement("div", {
+      style: {
+        display: 'flex',
+        flexWrap: 'nowrap',
+        flexDirection: 'row',
+        justifyContent: 'center',
+        alignItems: 'center'
+      }
+    }, this.TypeRecommendedOnLikes.map(recipe => /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_3__.PreviewCard, {
+      small: true,
+      key: recipe.recipe_id,
+      name: recipe.type,
+      url: recipe.picture_url,
+      id: recipe.recipe_id
+    }))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1__.createElement("h2", {
+      style: {
+        marginLeft: "15vw",
+        marginTop: "5vw"
+      }
+    }, "Based on your likes you should like recipes with these Regions:"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1__.createElement("div", {
+      style: {
+        display: 'flex',
+        flexDirection: 'row',
+        justifyContent: 'center',
+        alignItems: 'center'
+      }
+    }, this.RegionRecommendedOnLikes.map(recipe => /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_3__.PreviewCard, {
+      small: true,
+      key: recipe.recipe_id,
+      name: recipe.region,
+      url: recipe.picture_url,
+      id: recipe.recipe_id
+    }))));
   }
   async mounted() {
     try {
@@ -41323,19 +41341,20 @@ class Home extends react_simplified__WEBPACK_IMPORTED_MODULE_2__.Component {
         recipes.map(async recipe => {
           let newrecipe = await _service_files_recipe_service__WEBPACK_IMPORTED_MODULE_5__["default"].get(recipe.recipe_id);
           this.RecipesThatWasLikedByUser.push(newrecipe);
+          let recomendedT = this.recipes.filter(recipe => recipe.type == newrecipe.type && recipe.recipe_id != newrecipe.recipe_id);
+          let recomendedR = this.recipes.filter(recipe => recipe.region == newrecipe.region && recipe.recipe_id != newrecipe.recipe_id);
+          recomendedR.map(R => {
+            if (this.RegionRecommendedOnLikes.length < 3) {
+              this.RegionRecommendedOnLikes.push(R);
+            }
+          });
+          recomendedT.map(T => {
+            if (this.TypeRecommendedOnLikes.length < 3) {
+              this.TypeRecommendedOnLikes.push(T);
+            }
+          });
         });
       }) : this.RecipesThatWasLikedByUser = [];
-      for (let i = 0; i < 2; i++) {
-        let index = Math.floor(this.recipes.length * Math.random());
-        let recipe = this.recipes[index];
-        if (!this.recipesToShow.find(rec => rec.recipe_id == recipe.recipe_id)) {
-          this.recipesToShow.push(recipe);
-        } else if (recipe.recipe_id == 1) {
-          this.recipesToShow.push(this.recipes[2]);
-        } else {
-          this.recipesToShow.push(this.recipes[index - 1]);
-        }
-      }
     } catch (error) {
       _widgets__WEBPACK_IMPORTED_MODULE_3__.Alert.danger('Error getting recipes: ' + error.message);
     }

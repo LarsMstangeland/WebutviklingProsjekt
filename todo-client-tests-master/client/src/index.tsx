@@ -2,7 +2,7 @@ import ReactDOM from 'react-dom';
 import * as React from 'react';
 import { Component } from 'react-simplified';
 import { HashRouter, Route } from 'react-router-dom';
-import { NavBar, InfoCard, Alert, PreviewCard, SlideShowCard, BootstrapPreviewCard, Button, Card } from './widgets';
+import { NavBar, InfoCard, Alert, PreviewCard, SlideShowCard, BootstrapPreviewCard, Button, Card, Row} from './widgets';
 import { RecipeList, RecipeDetails, RecipeEdit } from './component-files/recipe-components';
 import recipeService, { Recipe, Ingredient, IngredientName } from './service-files/recipe-service';
 import {NewUser, UserLogin} from './component-files/user-components';
@@ -21,7 +21,6 @@ class Menu extends Component {
         <NavBar brand="Food Junkies">
           <NavBar.Link left={false} to="/recipes">Recipes</NavBar.Link>
           <NavBar.Link left={false} to="/user/login">My Profile</NavBar.Link>
-          {/*<NavBar.Link left={true} to="/cart"><Button.Light left={true} small={true} onClick={() => {}}>Jeg vil være et icon</Button.Light></NavBar.Link>*/}
         </NavBar>
       </div>
     );
@@ -33,9 +32,14 @@ class Home extends Component {
   recipesToShow: Recipe[] = [];
   MostLikedRecipes: Recipe[] = []
   UsersLikedRecipes: LikedRecipe[] = []
-  RecipesThatWasLikedByUser: Recipe[] = [{recipe_id: 0, name: "", description: "", picture_url: "", region: "", type:""}]
+  RecipesThatWasLikedByUser: Recipe[] = []
   slidenr: number = 0
   CurrentlyInSlide: Recipe = {recipe_id: 0, name: "", description: "", picture_url: "", region: "", type:""}
+
+
+  TypeRecommendedOnLikes: Recipe[] = []
+  RegionRecommendedOnLikes: Recipe[] = []  
+
 
   /**@ts-ignore */
   timer: Timer = () => {}
@@ -43,31 +47,26 @@ class Home extends Component {
   hermansMetodeStartTheTimeout(){
     this.timer = setInterval(() => {
 
-      console.log(this.slidenr)
       this.slidenr == 4 ? this.slidenr = 0 : this.slidenr++;
       this.CurrentlyInSlide = this.MostLikedRecipes[this.slidenr]
 
     },5000);
   }
 
-  
+  filterOnRelated(ListToBeFilter: Recipe[], relation: string){
+    let RelatedToLiked: Recipe[] = [];
+
+    ListToBeFilter.map((LikedRecipe) => {
+      relation == 'region' ? RelatedToLiked = this.recipes.filter((recipe) => recipe.region == LikedRecipe.region): []
+      relation == 'type' ? RelatedToLiked = this.recipes.filter((recipe) => recipe.type == LikedRecipe.type): []
+    })
+    return RelatedToLiked
+  }
 
    render() {
     return (
       <div style={{ backgroundColor: '#f9f5f1' }}>
-        <div
-          style={{
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            backgroundColor: 'white',
-            padding: '1rem',
-          }}
-        >
-        <div style={{ margin: '4rem' }}>
-            <h1>Welcome to <span style={{ fontSize: '3rem', fontWeight: 'bold' }}>Food Junkies</span></h1>
-        </div>
-        </div>
+        <h1 style={{marginLeft:"35vw", height:"30vh", width:"30vw", position:'relative', top:'5vh'}}>Welcome to <span style={{ fontSize: '3rem', fontWeight: 'bold' }}>Food Junkies</span></h1>
         <div
           style={{
             display: 'flex',
@@ -77,7 +76,6 @@ class Home extends Component {
             alignItems: 'center',
           }}>
           <SlideShowCard recipe={this.CurrentlyInSlide}>
-          <div style={{left: "80%", top: "80%"}}>
             <Button.Light onClick={() => {
               //onlick slide should increment and re-define the recipe to be shown
               this.slidenr == 0 ? this.slidenr = 4: this.slidenr--
@@ -101,10 +99,35 @@ class Home extends Component {
               <path fillRule="evenodd" d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 0 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8z"/>
               </svg>
             </Button.Light>
-          </div>
           </SlideShowCard>
-        </div>        
-      </div>
+        </div>
+        <h2 style={{marginLeft:"15vw", marginTop:"5vw"}}>Based on your likes you should like recipes with these types:</h2>
+        <div
+        style={{
+            display: 'flex',
+            flexWrap: 'nowrap',
+            flexDirection: 'row',
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}>
+          {this.TypeRecommendedOnLikes.map((recipe) => (
+            <PreviewCard small key={recipe.recipe_id} name={recipe.type} url={recipe.picture_url} id={recipe.recipe_id}></PreviewCard>
+          ))}
+            
+          </div>
+          <h2 style={{marginLeft:"15vw", marginTop:"5vw"}} >Based on your likes you should like recipes with these Regions:</h2>
+          <div
+        style={{
+            display: 'flex',
+            flexDirection: 'row',
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}>
+                {this.RegionRecommendedOnLikes.map((recipe) => (
+                <PreviewCard small key={recipe.recipe_id} name={recipe.region} url={recipe.picture_url} id={recipe.recipe_id}></PreviewCard>
+              ))}
+          </div>
+        </div>
     );
   }
 
@@ -131,28 +154,33 @@ class Home extends Component {
 
       this.hermansMetodeStartTheTimeout();
 
-
       userData? (
         await userService.getLikedRecipesForUser(userData.user_id).then((recipes) => {
           recipes.map(async (recipe) => {
-    
             let newrecipe = await recipeService.get(recipe.recipe_id)
             this.RecipesThatWasLikedByUser.push(newrecipe)
+
+
+            let recomendedT = this.recipes.filter((recipe) => recipe.type == newrecipe.type && recipe.recipe_id != newrecipe.recipe_id)
+            let recomendedR = this.recipes.filter((recipe) => recipe.region == newrecipe.region && recipe.recipe_id != newrecipe.recipe_id)
+
+
+
+            recomendedR.map((R) => {
+              if(this.RegionRecommendedOnLikes.length < 3){
+                this.RegionRecommendedOnLikes.push(R)
+              }
+            })
+            recomendedT.map((T) => {
+              if(this.TypeRecommendedOnLikes.length < 3){
+                this.TypeRecommendedOnLikes.push(T)
+              }
+            })
           })
         })
-        ) : this.RecipesThatWasLikedByUser = [{recipe_id: 0, name: "", description: "", picture_url: "", region: "", type:""}];
+        ) : this.RecipesThatWasLikedByUser = [];
 
-      for(let i = 0; i < 2; i++){
-        let index = Math.floor(this.recipes.length * Math.random())
-        let recipe = this.recipes[index];
-        if(!this.recipesToShow.find(rec => rec.recipe_id == recipe.recipe_id)){
-          this.recipesToShow.push(recipe)
-        } else if(recipe.recipe_id == 1){
-          this.recipesToShow.push(this.recipes[2])
-        } else{
-          this.recipesToShow.push(this.recipes[index - 1])
-        }
-      }
+ 
     } catch (error: any){
       Alert.danger('Error getting recipes: ' + error.message)
     }
