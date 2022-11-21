@@ -2,7 +2,7 @@
 
 ## Setup database connections
 
-The database connections should already set up in our config files. However these are `.gitignored` and will not show up if the repo is cloned from github. But they will be defined in this repo if you have gained access via, file sharing/zipping. The needed info will be in the server/config.ts file. You will also need to install bcrypt to support hashing passwords. We decided to keep these node_module files to make it easier for configuration and usage.
+The database connections should already set up in our config files. However these are `.gitignored` and will not show up if the repo is cloned from github. But they will be defined in this repo if you have gained access via, file sharing/zipping. The needed info will be in the server/config.ts file. You might also need to install bcrypt to support hashing passwords. We decided to keep these node_module files to make it easier for configuration and usage.
 
 `server/config.ts`:
 

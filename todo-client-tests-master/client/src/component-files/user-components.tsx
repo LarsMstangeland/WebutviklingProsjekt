@@ -39,6 +39,7 @@ export class UserLogin extends Component {
   //the user-object that gets altered with the input-fields
   user: User = { user_id: 0, username: '', password: '', admin: false };
 
+  //different variables to store data from db and during operations
   cart: CartItem[] = [];
   CartItemsToShow: CartItem[] = [];
   ingredients: Ingredient[] = [];
@@ -59,13 +60,24 @@ export class UserLogin extends Component {
   recipes: Recipe[] = [];
   recipeIngredients: RecipeToIngredient[] = [];
 
+  //filter function used to match an array of ingredients to different recipes
   filterFridge() {
     let filteredRecipes: Recipe[] = [];
+    //Iterating the current fridge content
     for (let i = 0; i < this.fridgeIngredients.length; i++) {
+
+      //within the first iterarsjon we start running through all the recipes
       if (i == 0) {
         for (let j = 0; j < this.recipes.length; j++) {
+
+          //define recipe id for all ingredients
           let recipeId = this.recipes[j].recipe_id;
+
+          //filter ingredients based on the many to many connection from recipes to ingredients table
+          //where we look for a array that matches a spesific recipe id
           let ingredients = this.recipeIngredients.filter((row) => row.recipe_id == recipeId);
+
+          //loop the ingredients fetched and then 
           for (let k = 0; k < ingredients.length; k++) {
             if (ingredients[k].ingredients_id == this.fridgeIngredients[i].ingredients_id) {
               filteredRecipes.push(this.recipes[j]);

@@ -5095,6 +5095,8 @@ class UserLogin extends react_simplified__WEBPACK_IMPORTED_MODULE_1__.Component 
     password: '',
     admin: false
   };
+
+  //different variables to store data from db and during operations
   cart = [];
   CartItemsToShow = [];
   ingredients = [];
@@ -5120,13 +5122,23 @@ class UserLogin extends react_simplified__WEBPACK_IMPORTED_MODULE_1__.Component 
   };
   recipes = [];
   recipeIngredients = [];
+
+  //filter function used to match an array of ingredients to different recipes
   filterFridge() {
     let filteredRecipes = [];
+    //Iterating the current fridge content
     for (let i = 0; i < this.fridgeIngredients.length; i++) {
+      //within the first iterarsjon we start running through all the recipes
       if (i == 0) {
         for (let j = 0; j < this.recipes.length; j++) {
+          //define recipe id for all ingredients
           let recipeId = this.recipes[j].recipe_id;
+
+          //filter ingredients based on the many to many connection from recipes to ingredients table
+          //where we look for a array that matches a spesific recipe id
           let ingredients = this.recipeIngredients.filter(row => row.recipe_id == recipeId);
+
+          //loop the ingredients fetched and then 
           for (let k = 0; k < ingredients.length; k++) {
             if (ingredients[k].ingredients_id == this.fridgeIngredients[i].ingredients_id) {
               filteredRecipes.push(this.recipes[j]);
@@ -5743,7 +5755,6 @@ const utilityService = new UtilityService();
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "Alert": () => (/* binding */ Alert),
-/* harmony export */   "BootstrapPreviewCard": () => (/* binding */ BootstrapPreviewCard),
 /* harmony export */   "Button": () => (/* binding */ Button),
 /* harmony export */   "Card": () => (/* binding */ Card),
 /* harmony export */   "Column": () => (/* binding */ Column),
@@ -5784,6 +5795,13 @@ class Card extends react_simplified__WEBPACK_IMPORTED_MODULE_1__.Component {
     }, this.props.children)));
   }
 }
+
+/**
+ * Renders a SlideShowCard to display recipes
+ * 
+ * Propperties: Recipe
+ */
+
 class SlideShowCard extends react_simplified__WEBPACK_IMPORTED_MODULE_1__.Component {
   render() {
     return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", {
@@ -5853,6 +5871,13 @@ class SlideShowCard extends react_simplified__WEBPACK_IMPORTED_MODULE_1__.Compon
     }, this.props.children)))));
   }
 }
+
+/**
+ * Renders a PreviewCard to display recipes-images
+ * 
+ * Propperties: Recipe-parameters
+ */
+
 class PreviewCard extends react_simplified__WEBPACK_IMPORTED_MODULE_1__.Component {
   render() {
     return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", {
@@ -5907,29 +5932,6 @@ class PreviewCard extends react_simplified__WEBPACK_IMPORTED_MODULE_1__.Componen
         borderRadius: '10px'
       }
     }))));
-  }
-}
-class BootstrapPreviewCard extends react_simplified__WEBPACK_IMPORTED_MODULE_1__.Component {
-  render() {
-    return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", {
-      className: "card",
-      style: {
-        width: '18rem;'
-      }
-    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("img", {
-      src: "https://i.guim.co.uk/img/media/26392d05302e02f7bf4eb143bb84c8097d09144b/446_167_3683_2210/master/3683.jpg?width=1200&quality=85&auto=format&fit=max&s=a52bbe202f57ac0f5ff7f47166906403",
-      className: "card-img-top",
-      alt: "..."
-    }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", {
-      className: "card-body"
-    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("h5", {
-      className: "card-title"
-    }, "Card title"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("p", {
-      className: "card-text"
-    }, "Some quick example text to build on the card title and make up the bulk of the card's content."), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("a", {
-      href: "#",
-      className: "btn btn-primary"
-    }, "Go somewhere")));
   }
 }
 
@@ -41148,6 +41150,9 @@ class Menu extends react_simplified__WEBPACK_IMPORTED_MODULE_2__.Component {
   }
 }
 class Home extends react_simplified__WEBPACK_IMPORTED_MODULE_2__.Component {
+  //different variables that are used for storing 
+  //our db-results
+
   recipes = [];
   recipesToShow = [];
   MostLikedRecipes = [];
@@ -41167,19 +41172,16 @@ class Home extends react_simplified__WEBPACK_IMPORTED_MODULE_2__.Component {
 
   /**@ts-ignore */
   timer = () => {};
+
+  //defined function for starting the 5s timer
+  //automatically controlling slides
   hermansMetodeStartTheTimeout() {
     this.timer = setInterval(() => {
+      //resets slide nr back down to 0 when it hits 4
+      //range 0-4 gives 5 slides
       this.slidenr == 4 ? this.slidenr = 0 : this.slidenr++;
       this.CurrentlyInSlide = this.MostLikedRecipes[this.slidenr];
     }, 5000);
-  }
-  filterOnRelated(ListToBeFilter, relation) {
-    let RelatedToLiked = [];
-    ListToBeFilter.map(LikedRecipe => {
-      relation == 'region' ? RelatedToLiked = this.recipes.filter(recipe => recipe.region == LikedRecipe.region) : [];
-      relation == 'type' ? RelatedToLiked = this.recipes.filter(recipe => recipe.type == LikedRecipe.type) : [];
-    });
-    return RelatedToLiked;
   }
   render() {
     return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1__.createElement("div", {
@@ -41214,6 +41216,9 @@ class Home extends react_simplified__WEBPACK_IMPORTED_MODULE_2__.Component {
         //onlick slide should increment and re-define the recipe to be shown
         this.slidenr == 0 ? this.slidenr = 4 : this.slidenr--;
         this.CurrentlyInSlide = this.MostLikedRecipes[this.slidenr];
+
+        //clear the interval so the slide does not
+        //switch right after being updated with manual
         clearInterval(this.timer);
         this.hermansMetodeStartTheTimeout();
       }
@@ -41228,7 +41233,7 @@ class Home extends react_simplified__WEBPACK_IMPORTED_MODULE_2__.Component {
       d: "M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8z"
     }))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_3__.Button.Light, {
       onClick: () => {
-        //onlick slide should increment and re-define the recipe to be shown
+        //same function as above, just the other way 
         this.slidenr == 4 ? this.slidenr = 0 : this.slidenr++;
         this.CurrentlyInSlide = this.MostLikedRecipes[this.slidenr];
         clearInterval(this.timer);
@@ -41244,7 +41249,10 @@ class Home extends react_simplified__WEBPACK_IMPORTED_MODULE_2__.Component {
     }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1__.createElement("path", {
       fillRule: "evenodd",
       d: "M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 0 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8z"
-    }))))), userData ? /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1__.createElement("div", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1__.createElement("h2", {
+    }))))),
+    //checks if a user i logged in and generates the rest of
+    //the site based on that, if not the user gets fitting response to log in
+    userData ? /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1__.createElement("div", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1__.createElement("h2", {
       style: {
         marginLeft: "15vw",
         marginTop: "5vw"
@@ -41257,7 +41265,13 @@ class Home extends react_simplified__WEBPACK_IMPORTED_MODULE_2__.Component {
         justifyContent: 'center',
         alignItems: 'center'
       }
-    }, this.TypeRecommendedOnLikes.length > 0 ? this.TypeRecommendedOnLikes.map(recipe => /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_3__.PreviewCard, {
+    }, this.TypeRecommendedOnLikes.length > 0 ? this.TypeRecommendedOnLikes.map(recipe =>
+    /*#__PURE__*/
+    //runs through a defined array to show what recipes a user could try out
+    //this defined array is based on likes and utilizes the type of dish
+    //Also checks to see if the array is empty
+    //And gives a response based on that
+    react__WEBPACK_IMPORTED_MODULE_1__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_3__.PreviewCard, {
       small: true,
       key: recipe.recipe_id,
       name: recipe.type,
@@ -41275,7 +41289,12 @@ class Home extends react_simplified__WEBPACK_IMPORTED_MODULE_2__.Component {
         justifyContent: 'center',
         alignItems: 'center'
       }
-    }, this.RegionRecommendedOnLikes.length > 0 ? this.RegionRecommendedOnLikes.map(recipe => /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_3__.PreviewCard, {
+    }, this.RegionRecommendedOnLikes.length > 0 ? this.RegionRecommendedOnLikes.map(recipe =>
+    /*#__PURE__*/
+    //runs through a defined array to show what recipes a user could try out
+    //this defined array is based on likes and utilizes the type of dish. Also checks to see if the array is empty
+    //And gives a response based on that
+    react__WEBPACK_IMPORTED_MODULE_1__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_3__.PreviewCard, {
       small: true,
       key: recipe.recipe_id,
       name: recipe.region,
@@ -41286,7 +41305,7 @@ class Home extends react_simplified__WEBPACK_IMPORTED_MODULE_2__.Component {
         marginLeft: "35vw",
         marginTop: "5vw"
       }
-    }, "Log in to view many more things!"));
+    }, "Log in to view more!"));
   }
   async mounted() {
     try {
@@ -41308,12 +41327,21 @@ class Home extends react_simplified__WEBPACK_IMPORTED_MODULE_2__.Component {
       //initiialize the first slide and start timer
       this.CurrentlyInSlide = this.MostLikedRecipes[this.slidenr];
       this.hermansMetodeStartTheTimeout();
+
+      //checks if the user is logged in and then fetches the liked recipe id's from the user
       userData ? await _service_files_user_service__WEBPACK_IMPORTED_MODULE_7__["default"].getLikedRecipesForUser(userData.user_id).then(recipes => {
+        //Uses these recipe id's to the get full recipe object
+        //and then pushes it into a array
         recipes.map(async recipe => {
           let newrecipe = await _service_files_recipe_service__WEBPACK_IMPORTED_MODULE_5__["default"].get(recipe.recipe_id);
           this.RecipesThatWasLikedByUser.push(newrecipe);
+
+          //uses the new recipe objekt to filter on this.recipes which is all the recipes in the db
+          //Filtering for both region and type to recommend for user
           let recomendedType = this.recipes.filter(recipe => recipe.type == newrecipe.type && recipe.recipe_id != newrecipe.recipe_id);
           let recomendedRegion = this.recipes.filter(recipe => recipe.region == newrecipe.region && recipe.recipe_id != newrecipe.recipe_id);
+
+          //make it so no more than 3 recipes can be recommended
           recomendedRegion.map(RegionRecipe => {
             if (this.RegionRecommendedOnLikes.length < 3) {
               this.RegionRecommendedOnLikes.push(RegionRecipe);

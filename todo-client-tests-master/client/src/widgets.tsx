@@ -24,6 +24,11 @@ export class Card extends Component<{ title: ReactNode; inline?: boolean; style?
   }
 }
 
+/**
+ * Renders a SlideShowCard to display recipes
+ * 
+ * Propperties: Recipe
+ */
 
 export class SlideShowCard extends Component<{
   recipe: Recipe
@@ -78,11 +83,16 @@ export class SlideShowCard extends Component<{
             </div>
           </div>
         </Card>
-
       </div>
     )
   }
 }
+
+/**
+ * Renders a PreviewCard to display recipes-images
+ * 
+ * Propperties: Recipe-parameters
+ */
 
 export class PreviewCard extends Component<{
   name: string;
@@ -141,30 +151,6 @@ export class PreviewCard extends Component<{
             />
           </div>
         </NavLink>
-      </div>
-    );
-  }
-}
-
-export class BootstrapPreviewCard extends Component<{}> {
-  render() {
-    return (
-      <div className="card" style={{ width: '18rem;' }}>
-        <img
-          src="https://i.guim.co.uk/img/media/26392d05302e02f7bf4eb143bb84c8097d09144b/446_167_3683_2210/master/3683.jpg?width=1200&quality=85&auto=format&fit=max&s=a52bbe202f57ac0f5ff7f47166906403"
-          className="card-img-top"
-          alt="..."
-        ></img>
-        <div className="card-body">
-          <h5 className="card-title">Card title</h5>
-          <p className="card-text">
-            Some quick example text to build on the card title and make up the bulk of the card's
-            content.
-          </p>
-          <a href="#" className="btn btn-primary">
-            Go somewhere
-          </a>
-        </div>
       </div>
     );
   }
