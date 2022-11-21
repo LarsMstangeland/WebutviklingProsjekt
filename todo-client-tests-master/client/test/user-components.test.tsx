@@ -36,6 +36,13 @@ jest.mock('../src/service-files/user-service', () => {
                 {recipe_id : 2, name : 'chicken'}
             ]);
         }
+
+        getLikedRecipesForUser() {
+            return Promise.resolve([
+                {recipe_id : 1, name : 'kyllinggryte'},
+                {recipe_id : 2, name : 'løvegryte'},
+            ]);
+        }
         removeLikedRecipe() {
             return Promise.resolve();
         }
@@ -142,6 +149,7 @@ jest.mock('../src/service-files/recipe-service', () => {
             ]);
         }
     }
+    return new RecipeService();
 })
 
 beforeEach(() => {
@@ -192,7 +200,7 @@ describe('Testing NewUser-component', () => {
             ])).toEqual(true);
         });
 
-        //@ts-ignore
+//       //@ts-ignore
         wrapper.find(Form.Input).at(0).simulate('change', {currentTarget : {value : 'vetleek'}});                
         //@ts-ignore
         expect(wrapper.containsMatchingElement(<Form.Input type="text" value="vetleek"></Form.Input>)).toEqual(true);
@@ -244,6 +252,24 @@ describe('Testing NewUser-component', () => {
         done();
     });
 
+    test('Alerts wrong username on login', (done) => {
+        const wrapper = shallow(<NewUser></NewUser>);
+
+        setTimeout(() => {
+            wrapper.find(Form.Input).at(1).simulate('change', {currentTarget : {value : 'javsnvdjkv' }});
+            wrapper.find(Button.Success).simulate('click');
+         expect(wrapper.containsAllMatchingElements([    
+            <div>
+                <div>
+            Wrong username or password. Try again
+              <button />
+            </div>
+          </div>          
+         ])).toEqual(true);
+        });
+        done();
+    });
+
 });
 
 
@@ -260,22 +286,80 @@ describe('Testing UserLogin-component', () => {
         });
 
         setTimeout(() => {
-            wrapper.find(Button.Danger).at(1).simulate('click');
+            wrapper.find(Button.Danger).at(0).simulate('click');
             expect(location.hash).toEqual('#/user/login/');   
         })
         done();
     });
 
-    test('Fucked up test that should fail', (done) => {
+
+    test('Alert draws correctly when username is already taken', () => {
+        const wrapper = shallow(<NewUser></NewUser>);
+
+        setTimeout(() => {
+            wrapper.find(Form.Input).at(0).simulate('change', {currentTarget : {value : 'tevle'}});
+            
+            expect(wrapper.containsMatchingElement(
+                <div>
+            <div>
+            Username already exists. Try another one
+              <button />
+            </div>
+          </div>
+            ))
+        });
+    })
+
+//     test('Liked recipes are drawn correctly', (done) => {
+
+//         const wrapper = shallow(<UserLogin></UserLogin>);
+
+//         setTimeout(() => {
+//             expect(wrapper.containsAllMatchingElements([
+//                 //@ts-ignore
+//                 <Row key={1}><NavLink>
+//                 <Column>kyllinggryte</Column>
+//               </NavLink></Row>,
+//                 //@ts-ignore
+//               <Row key={2}><NavLink>
+//               <Column>løvegryte</Column>
+//             </NavLink></Row>
+//             ]));
+//             done();
+//         });
+//     });
+
+
+    test('Button create user sets correct location', (done) => {
+
+        const wrapper = shallow(<UserLogin></UserLogin>);
+
+        
+        setTimeout(() => {
+            wrapper.find(Button.Light).at(0).simulate('click');
+            expect(location.hash).toEqual('#/user/create/');   
+        });
+        done();
+    });
+
+    test('Likedrecepies are correctly drawn', (done) => {
+
         const wrapper = shallow(<UserLogin></UserLogin>);
 
         setTimeout(() => {
-            expect(wrapper.containsMatchingElement(
-                <NewUser></NewUser>
-           )).toEqual(true);
+            expect(wrapper.containsAllMatchingElements([
+                <Row key={1}>
+                        <NavLink>
+                          <Column>kyllinggryte</Column>
+                        </NavLink>
+                      </Row>,
+                      <Row key={2}>
+                      <NavLink>
+                        <Column>løvegryte</Column>
+                      </NavLink>
+                    </Row>
+            ])).toEqual(true);
         });
         done();
     })
-
-
 });
