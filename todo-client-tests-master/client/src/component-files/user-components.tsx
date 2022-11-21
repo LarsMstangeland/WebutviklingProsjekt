@@ -432,7 +432,7 @@ export class UserLogin extends Component {
       this.ingredients = ingredients;
 
       if (this.userData) {
-        let likedRecipes = await userService.getLikedRecipes(this.userData.user_id);
+        let likedRecipes = await userService.getLikedRecipesForUser(this.userData.user_id);
         this.likedRecipes = likedRecipes;
 
         try {
@@ -473,59 +473,69 @@ export class NewUser extends Component {
         >
           <Card title="Create new user">
             <Row>
-                            <Column>
-                                Username: 
-                                <Form.Input 
-                                type="text" 
-                                value={this.user.username} 
-                                onChange={(event)=>{
-                                    this.user.username = event.currentTarget.value;
-                                }}></Form.Input>
-                            </Column>
-                        </Row>
-                        <Row>
-                            <Column>
-                                Password:
-                                <Form.Input
-                                type="password" 
-                                value={this.user.password} 
-                                onChange={(event)=>{
-                                    this.user.password = event.currentTarget.value;
-                                }}></Form.Input>
-                            </Column>
-                        </Row>
-                        <Row>
-                            <Column>
-                                Confirm password:
-                                <Form.Input 
-                                type="password" 
-                                value={this.passwordCheck} 
-                                onChange={(event)=>{
-                                    this.passwordCheck = event.currentTarget.value;
-                                }}></Form.Input>
-                            </Column>
-                        </Row>
-                        <Row>
-                            <Column>
-                            Admin: {' '}
-                            <Form.Checkbox checked={this.user.admin} onChange={()=> {
-                                this.user.admin == false ? this.user.admin = true : this.user.admin = false;
-                            }
-                            }></Form.Checkbox>
-                            </Column>
-                        </Row>
-                        <Row>
-                            <Column>
-                            <Button.Success onClick={async ()=>{
-                                if(!this.users.find(u => u.username == this.user.username)){
-                                    if(this.user.password == this.passwordCheck){
-                                        if(this.user.password != ''){
-                                            if(this.user.username != ''){
-                                                let hashPassword : string = await generateHash(this.user.password)
-                                                await userService.create(hashPassword, this.user.username, this.user.admin) 
-                                                 let u = await userService.get(this.user.username)
-                                                 this.user = u       
-                                                 sessionStorage.setItem('user', JSON.stringify(this.user));
+              <Column>
+                Username:
+                <Form.Input
+                  type="text"
+                  value={this.user.username}
+                  onChange={(event) => {
+                    this.user.username = event.currentTarget.value;
+                  }}
+                ></Form.Input>
+              </Column>
+            </Row>
+            <Row>
+              <Column>
+                Password:
+                <Form.Input
+                  type="password"
+                  value={this.user.password}
+                  onChange={(event) => {
+                    this.user.password = event.currentTarget.value;
+                  }}
+                ></Form.Input>
+              </Column>
+            </Row>
+            <Row>
+              <Column>
+                Confirm password:
+                <Form.Input
+                  type="password"
+                  value={this.passwordCheck}
+                  onChange={(event) => {
+                    this.passwordCheck = event.currentTarget.value;
+                  }}
+                ></Form.Input>
+              </Column>
+            </Row>
+            <Row>
+              <Column>
+                Admin:{' '}
+                <Form.Checkbox
+                  checked={this.user.admin}
+                  onChange={() => {
+                    this.user.admin == false ? (this.user.admin = true) : (this.user.admin = false);
+                  }}
+                ></Form.Checkbox>
+              </Column>
+            </Row>
+            <Row>
+              <Column>
+                <Button.Success
+                  onClick={async () => {
+                    if (!this.users.find((u) => u.username == this.user.username)) {
+                      if (this.user.password == this.passwordCheck) {
+                        if (this.user.password != '') {
+                          if (this.user.username != '') {
+                            let hashPassword: string = await generateHash(this.user.password);
+                            await userService.create(
+                              hashPassword,
+                              this.user.username,
+                              this.user.admin
+                            );
+                            let u = await userService.get(this.user.username);
+                            this.user = u;
+                            sessionStorage.setItem('user', JSON.stringify(this.user));
 
                             // sets created to be true and then pushes to the UserLogin component. The UserLogin component will then be refreshed with the if-sentence on line 153
                             created = true;

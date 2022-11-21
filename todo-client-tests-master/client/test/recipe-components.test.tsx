@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { RecipeList, RecipeDetails, RecipeEdit } from '../src/component-files/recipe-components';
 import { shallow } from 'enzyme';
-import { Form, Button, PreviewCard } from '../src/widgets';
+import { Form, Button, PreviewCard, Column, Alert } from '../src/widgets';
 import { NavLink } from 'react-router-dom';
 
 jest.mock('../src/service-files/recipe-service', () => {
@@ -47,7 +47,19 @@ jest.mock('../src/service-files/recipe-service', () => {
     }
 
     getRecipeIngredients() {
-      return Promise.resolve([]);
+      return Promise.resolve([
+        { ingredients_id: 1, name: 'water', amount: '1', unit: 'dl' },
+        { ingredients_id: 2, name: 'chicken', amount: '200', unit: 'g' },
+      ]);
+    }
+
+    getAllIngredients() {
+      return Promise.resolve([
+        { ingredients_id: 1, name: 'water' },
+        { ingredients_id: 2, name: 'chicken' },
+        { ingredients_id: 3, name: 'chili' },
+        { ingredients_id: 4, name: 'pepper' },
+      ]);
     }
   }
   return new RecipeService();
@@ -67,6 +79,13 @@ jest.mock('../src/service-files/utility-service.tsx', () => {
         { id: 1, name: 'Beef' },
         { id: 2, name: 'Pork' },
         { id: 3, name: 'Vegatarian' },
+      ]);
+    }
+
+    getAllUnits() {
+      return Promise.resolve([
+        { id: 1, unit: 'dl' },
+        { id: 2, unit: 'g' },
       ]);
     }
   }
@@ -108,36 +127,6 @@ describe('RecipeList tests', () => {
     });
     done();
   });
-  /*test('RecipeList draws correctly', (done) => {
-    const wrapper = shallow(<RecipeList />);
-
-    // Wait for events to complete
-    setTimeout(() => {
-      expect(
-        wrapper.containsAllMatchingElements([
-          <NavLink to="/recipe/1">Hotdog</NavLink>,
-          <NavLink to="/recipe/2">Hamburger</NavLink>,
-          <NavLink to="/recipe/3">Pizza</NavLink>,
-        ])
-      ).toEqual(true);
-      done();
-    });
-  });
-
-  test('TaskNew correctly sets location on create', (done) => {
-    const wrapper = shallow(<RecipeDetails match={{ params: { id: 1 } }} />);
-
-    wrapper.find(Form.Input).simulate('change', { currentTarget: { value: 'Kaffepause' } });
-    // @ts-ignore
-    expect(wrapper.containsMatchingElement(<Form.Input value="Kaffepause" />)).toEqual(true);
-
-    wrapper.find(Button.Success).simulate('click');
-    // Wait for events to complete
-    setTimeout(() => {
-      expect(location.hash).toEqual('#/tasks/4');
-      done();
-    });
-  });*/
 });
 
 describe('RecipeDetails tests', () => {
@@ -147,32 +136,66 @@ describe('RecipeDetails tests', () => {
     expect(wrapper).toMatchSnapshot();
   });
 
-  test('Region input filters correct', (done) => {
-    const wrapper = shallow(<RecipeList />);
+  test('RecipeDetails draws correctly when not logged in', (done) => {
+    const wrapper = shallow(<RecipeDetails match={{ params: { id: 2 } }} />);
 
     setTimeout(() => {
       expect(
         wrapper.containsAllMatchingElements([
+          <h2>Hamburger</h2>,
+          <div>
+            <p>Region:</p>
+            <p>Asia</p>
+          </div>,
+          <div>
+            <p>Type:</p>
+            <p>Beef</p>
+          </div>,
+          <div>
+            <p>Description:</p>
+            <p>Digg</p>
+          </div>,
           <PreviewCard id={1} url="" name="Hotdog"></PreviewCard>,
-          <PreviewCard id={2} url="" name="Hamburger"></PreviewCard>,
           <PreviewCard id={3} url="" name="Pizza"></PreviewCard>,
         ])
       ).toEqual(true);
     });
 
-    wrapper
-      .find(Form.Input)
-      .at(0)
-      .simulate('change', { currentTarget: { value: 'Asia' } });
+    wrapper.find(Button.Success).at(0).simulate('click');
+
+    expect(
+      wrapper.containsMatchingElement(
+        <div>
+          Log in to like a recipe
+          <button />
+        </div>
+      )
+    );
+
+    done();
+  });
+
+  test('RecipeDetails draws correctly when logged in', (done) => {
+    const wrapper = shallow(<RecipeDetails match={{ params: { id: 2 } }} />);
+
+    const userData = { user_id: 1, username: 'larsy', password: 'larserkul', admin: true };
+    window.sessionStorage.setItem('user', JSON.stringify(userData));
+
+    wrapper.find(Button.Success).at(0).simulate('click');
 
     setTimeout(() => {
       expect(
-        wrapper.containsAllMatchingElements([
-          <PreviewCard id={2} url="" name="Hamburger"></PreviewCard>,
-          <PreviewCard id={3} url="" name="Pizza"></PreviewCard>,
-        ])
-      ).toEqual(true);
+        wrapper.containsAllMatchingElements(
+          //@ts-ignore
+          <Button.Danger>Unlike</Button.Danger>,
+          //@ts-ignore
+          <Button.Danger>Delete</Button.Danger>,
+          //@ts-ignore
+          <Button.Success>Edit</Button.Success>
+        )
+      );
     });
+
     done();
   });
 });
@@ -183,4 +206,148 @@ describe('RecipeEdit tests', () => {
 
     expect(wrapper).toMatchSnapshot();
   });
+
+  test('RecipeEdit draws correctly', (done) => {
+    const wrapper = shallow(<RecipeEdit match={{ params: { id: 2 } }} />);
+
+    setTimeout(() => {
+      expect(
+        wrapper.containsAllMatchingElements([
+          <h2>Hamburger</h2>,
+          //@ts-ignore
+          <Form.Input value="Hamburger"></Form.Input>,
+          //@ts-ignore
+          <Form.Select value="Asia"></Form.Select>,
+          //@ts-ignore
+          <Form.Select value="Beef"></Form.Select>,
+          //@ts-ignore
+          <Form.Textarea value="Digg"></Form.Textarea>,
+          <Column>Water</Column>,
+          //@ts-ignore
+          <Form.Input value="1"></Form.Input>,
+          //@ts-ignore
+          <Form.Select value="dl"></Form.Select>,
+          <Column>Chicken</Column>,
+          //@ts-ignore
+          <Form.Input value="200"></Form.Input>,
+          //@ts-ignore
+          <Form.Select value="g"></Form.Select>,
+        ])
+      ).toEqual(true);
+    });
+
+    done();
+  });
+
+  test('RecipeEdit add ingredient to recipe', (done) => {
+    const wrapper = shallow(<RecipeEdit match={{ params: { id: 2 } }} />);
+
+    setTimeout(() => {
+      expect(
+        wrapper.containsAllMatchingElements([
+          <Column>Water</Column>,
+          //@ts-ignore
+          <Form.Input value="1"></Form.Input>,
+          //@ts-ignore
+          <Form.Select value="dl"></Form.Select>,
+          <Column>Chicken</Column>,
+          //@ts-ignore
+          <Form.Input value="200"></Form.Input>,
+          //@ts-ignore
+          <Form.Select value="g"></Form.Select>,
+        ])
+      ).toEqual(true);
+    });
+
+    wrapper
+      .find(Form.Input)
+      .at(2)
+      .simulate('change', { currentTarget: { value: 'chi' } });
+
+    setTimeout(() => {
+      expect(
+        wrapper.containsMatchingElement(
+          <datalist>
+            <option value={'chicken'}>chicken</option>
+            <option value={'chili'}>chili</option>
+          </datalist>
+        )
+      ).toEqual(true);
+    });
+
+    wrapper
+      .find(Form.Input)
+      .at(2)
+      .simulate('change', { currentTarget: { value: 'rice' } });
+    wrapper
+      .find(Form.Input)
+      .at(3)
+      .simulate('change', { currentTarget: { value: '100' } });
+    wrapper
+      .find(Form.Select)
+      .at(2)
+      .simulate('change', { currentTarget: { value: 'g' } });
+    wrapper.find(Button.Light).at(0).simulate('click');
+
+    setTimeout(() => {
+      expect(
+        wrapper.containsAllMatchingElements([
+          <Column>Water</Column>,
+          //@ts-ignore
+          <Form.Input value="1"></Form.Input>,
+          //@ts-ignore
+          <Form.Select value="dl"></Form.Select>,
+          <Column>Chicken</Column>,
+          //@ts-ignore
+          <Form.Input value="200"></Form.Input>,
+          //@ts-ignore
+          <Form.Select value="g"></Form.Select>,
+          <Column>Rice</Column>,
+          //@ts-ignore
+          <Form.Input value="100"></Form.Input>,
+          //@ts-ignore
+          <Form.Select value="g"></Form.Select>,
+        ])
+      ).toEqual(true);
+    });
+
+    setTimeout(() => {
+      expect(
+        wrapper.containsAllMatchingElements(
+          //@ts-ignore
+          <Button.Danger>Unlike</Button.Danger>,
+          //@ts-ignore
+          <Button.Danger>Delete</Button.Danger>,
+          //@ts-ignore
+          <Button.Success>Edit</Button.Success>
+        )
+      );
+    });
+
+    done();
+  });
+
+  test('RecipeEdit sets correct location after save', (done) => {
+    const wrapper = shallow(<RecipeEdit match={{ params: { id: 2 } }} />);
+
+    wrapper.find(Button.Success).simulate('click');
+
+    setTimeout(() => {
+      expect(location.hash).toEqual('#/recipes/2');
+    });
+
+    done();
+  });
+
+  /*test('Delete and add ingredient to recipe', (done) => {
+    const wrapper = shallow(<RecipeEdit match={{ params: { id: 2 } }} />);
+
+    wrapper.find(Button.Danger).at(0).simulate('click');
+
+    setTimeout(() => {
+      wrapper.containsMatchingElement(Button.Success)
+    });
+
+    done();
+  });*/
 });

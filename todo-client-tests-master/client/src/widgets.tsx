@@ -2,6 +2,8 @@ import * as React from 'react';
 import { ReactNode, ChangeEvent } from 'react';
 import { Component } from 'react-simplified';
 import { NavLink } from 'react-router-dom';
+import { Recipe } from './service-files/recipe-service';
+
 //import { pizzaIcon } from './assets/pizza-icon.png';
 
 /**
@@ -19,6 +21,79 @@ export class Card extends Component<{ title: ReactNode; inline?: boolean; style?
         </div>
       </div>
     );
+  }
+}
+
+export class InfoCard extends Card{
+
+  render(){
+    return(
+      <Card title={this.props.children}>
+        
+        <div style={{height:"550px", border: "2px solid black"}}></div>
+        dette er et infocard
+        
+        </Card>
+    )
+  }
+}
+
+export class SlideShowCard extends Component<{
+  recipe: Recipe
+}>{
+  render(){
+    return(
+        <div style={{ margin: '1rem', borderRadius: "0.5rem", display: 'flex', flexDirection: 'row'}}>
+        <NavLink to={'recipes/' + this.props.recipe.recipe_id}>
+          <div style={{ display: 'flex', position: 'relative' }}>
+            <h2 style={{
+              position: 'absolute',
+              left: '0',
+              top: '0',
+              color: 'black',
+              fontSize: '2rem',
+              fontWeight: 'bold',
+              margin: '1rem',
+              padding: '0.5rem',
+              backgroundColor: 'rgba(255, 255, 255, 0.7)',
+              borderRadius: '0.5rem',
+
+            }}>{this.props.recipe.name}</h2>
+            <img
+
+              style={{            
+              height: '50vh',
+              width: '40vw',
+              objectFit: 'cover',
+              boxShadow: 'rgba(0, 0, 0, 0.5) 0px 4px 12px',
+              borderRadius: '10px'
+            }}
+              alt={this.props.recipe.name}
+              src={this.props.recipe.picture_url}
+            />
+          </div>
+        </NavLink>
+        <Card title="Our five most popular recipes!">
+          <div style={{maxWidth:"20vw"}}>
+            <i>If you wish to learn more about the recipe displayed, click on the image!</i>
+            <p style={{marginTop:"40px"}}>We have a plethora, of different ingredients ranging from all over the world.
+              To explore all these, click the button under!
+            </p>
+            <div style={{display:"flex", justifyContent:"space-between"}}>
+            <NavBar.Link left={false} to="/recipes">
+              <button type="button" className="btn btn-primary" onClick={() => {}}>
+                To recipes!
+              </button>
+            </NavBar.Link>
+            <div style={{display:"flex", justifyContent:"space-between"}}>
+              {this.props.children}
+            </div>
+            </div>
+          </div>
+        </Card>
+
+      </div>
+    )
   }
 }
 
@@ -75,7 +150,6 @@ export class PreviewCard extends Component<{
                 objectFit: 'cover',
                 boxShadow: 'rgba(0, 0, 0, 0.5) 0px 4px 12px',
                 borderRadius: '10px',
-                
               }}
             />
           </div>

@@ -27,7 +27,6 @@ class UserService {
       });
     });
   }
-
   /**
    * Get all tasks.
    */
@@ -40,6 +39,22 @@ class UserService {
       });
     });
   }
+  getMostLikedRecipe() {
+    return new Promise<LikedRecipe[]>((resolve, reject) => {
+      pool.query(
+        'SELECT Count(r.recipe_id) antall_likes, r.recipe_id '+
+        'FROM recipes r, user_to_recipe utr '+
+        'WHERE utr.recipe_id = r.recipe_id '+
+        'GROUP BY r.recipe_id '+
+        'ORDER BY antall_likes DESC'
+        ,
+        (error, results: RowDataPacket[]) => {
+          if(error) return reject(error)
+          resolve(results as LikedRecipe[])
+        }
+      )
+    })
+  }
 
   getLikedRecipes(userId : number) {
     return new Promise<LikedRecipe[]>((resolve, reject) => {
@@ -49,7 +64,7 @@ class UserService {
         if(error) return reject(error)
 
         resolve(results as LikedRecipe[])
-      }
+        }
       )
     })
   }
@@ -132,7 +147,6 @@ class UserService {
       )
     })
   }
-  
 }
 
 const userService = new UserService();
