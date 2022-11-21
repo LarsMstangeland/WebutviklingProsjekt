@@ -31,7 +31,7 @@ export async function compareHash(password: string, hashed: string) {
 }
 
 export class UserLogin extends Component {
-    //@ts-ignore
+    // @ts-ignore
     userData = JSON.parse(sessionStorage.getItem('user'));
   likedRecipes: LikedRecipe[] = [];
   users: User[] = [];

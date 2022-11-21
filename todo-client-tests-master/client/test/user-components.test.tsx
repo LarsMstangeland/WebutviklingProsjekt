@@ -64,26 +64,109 @@ jest.mock('../src/service-files/cart-service', () => {
     return new CartService();
 })
 
+jest.mock('../src/service-files/recipe-service', () => {
+    class RecipeService {
+        createIngredient(){
+            return Promise.resolve();
+        }
+        getAllRecipeIngredients(){
+            return Promise.resolve([
+                {
+                    ingredients_id: 1,
+                    recipe_id: 3,
+                    amount: 4,
+                    unit: 'dl'
+                },
+                {
+                    ingredients_id: 4,
+                    recipe_id: 1,
+                    amount: 4,
+                    unit: 'g'
+                },
+                {
+                    ingredients_id: 8,
+                    recipe_id: 1,
+                    amount: 3,
+                    unit: 'l'
+                }
+            ]);
+        }
+        getAll(){
+            return Promise.resolve([
+                {
+                    recipe_id: 1,
+                    name: 'chicken',
+                    region: 'africa',
+                    type: 'meat',
+                    picture_url: '',
+                    description: 'very tasty'
+                },
+                {
+                    recipe_id: 2,
+                    name: 'beef',
+                    region: 'europe',
+                    type: 'meat',
+                    picture_url: '',
+                    description: 'very tasty yumyum'
+                },
+                {
+                    recipe_id: 3,
+                    name: 'corn',
+                    region: 'america',
+                    type: 'vegan',
+                    picture_url: '',
+                    description: 'it has the juice'
+                }
+            ]);
+        }
+        getIngredients(){
+            return Promise.resolve([
+                {
+                    ingredients_id: 1,
+                    name: 'ham',
+                    amount: '2',
+                    unit: 'kg'
+                },
+                {
+                    ingredients_id: 2,
+                    name: 'rice',
+                    amount: '2',
+                    unit: 'dl'
+                },
+                {
+                    ingredients_id: 3,
+                    name: 'pepper',
+                    amount: '7',
+                    unit: 'l'
+                }
+            ]);
+        }
+    }
+})
 
+beforeEach(() => {
+    window.sessionStorage.clear();
+});
 
 
 describe('Components draw correctly tests' , () => {
+
     test('UserLogin draws correctly when not logged in' , () => {
         const wrapper = shallow(<UserLogin/>);
 
         expect(wrapper).toMatchSnapshot();
     });
-
+    
+    
     test('UserLogin draws correctly when logged in', () => {
-        const user = {user_id : 1, name : 'larsy', password : 'larserkul', admin : true};
-
-        sessionStorage.setItem('user', JSON.stringify(user));
-
+        let userData = {user_id : 1, name : 'larsy', password : 'larserkul', admin : true};
+        
+        window.sessionStorage.setItem('user', JSON.stringify(userData));
+        
         const wrapper = shallow(<UserLogin></UserLogin>);
-
+        
         expect(wrapper).toMatchSnapshot();
     })
-
 
     test('NewUser draws correctly' , () => {
         const wrapper = shallow(<NewUser/>);
@@ -156,11 +239,13 @@ describe('Testing NewUser-component', () => {
         setTimeout(() => {
         wrapper.find(Button.Danger).simulate('click');
 
-            expect(location.hash).toEqual('#/user/login');
+            expect(location.hash).toEqual('#/user/login/');
         });
         done();
     });
+
 });
+
 
 
 describe('Testing UserLogin-component', () => {
@@ -176,40 +261,21 @@ describe('Testing UserLogin-component', () => {
 
         setTimeout(() => {
             wrapper.find(Button.Danger).at(1).simulate('click');
-            expect(location.hash).toEqual('#/user/login');   
+            expect(location.hash).toEqual('#/user/login/');   
         })
         done();
     });
 
-    test('Displays correct userinformation', (done) => {
-        const user = {user_id : 1, name : 'larsy', password : 'larserkul', admin : true};
+    test('Fucked up test that should fail', (done) => {
+        const wrapper = shallow(<UserLogin></UserLogin>);
 
-        sessionStorage.setItem('user', JSON.stringify(user));
-
-        const wrapper = shallow(<UserLogin></UserLogin>)
-
-        expect(wrapper.containsAllMatchingElements([
-            //@ts-ignore
-            <Column>lars</Column>,
-            //@ts-ignore
-            <Column>Admin</Column>,
-        ])).toEqual(true);
+        setTimeout(() => {
+            expect(wrapper.containsMatchingElement(
+                <NewUser></NewUser>
+           )).toEqual(true);
+        });
         done();
     })
 
-    // test('Displays correct likedRecipes', (done) => {
-    //     // window.sessionStorage.setItem('user', '{"user_id" : "1", "name" : "larsy", "admin" : "true"}');
 
-    //     const wrapper = shallow(<UserLogin></UserLogin>);
-
-    //     expect(wrapper.containsAllMatchingElements([
-    //         //@ts-ignore
-    //         <Row key={1}><NavLink to="/recipes/1"><Column>duck</Column></NavLink></Row>,
-    //         //@ts-ignore
-    //         <Row key={2}><NavLink to="/recipes/1"><Column>chicken</Column></NavLink></Row>
-    //     ])).toEqual(true);
-    //     done();
-    // });
-
-    
 });

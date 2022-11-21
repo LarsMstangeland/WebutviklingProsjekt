@@ -5073,7 +5073,7 @@ async function compareHash(password, hashed) {
   return bcryptjs__WEBPACK_IMPORTED_MODULE_6___default().compareSync(password, hashed);
 }
 class UserLogin extends react_simplified__WEBPACK_IMPORTED_MODULE_1__.Component {
-  //@ts-ignore
+  // @ts-ignore
   userData = JSON.parse(sessionStorage.getItem('user'));
   likedRecipes = [];
   users = [];
