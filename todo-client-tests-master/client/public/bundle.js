@@ -5073,11 +5073,12 @@ async function compareHash(password, hashed) {
   return bcryptjs__WEBPACK_IMPORTED_MODULE_6___default().compareSync(password, hashed);
 }
 class UserLogin extends react_simplified__WEBPACK_IMPORTED_MODULE_1__.Component {
-  // @ts-ignore
+  // @ts-ignore gets the logged in user from sessionstorage
   userData = JSON.parse(sessionStorage.getItem('user'));
   likedRecipes = [];
+  //imported to check the username entered in input-field with the usernames in the database
   users = [];
-  loggedIn = false;
+  //the user-object that gets altered with the input-fields
   user = {
     user_id: 0,
     username: '',
@@ -5386,13 +5387,16 @@ class UserLogin extends react_simplified__WEBPACK_IMPORTED_MODULE_1__.Component 
   }
 }
 class NewUser extends react_simplified__WEBPACK_IMPORTED_MODULE_1__.Component {
+  //users used to check if the username trying to be created already exist
   users = [];
+  //the standardised object that gets altered with the inputs
   user = {
     user_id: 0,
     username: '',
     password: '',
     admin: false
   };
+  //extra password-variable to compare both typed in
   passwordCheck = '';
   render() {
     return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", {
