@@ -124,7 +124,6 @@ exports[`Components draw correctly tests UserLogin draws correctly 1`] = `
             Log in
           </ButtonSuccess>
            
-           
           <ButtonLight
             onClick={[Function]}
           >

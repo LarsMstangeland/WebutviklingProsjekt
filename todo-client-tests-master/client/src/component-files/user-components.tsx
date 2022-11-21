@@ -10,7 +10,6 @@ import recipeService, {
   Recipe,
   RecipeToIngredient,
 } from '../service-files/recipe-service';
-import utilityService, { Region, Unit, Type } from '../service-files/utility-service';
 import { createHashHistory } from 'history';
 import bcrypt from 'bcryptjs';
 
@@ -287,7 +286,7 @@ export class UserLogin extends Component {
                             Alert.danger(
                               'This is not an ingredient, you can add ingredients in the left section of the page'
                             );
-                          } else Alert.danger('This is not a ingredient');
+                          } else Alert.danger('This is not an ingredient');
                         }}
                       >
                         Add
@@ -473,8 +472,6 @@ export class NewUser extends Component {
                             <Column>
                                 Username: 
                                 <Form.Input 
-                                // added id to find specific input for testing
-                                id="username"
                                 type="text" 
                                 value={this.user.username} 
                                 onChange={(event)=>{
@@ -486,8 +483,6 @@ export class NewUser extends Component {
                             <Column>
                                 Password:
                                 <Form.Input
-                                //using id in testing 
-                                id="password"
                                 type="password" 
                                 value={this.user.password} 
                                 onChange={(event)=>{
@@ -499,9 +494,6 @@ export class NewUser extends Component {
                             <Column>
                                 Confirm password:
                                 <Form.Input 
-                                //using id in testing 
-
-                                id="passwordCheck"
                                 type="password" 
                                 value={this.passwordCheck} 
                                 onChange={(event)=>{
