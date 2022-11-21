@@ -259,8 +259,14 @@ describe('Testing UserLogin-component', () => {
   test('Buttons set correct location on click', (done) => {
     const wrapper = shallow(<UserLogin />);
 
-    setTimeout(() => {
-      wrapper.find(Button.Danger).at(0).simulate('click');
+    test('Buttons set correct location on click', (done) => {
+      const wrapper = shallow(<UserLogin></UserLogin>);
+
+      setTimeout(() => {
+        wrapper.find(Button.Danger).at(0).simulate('click');
+
+        expect(location.hash).toEqual('#/user/login');
+      });
 
       expect(location.hash).toEqual('#/user/login');
     });

@@ -24,19 +24,6 @@ export class Card extends Component<{ title: ReactNode; inline?: boolean; style?
   }
 }
 
-export class InfoCard extends Card{
-
-  render(){
-    return(
-      <Card title={this.props.children}>
-        
-        <div style={{height:"550px", border: "2px solid black"}}></div>
-        dette er et infocard
-        
-        </Card>
-    )
-  }
-}
 
 export class SlideShowCard extends Component<{
   recipe: Recipe
@@ -500,16 +487,7 @@ export class Alert extends Component {
     );
   }
 
-  /**
-   * Show success alert.
-   */
-  static success(text: ReactNode) {
-    // To avoid 'Cannot update during an existing state transition' errors, run after current event through setTimeout
-    setTimeout(() => {
-      let instance = Alert.instance(); // Get rendered Alert component instance
-      if (instance) instance.alerts.push({ id: instance.nextId++, text: text, type: 'success' });
-    });
-  }
+
 
   /**
    * Show info alert.
@@ -521,18 +499,6 @@ export class Alert extends Component {
       if (instance) instance.alerts.push({ id: instance.nextId++, text: text, type: 'info' });
     });
   }
-
-  /**
-   * Show warning alert.
-   */
-  static warning(text: ReactNode) {
-    // To avoid 'Cannot update during an existing state transition' errors, run after current event through setTimeout
-    setTimeout(() => {
-      let instance = Alert.instance(); // Get rendered Alert component instance
-      if (instance) instance.alerts.push({ id: instance.nextId++, text: text, type: 'warning' });
-    });
-  }
-
   /**
    * Show danger alert.
    */
