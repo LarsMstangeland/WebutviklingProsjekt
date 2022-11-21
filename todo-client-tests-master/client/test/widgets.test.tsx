@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Alert, Card, Row, Column, Form, Button, PreviewCard,  BootstrapPreviewCard, NavBar} from '../src/widgets';
+import { Alert, Card, Row, Column, Form, Button, PreviewCard, NavBar} from '../src/widgets';
 import { shallow } from 'enzyme';
 import { NavLink } from 'react-router-dom';
 
@@ -364,31 +364,6 @@ describe('PreviewCard tests', () => {
             </img>
           </div>
         </NavLink>
-      </div>
-    ));
-    done();
-  });
-
-  test('BootstrapPreviewCard is drawn correctly', (done) => {
-    const wrapper = shallow(<BootstrapPreviewCard></BootstrapPreviewCard>)
-
-    expect(wrapper.matchesElement(
-      <div className="card" style={{ width: '18rem;' }}>
-        <img
-          src="https://i.guim.co.uk/img/media/26392d05302e02f7bf4eb143bb84c8097d09144b/446_167_3683_2210/master/3683.jpg?width=1200&quality=85&auto=format&fit=max&s=a52bbe202f57ac0f5ff7f47166906403"
-          className="card-img-top"
-          alt="..."
-        ></img>
-        <div className="card-body">
-          <h5 className="card-title">Card title</h5>
-          <p className="card-text">
-            Some quick example text to build on the card title and make up the bulk of the card's
-            content.
-          </p>
-          <a href="#" className="btn btn-primary">
-            Go somewhere
-          </a>
-        </div>
       </div>
     ));
     done();

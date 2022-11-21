@@ -21,8 +21,6 @@ UserRouter.get('/:username', (request, response) => {
     .catch((error) => response.status(500).send(error));
 });
 
-// Example request body: { title: "Ny oppgave" }
-// Example response body: { id: 4 }
 UserRouter.post('', (request, response) => {
 
   const password = request.body.password;
