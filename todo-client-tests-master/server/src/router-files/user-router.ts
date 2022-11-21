@@ -60,6 +60,12 @@ UserRouter.get('/recipes/:userId', (request, response)=> {
   .catch((error) => response.status(500).send(error));
 })
 
+UserRouter.get('/recipes/all/MostLikedRecipes', (_request, response)=> {
+  userService.getMostLikedRecipe()
+  .then((rows) => rows ? response.send(rows) : response.send("No liked recipes"))
+  .catch((error) => response.status(500).send(error));
+})
+
 UserRouter.delete('/:userId/recipes/:recipeId', (request, response) => {
 
   const userId = Number(request.params.userId)

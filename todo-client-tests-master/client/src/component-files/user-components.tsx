@@ -84,6 +84,7 @@ export class UserLogin extends Component {
         }
       }
     }
+    console.log(filteredRecipes)
     filteredRecipes.map((recipe) => this.recipesToShow.push(recipe));
   }
 
@@ -416,22 +417,18 @@ export class UserLogin extends Component {
     }
   }
 
-  async mounted() {
-    try {
-      let users = await userService.getAll();
-      this.users = users;
-      let recipes = await recipeService.getAll();
-      this.recipes = recipes;
-      let recipeIngredients = await recipeService.getAllRecipeIngredients();
-      //@ts-ignore
-      this.recipeIngredients = recipeIngredients;
-      let ingredients = await recipeService.getIngredients();
-      //@ts-ignore
-      this.ingredients = ingredients;
+    async mounted() {
+        try{
+            let users = await userService.getAll()
+            this.users = users 
 
-      if (this.userData) {
-        let likedRecipes = await userService.getLikedRecipes(this.userData.user_id);
-        this.likedRecipes = likedRecipes;
+            if(this.userData){
+                let likedRecipes = await userService.getLikedRecipesForUser(this.userData.user_id)
+                this.likedRecipes = likedRecipes
+                let ingredients = await recipeService.getIngredients();
+                //@ts-ignore
+                this.ingredients = ingredients;
+
 
         try {
           let cart = await cartService.get(this.userData.user_id);

@@ -326,7 +326,7 @@ export class RecipeDetails extends Component<{ match: { params: { id: number } }
       
       //If there is a user logged in mounted gets the recipes the user has liked and inserts them into an client array
       if(userData) {
-        let likedRecipes = await userService.getLikedRecipes(userData.user_id)
+        let likedRecipes = await userService.getLikedRecipesForUser(userData.user_id)
         this.likedRecipes = likedRecipes
       }
 
