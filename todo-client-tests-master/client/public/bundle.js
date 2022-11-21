@@ -5281,7 +5281,7 @@ class UserLogin extends react_simplified__WEBPACK_IMPORTED_MODULE_1__.Component 
             }
           } else if (userData.admin) {
             _widgets__WEBPACK_IMPORTED_MODULE_2__.Alert.danger('This is not an ingredient, you can add ingredients in the left section of the page');
-          } else _widgets__WEBPACK_IMPORTED_MODULE_2__.Alert.danger('This is not a ingredient');
+          } else _widgets__WEBPACK_IMPORTED_MODULE_2__.Alert.danger('This is not an ingredient');
         }
       }, "Add"))), this.fridgeIngredients.map(ingredient =>
       /*#__PURE__*/
@@ -5426,7 +5426,7 @@ class NewUser extends react_simplified__WEBPACK_IMPORTED_MODULE_1__.Component {
       onChange: event => {
         this.passwordCheck = event.currentTarget.value;
       }
-    }))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Row, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Column, null, "Admin:", ' ', /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Form.Checkbox, {
+    }))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Row, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Column, null, "Admin: ", ' ', /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Form.Checkbox, {
       checked: this.user.admin,
       onChange: () => {
         this.user.admin == false ? this.user.admin = true : this.user.admin = false;
