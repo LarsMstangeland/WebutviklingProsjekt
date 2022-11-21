@@ -10,13 +10,15 @@ import { createHashHistory } from 'history';
 
 const history = createHashHistory(); // Use history.push(...) to programmatically change path, for instance after successfully saving a student
 //@ts-ignore
-const userData = JSON.parse(sessionStorage.getItem('user'));
+// const userData = JSON.parse(sessionStorage.getItem('user'));
+let created: boolean = false;
 
 /**
  * Renders recipe list.
  */
 export class RecipeList extends Component {
   //Arrays to store all recipes and relevant recipe info
+
   recipes: Recipe[] = [];
   recipesToShow: Recipe[] = [];
   regions: Region[] = [];
@@ -149,6 +151,9 @@ export class RecipeList extends Component {
  */
 export class RecipeDetails extends Component<{ match: { params: { id: number } } }> {
   //Objects to store recipe and recipe ingredient details
+  //@ts-ignore
+  userData = JSON.parse(sessionStorage.getItem('user'));
+
   recipe: Recipe = { recipe_id: 0, name: '', description: '', region: '', picture_url: '', type: '' };
   likedRecipes : LikedRecipe[] = [];
   ingredients: Ingredient[] = [];
@@ -197,8 +202,14 @@ export class RecipeDetails extends Component<{ match: { params: { id: number } }
   }
 
   render() {
+    if(this.userData){
+      if(created == false){
+        created = true;
+        location.reload;
+      }
+    }
     return (
-    <>
+      <>
       <div style={{padding: "1rem", marginLeft: '5rem', marginTop: '2rem'}}>
           
           <div style={{display: 'flex', marginBottom: '2rem'}}>
@@ -213,15 +224,15 @@ export class RecipeDetails extends Component<{ match: { params: { id: number } }
             </div>
           <div style={{marginBottom: "0.5rem", display: 'flex', justifyContent: 'space-around', width: '27.5vw'}}>
                   {//If there is a user logged in the user can like or unlike a recipe, else like button sends an alert to log in
-                  userData ?
+                  this.userData ? 
                   (this.likedRecipes.some((r) => (this.recipe.recipe_id == r.recipe_id)) ?
                   <Button.Danger onClick={async ()=>{
-                    await userService.removeLikedRecipe(userData.user_id, this.recipe.recipe_id)
+                    await userService.removeLikedRecipe(this.userData.user_id, this.recipe.recipe_id)
                     location.reload();
                     }}>Unlike</Button.Danger>  
                     :
                    <Button.Success onClick={async ()=> {
-                    await userService.likeRecipe(userData.user_id, this.props.match.params.id);
+                    await userService.likeRecipe(this.userData.user_id, this.props.match.params.id);
                     location.reload();
                     }}>Like recipe
                   </Button.Success>)
@@ -233,8 +244,8 @@ export class RecipeDetails extends Component<{ match: { params: { id: number } }
                   }
               <Button.Success onClick={() => {
               //If there is a user logged in the user can add recipe ingredients to cart, else button sends an alert to log in
-              userData ? 
-                (recipeService.addRecipeIngredientsToCart(this.ingredients, this.recipe.recipe_id, userData.user_id),
+              this.userData ? 
+                (recipeService.addRecipeIngredientsToCart(this.ingredients, this.recipe.recipe_id, this.userData.user_id),
                 Alert.info('Ingredients added to cart!')
                ) : (Alert.info('Log in to add ingredients to cart'))
             }}>Add ingredients to cart</Button.Success> 
@@ -280,8 +291,8 @@ export class RecipeDetails extends Component<{ match: { params: { id: number } }
               
               <br/>
           {//If there is a logged in user and the user is an admin, two buttons to delete and edit a recipe is displayed
-          userData ? 
-          (userData.admin ? (<div style={{display: 'flex', justifyContent: 'space-around', width: '10vw'}}>
+          this.userData ? 
+          (this.userData.admin ? (<div style={{display: 'flex', justifyContent: 'space-around', width: '10vw'}}>
               <Button.Danger onClick={() => {
                 //Deletes the recipe and pushes the path back to all recipes
                   recipeService.delete(this.recipe.recipe_id).then(() => {
@@ -325,8 +336,8 @@ export class RecipeDetails extends Component<{ match: { params: { id: number } }
       this.emailBody = 'Description: %0D%0A' + this.recipe.description + '%0D%0A %0D%0A Ingredients:  %0D%0A' + this.ingredients.map(ing => `${ing.name + ' - ' + ing.amount + ' ' + ing.unit} %0D%0A`)
       
       //If there is a user logged in mounted gets the recipes the user has liked and inserts them into an client array
-      if(userData) {
-        let likedRecipes = await userService.getLikedRecipesForUser(userData.user_id)
+      if(this.userData) {
+        let likedRecipes = await userService.getLikedRecipesForUser(this.userData.user_id)
         this.likedRecipes = likedRecipes
       }
 

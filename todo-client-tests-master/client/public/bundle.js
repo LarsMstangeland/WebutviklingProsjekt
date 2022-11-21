@@ -4416,13 +4416,15 @@ __webpack_require__.r(__webpack_exports__);
 
 const history = (0,history__WEBPACK_IMPORTED_MODULE_6__.createHashHistory)(); // Use history.push(...) to programmatically change path, for instance after successfully saving a student
 //@ts-ignore
-const userData = JSON.parse(sessionStorage.getItem('user'));
+// const userData = JSON.parse(sessionStorage.getItem('user'));
+let created = false;
 
 /**
  * Renders recipe list.
  */
 class RecipeList extends react_simplified__WEBPACK_IMPORTED_MODULE_1__.Component {
   //Arrays to store all recipes and relevant recipe info
+
   recipes = [];
   recipesToShow = [];
   regions = [];
@@ -4568,6 +4570,8 @@ class RecipeList extends react_simplified__WEBPACK_IMPORTED_MODULE_1__.Component
  */
 class RecipeDetails extends react_simplified__WEBPACK_IMPORTED_MODULE_1__.Component {
   //Objects to store recipe and recipe ingredient details
+  //@ts-ignore
+  userData = JSON.parse(sessionStorage.getItem('user'));
   recipe = {
     recipe_id: 0,
     name: '',
@@ -4626,6 +4630,12 @@ class RecipeDetails extends react_simplified__WEBPACK_IMPORTED_MODULE_1__.Compon
     }, name, ":"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("p", null, value));
   }
   render() {
+    if (this.userData) {
+      if (created == false) {
+        created = true;
+        location.reload;
+      }
+    }
     return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", {
       style: {
         padding: "1rem",
@@ -4674,14 +4684,14 @@ class RecipeDetails extends react_simplified__WEBPACK_IMPORTED_MODULE_1__.Compon
       }
     },
     //If there is a user logged in the user can like or unlike a recipe, else like button sends an alert to log in
-    userData ? this.likedRecipes.some(r => this.recipe.recipe_id == r.recipe_id) ? /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Button.Danger, {
+    this.userData ? this.likedRecipes.some(r => this.recipe.recipe_id == r.recipe_id) ? /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Button.Danger, {
       onClick: async () => {
-        await _service_files_user_service__WEBPACK_IMPORTED_MODULE_4__["default"].removeLikedRecipe(userData.user_id, this.recipe.recipe_id);
+        await _service_files_user_service__WEBPACK_IMPORTED_MODULE_4__["default"].removeLikedRecipe(this.userData.user_id, this.recipe.recipe_id);
         location.reload();
       }
     }, "Unlike") : /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Button.Success, {
       onClick: async () => {
-        await _service_files_user_service__WEBPACK_IMPORTED_MODULE_4__["default"].likeRecipe(userData.user_id, this.props.match.params.id);
+        await _service_files_user_service__WEBPACK_IMPORTED_MODULE_4__["default"].likeRecipe(this.userData.user_id, this.props.match.params.id);
         location.reload();
       }
     }, "Like recipe") : /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Button.Success, {
@@ -4691,7 +4701,7 @@ class RecipeDetails extends react_simplified__WEBPACK_IMPORTED_MODULE_1__.Compon
     }, "Like recipe"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Button.Success, {
       onClick: () => {
         //If there is a user logged in the user can add recipe ingredients to cart, else button sends an alert to log in
-        userData ? (_service_files_recipe_service__WEBPACK_IMPORTED_MODULE_3__["default"].addRecipeIngredientsToCart(this.ingredients, this.recipe.recipe_id, userData.user_id), _widgets__WEBPACK_IMPORTED_MODULE_2__.Alert.info('Ingredients added to cart!')) : _widgets__WEBPACK_IMPORTED_MODULE_2__.Alert.info('Log in to add ingredients to cart');
+        this.userData ? (_service_files_recipe_service__WEBPACK_IMPORTED_MODULE_3__["default"].addRecipeIngredientsToCart(this.ingredients, this.recipe.recipe_id, this.userData.user_id), _widgets__WEBPACK_IMPORTED_MODULE_2__.Alert.info('Ingredients added to cart!')) : _widgets__WEBPACK_IMPORTED_MODULE_2__.Alert.info('Log in to add ingredients to cart');
       }
     }, "Add ingredients to cart"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Button.Light, {
       onClick: () => {
@@ -4712,7 +4722,7 @@ class RecipeDetails extends react_simplified__WEBPACK_IMPORTED_MODULE_1__.Compon
       key: ingredient.ingredients_id
     }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Column, null, ingredient.name.charAt(0).toUpperCase() + ingredient.name.slice(1)), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Column, null, ingredient.amount * this.portions / 4), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Column, null, ingredient.unit))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("br", null),
     //If there is a logged in user and the user is an admin, two buttons to delete and edit a recipe is displayed
-    userData ? userData.admin ? /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", {
+    this.userData ? this.userData.admin ? /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", {
       style: {
         display: 'flex',
         justifyContent: 'space-around',
@@ -4773,8 +4783,8 @@ class RecipeDetails extends react_simplified__WEBPACK_IMPORTED_MODULE_1__.Compon
       this.emailBody = 'Description: %0D%0A' + this.recipe.description + '%0D%0A %0D%0A Ingredients:  %0D%0A' + this.ingredients.map(ing => `${ing.name + ' - ' + ing.amount + ' ' + ing.unit} %0D%0A`);
 
       //If there is a user logged in mounted gets the recipes the user has liked and inserts them into an client array
-      if (userData) {
-        let likedRecipes = await _service_files_user_service__WEBPACK_IMPORTED_MODULE_4__["default"].getLikedRecipesForUser(userData.user_id);
+      if (this.userData) {
+        let likedRecipes = await _service_files_user_service__WEBPACK_IMPORTED_MODULE_4__["default"].getLikedRecipesForUser(this.userData.user_id);
         this.likedRecipes = likedRecipes;
       }
     } catch (error) {
