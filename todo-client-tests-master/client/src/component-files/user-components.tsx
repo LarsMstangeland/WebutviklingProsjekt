@@ -31,8 +31,8 @@ export async function compareHash(password: string, hashed: string) {
 }
 
 export class UserLogin extends Component {
-    // @ts-ignore
-    userData = JSON.parse(sessionStorage.getItem('user'));
+  // @ts-ignore
+  userData = JSON.parse(sessionStorage.getItem('user'));
   likedRecipes: LikedRecipe[] = [];
   users: User[] = [];
   loggedIn: boolean = false;
@@ -84,7 +84,6 @@ export class UserLogin extends Component {
         }
       }
     }
-    console.log(filteredRecipes)
     filteredRecipes.map((recipe) => this.recipesToShow.push(recipe));
   }
 
@@ -417,18 +416,22 @@ export class UserLogin extends Component {
     }
   }
 
-    async mounted() {
-        try{
-            let users = await userService.getAll()
-            this.users = users 
+  async mounted() {
+    try {
+      let users = await userService.getAll();
+      this.users = users;
+      let recipes = await recipeService.getAll();
+      this.recipes = recipes;
+      let recipeIngredients = await recipeService.getAllRecipeIngredients();
+      //@ts-ignore
+      this.recipeIngredients = recipeIngredients;
+      let ingredients = await recipeService.getIngredients();
+      //@ts-ignore
+      this.ingredients = ingredients;
 
-            if(this.userData){
-                let likedRecipes = await userService.getLikedRecipesForUser(this.userData.user_id)
-                this.likedRecipes = likedRecipes
-                let ingredients = await recipeService.getIngredients();
-                //@ts-ignore
-                this.ingredients = ingredients;
-
+      if (this.userData) {
+        let likedRecipes = await userService.getLikedRecipesForUser(this.userData.user_id);
+        this.likedRecipes = likedRecipes;
 
         try {
           let cart = await cartService.get(this.userData.user_id);
@@ -465,59 +468,69 @@ export class NewUser extends Component {
         >
           <Card title="Create new user">
             <Row>
-                            <Column>
-                                Username: 
-                                <Form.Input 
-                                type="text" 
-                                value={this.user.username} 
-                                onChange={(event)=>{
-                                    this.user.username = event.currentTarget.value;
-                                }}></Form.Input>
-                            </Column>
-                        </Row>
-                        <Row>
-                            <Column>
-                                Password:
-                                <Form.Input
-                                type="password" 
-                                value={this.user.password} 
-                                onChange={(event)=>{
-                                    this.user.password = event.currentTarget.value;
-                                }}></Form.Input>
-                            </Column>
-                        </Row>
-                        <Row>
-                            <Column>
-                                Confirm password:
-                                <Form.Input 
-                                type="password" 
-                                value={this.passwordCheck} 
-                                onChange={(event)=>{
-                                    this.passwordCheck = event.currentTarget.value;
-                                }}></Form.Input>
-                            </Column>
-                        </Row>
-                        <Row>
-                            <Column>
-                            Admin: {' '}
-                            <Form.Checkbox checked={this.user.admin} onChange={()=> {
-                                this.user.admin == false ? this.user.admin = true : this.user.admin = false;
-                            }
-                            }></Form.Checkbox>
-                            </Column>
-                        </Row>
-                        <Row>
-                            <Column>
-                            <Button.Success onClick={async ()=>{
-                                if(!this.users.find(u => u.username == this.user.username)){
-                                    if(this.user.password == this.passwordCheck){
-                                        if(this.user.password != ''){
-                                            if(this.user.username != ''){
-                                                let hashPassword : string = await generateHash(this.user.password)
-                                                await userService.create(hashPassword, this.user.username, this.user.admin) 
-                                                 let u = await userService.get(this.user.username)
-                                                 this.user = u       
-                                                 sessionStorage.setItem('user', JSON.stringify(this.user));
+              <Column>
+                Username:
+                <Form.Input
+                  type="text"
+                  value={this.user.username}
+                  onChange={(event) => {
+                    this.user.username = event.currentTarget.value;
+                  }}
+                ></Form.Input>
+              </Column>
+            </Row>
+            <Row>
+              <Column>
+                Password:
+                <Form.Input
+                  type="password"
+                  value={this.user.password}
+                  onChange={(event) => {
+                    this.user.password = event.currentTarget.value;
+                  }}
+                ></Form.Input>
+              </Column>
+            </Row>
+            <Row>
+              <Column>
+                Confirm password:
+                <Form.Input
+                  type="password"
+                  value={this.passwordCheck}
+                  onChange={(event) => {
+                    this.passwordCheck = event.currentTarget.value;
+                  }}
+                ></Form.Input>
+              </Column>
+            </Row>
+            <Row>
+              <Column>
+                Admin:{' '}
+                <Form.Checkbox
+                  checked={this.user.admin}
+                  onChange={() => {
+                    this.user.admin == false ? (this.user.admin = true) : (this.user.admin = false);
+                  }}
+                ></Form.Checkbox>
+              </Column>
+            </Row>
+            <Row>
+              <Column>
+                <Button.Success
+                  onClick={async () => {
+                    if (!this.users.find((u) => u.username == this.user.username)) {
+                      if (this.user.password == this.passwordCheck) {
+                        if (this.user.password != '') {
+                          if (this.user.username != '') {
+                            let hashPassword: string = await generateHash(this.user.password);
+                            await userService.create(
+                              hashPassword,
+                              this.user.username,
+                              this.user.admin
+                            );
+                            let u = await userService.get(this.user.username);
+                            this.user = u;
+                            sessionStorage.setItem('user', JSON.stringify(this.user));
 
                             // sets created to be true and then pushes to the UserLogin component. The UserLogin component will then be refreshed with the if-sentence on line 153
                             created = true;
