@@ -4521,7 +4521,9 @@ class RecipeList extends react_simplified__WEBPACK_IMPORTED_MODULE_1__.Component
         height: '5.5vh',
         border: '2px solid black',
         borderRadius: '5px'
-      },
+      }
+      // Selection for type
+      ,
       value: this.recipeTypeFilter,
       onChange: event => {
         this.recipeTypeFilter = event.currentTarget.value;
@@ -4906,7 +4908,10 @@ class RecipeEdit extends react_simplified__WEBPACK_IMPORTED_MODULE_1__.Component
           this.recipeIngredients.splice(this.recipeIngredients.indexOf(ingredient), 1);
         }
       }
-    }, "X") : /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Button.Success, {
+    }, "X") :
+    /*#__PURE__*/
+    // Button that appears if you cross out an ingredient, to give them an opportunity to change their mind before it is pushed to the database
+    react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Button.Success, {
       small: true,
       onClick: () => {
         const index = this.ingredientsToDelete.indexOf(ingredient);

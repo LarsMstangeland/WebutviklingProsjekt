@@ -28,16 +28,24 @@ jest.mock('../src/service-files/user-service', () => {
       return Promise.resolve();
     }
 
-    getLikedRecipes() {
-      return Promise.resolve([
-        { recipe_id: 1, name: 'duck' },
-        { recipe_id: 2, name: 'chicken' },
-      ]);
+        getLikedRecipes() {
+            return Promise.resolve([
+                {recipe_id : 1, name : 'duck'},
+                {recipe_id : 2, name : 'chicken'}
+            ]);
+        }
+
+        getLikedRecipesForUser() {
+            return Promise.resolve([
+                {recipe_id : 1, name : 'kyllinggryte'},
+                {recipe_id : 2, name : 'løvegryte'},
+            ]);
+        }
+        removeLikedRecipe() {
+            return Promise.resolve();
+        }
     }
-    removeLikedRecipe() {
-      return Promise.resolve();
-    }
-  }
+  
   return new UserService();
 });
 
@@ -137,9 +145,9 @@ jest.mock('../src/service-files/recipe-service', () => {
         },
       ]);
     }
-  }
-  return new RecipeService();
-});
+}
+    return new RecipeService();
+})
 
 beforeEach(() => {
   window.sessionStorage.clear();
@@ -186,25 +194,10 @@ describe('Testing NewUser-component', () => {
       ).toEqual(true);
     });
 
-    wrapper
-      .find(Form.Input)
-      .at(0)
-      .simulate('change', { currentTarget: { value: 'vetleek' } });
-
-    expect(
-      //@ts-ignore
-      wrapper.containsMatchingElement(<Form.Input type="text" value="vetleek"></Form.Input>)
-    ).toEqual(true);
-
-    wrapper
-      .find(Form.Input)
-      .at(1)
-      .simulate('change', { currentTarget: { value: 'pass' } });
-
-    expect(
-      //@ts-ignore
-      wrapper.containsMatchingElement(<Form.Input type="password" value="pass"></Form.Input>)
-    ).toEqual(true);
+        //@ts-ignore
+        wrapper.find(Form.Input).at(0).simulate('change', {currentTarget : {value : 'vetleek'}});                
+        //@ts-ignore
+        expect(wrapper.containsMatchingElement(<Form.Input type="text" value="vetleek"></Form.Input>)).toEqual(true);
 
     //@ts-ignore
     wrapper
@@ -249,67 +242,54 @@ describe('Testing NewUser-component', () => {
     setTimeout(() => {
       wrapper.find(Button.Danger).simulate('click');
 
-      expect(location.hash).toEqual('#/user/login/');
+            expect(location.hash).toEqual('#/user/login/');
+        });
+        done();
     });
-    done();
-  });
+
+    test('Alerts wrong username on login', (done) => {
+        const wrapper = shallow(<NewUser></NewUser>);
+
+        setTimeout(() => {
+            wrapper.find(Form.Input).at(1).simulate('change', {currentTarget : {value : 'javsnvdjkv' }});
+            wrapper.find(Button.Success).simulate('click');
+         expect(wrapper.containsAllMatchingElements([    
+            <div>
+                <div>
+            Wrong username or password. Try again
+              <button />
+            </div>
+          </div>          
+         ])).toEqual(true);
+        });
+        done();
+    });
+
 });
 
 describe('Testing UserLogin-component', () => {
-  test('Buttons set correct location on click', (done) => {
-    const wrapper = shallow(<UserLogin />);
+  
 
     test('Buttons set correct location on click', (done) => {
       const wrapper = shallow(<UserLogin></UserLogin>);
 
-      setTimeout(() => {
-        wrapper.find(Button.Danger).at(0).simulate('click');
-
-        expect(location.hash).toEqual('#/user/login');
-      });
-
-      expect(location.hash).toEqual('#/user/login');
+        setTimeout(() => {
+            wrapper.find(Button.Danger).at(0).simulate('click');
+            expect(location.hash).toEqual('#/user/login/');   
+        })
+        done();
     });
 
-    setTimeout(() => {
-      wrapper.find(Button.Danger).at(1).simulate('click');
-      expect(location.hash).toEqual('#/user/login/');
-    });
-    done();
-  });
+    test('Fucked up test that should fail', (done) => {
+        const wrapper = shallow(<UserLogin></UserLogin>);
 
-  test('Test fridge filtering', (done) => {
-    const wrapper = shallow(<UserLogin />);
+        setTimeout(() => {
+            expect(wrapper.containsMatchingElement(
+                <NewUser></NewUser>
+           )).toEqual(true);
+        });
+        done();
+    })
 
-    setTimeout(() => {
-      wrapper
-        .find(Form.Input)
-        .at(1)
-        .simulate('change', { currentTarget: { value: 'ham' } });
-      wrapper.find(Button.Light).at(1).simulate('click');
-    });
 
-    setTimeout(() => {
-      expect(
-        wrapper.containsAllMatchingElements([
-          <PreviewCard id={1} url="" name="chicken"></PreviewCard>,
-          <PreviewCard id={2} url="" name="beef"></PreviewCard>,
-        ])
-      );
-    });
-
-    setTimeout(() => {
-      wrapper
-        .find(Form.Input)
-        .at(1)
-        .simulate('change', { currentTarget: { value: 'rice' } });
-      wrapper.find(Button.Light).at(1).simulate('click');
-    });
-
-    setTimeout(() => {
-      expect(
-        wrapper.containsMatchingElement(<PreviewCard id={1} url="" name="chicken"></PreviewCard>)
-      );
-    });
-  });
 });

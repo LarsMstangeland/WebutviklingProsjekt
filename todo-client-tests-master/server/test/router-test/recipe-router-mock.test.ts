@@ -110,7 +110,7 @@ describe('Fetch ingredients (GET)', () => {
     test('Fetch all ingredients to a recipe (200)', async () => {
 
         let recipe_id = 1
-        recipeService.getAllRecipeIngredients = jest.fn(() => Promise.resolve(testIngredients))
+        recipeService.getRecipeIngredients = jest.fn(() => Promise.resolve(testIngredients))
         const response = await axios.get('/recipes/'+recipe_id+'/ingredients')
         expect(response.data).toEqual(testIngredients)
         expect(response.status).toEqual(200)
