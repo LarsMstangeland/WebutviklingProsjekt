@@ -77,7 +77,8 @@ export class UserLogin extends Component {
           //where we look for a array that matches a spesific recipe id
           let ingredients = this.recipeIngredients.filter((row) => row.recipe_id == recipeId);
 
-          //loop the ingredients fetched and then 
+          //loop the ingredients fetched and then check if they match with the fridge ingredients
+          //if that is the case push the recipe into filtered recipe 
           for (let k = 0; k < ingredients.length; k++) {
             if (ingredients[k].ingredients_id == this.fridgeIngredients[i].ingredients_id) {
               filteredRecipes.push(this.recipes[j]);
@@ -85,6 +86,9 @@ export class UserLogin extends Component {
           }
         }
       } else {
+        //If it is not the first iteration we further iterate and filter the already established
+        //array, instead of pushing the recipes that meet the criteria we now splice the recipes 
+        //which does not meet the criteria
         for (let j = 0; j < filteredRecipes.length; j++) {
           let recipeId = filteredRecipes[j].recipe_id;
           let ingredients = this.recipeIngredients.filter((row) => row.recipe_id == recipeId);

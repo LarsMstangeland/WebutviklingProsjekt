@@ -9,17 +9,19 @@ import {NewUser, UserLogin} from './component-files/user-components';
 import userService, { LikedRecipe } from './service-files/user-service';
 
 //@ts-ignore
-const userData = JSON.parse(sessionStorage.getItem('user')); 
-
-
+const userData = JSON.parse(sessionStorage.getItem('user'));
 
 class Menu extends Component {
   render() {
     return (
       <div>
         <NavBar brand="Food Junkies">
-          <NavBar.Link left={false} to="/recipes">Recipes</NavBar.Link>
-          <NavBar.Link left={false} to="/user/login">My Profile</NavBar.Link>
+          <NavBar.Link left={false} to="/recipes">
+            Recipes
+          </NavBar.Link>
+          <NavBar.Link left={false} to="/user/login">
+            My Profile
+          </NavBar.Link>
         </NavBar>
       </div>
     );
@@ -33,17 +35,24 @@ class Home extends Component {
 
   recipes: Recipe[] = [];
   recipesToShow: Recipe[] = [];
-  MostLikedRecipes: Recipe[] = []
-  UsersLikedRecipes: LikedRecipe[] = []
-  RecipesThatWasLikedByUser: Recipe[] = []
-  slidenr: number = 0
-  CurrentlyInSlide: Recipe = {recipe_id: 0, name: "", description: "", picture_url: "", region: "", type:""}
+  MostLikedRecipes: Recipe[] = [];
+  UsersLikedRecipes: LikedRecipe[] = [];
+  RecipesThatWasLikedByUser: Recipe[] = [];
+  slidenr: number = 0;
+  CurrentlyInSlide: Recipe = {
+    recipe_id: 0,
+    name: '',
+    description: '',
+    picture_url: '',
+    region: '',
+    type: '',
+  };
 
-  TypeRecommendedOnLikes: Recipe[] = []
-  RegionRecommendedOnLikes: Recipe[] = []  
+  TypeRecommendedOnLikes: Recipe[] = [];
+  RegionRecommendedOnLikes: Recipe[] = [];
 
   /**@ts-ignore */
-  timer: Timer = () => {}
+  timer: Timer = () => {};
 
 
   //defined function for starting the 5s timer
@@ -61,7 +70,18 @@ class Home extends Component {
    render() {
     return (
       <div style={{ backgroundColor: '#f9f5f1' }}>
-        <h1 style={{marginLeft:"35vw", height:"20vh", width:"30vw", position:'relative', top:'5vh'}}>Welcome to <span style={{ fontSize: '3rem', fontWeight: 'bold' }}>Food Junkies</span></h1>
+        <h1
+          style={{
+            marginLeft: '35vw',
+            height: '20vh',
+            width: '50vw',
+            position: 'relative',
+            top: '5vh',
+          }}
+        >
+          Welcome to <br />
+          <span style={{ fontSize: '3rem', fontWeight: 'bold' }}>Food Junkies</span>
+        </h1>
         <div
           style={{
             display: 'flex',
@@ -69,7 +89,8 @@ class Home extends Component {
             flexDirection: 'column',
             justifyContent: 'center',
             alignItems: 'center',
-          }}>
+          }}
+        >
           <SlideShowCard recipe={this.CurrentlyInSlide}>
             <Button.Light onClick={() => {
               
@@ -152,22 +173,21 @@ class Home extends Component {
 
   async mounted() {
     try {
-
       //Gets all recipes and pass them to recipe array
       let recipes = await recipeService.getAll();
       this.recipes = recipes;
 
       //get a filtered list of the liked recipes in the whole db
       //and define how big the slide show should be
-      let bestrecipes = await userService.getMostLikedRecipes()
-      let sizeOfSlide = 5
+      let bestrecipes = await userService.getMostLikedRecipes();
+      let sizeOfSlide = 5;
 
       //fill up the array with the specified top % of liked recipes
-      for(let i = 0; i < sizeOfSlide; i++){
-        let PopularRecipe = await recipeService.get(bestrecipes[i].recipe_id)
-        this.MostLikedRecipes.push(PopularRecipe)
-        }
-        
+      for (let i = 0; i < sizeOfSlide; i++) {
+        let PopularRecipe = await recipeService.get(bestrecipes[i].recipe_id);
+        this.MostLikedRecipes.push(PopularRecipe);
+      }
+
       //initiialize the first slide and start timer
       this.CurrentlyInSlide = this.MostLikedRecipes[this.slidenr]
       this.hermansMetodeStartTheTimeout();
@@ -200,10 +220,9 @@ class Home extends Component {
               }
             })
           })
-        })
-        ) : this.RecipesThatWasLikedByUser = [];
-    } catch (error: any){
-      Alert.danger('Error getting recipes: ' + error.message)
+        })) : (this.RecipesThatWasLikedByUser = []);
+    } catch (error: any) {
+      Alert.danger('Error getting recipes: ' + error.message);
     }
   }
 }
@@ -215,9 +234,9 @@ ReactDOM.render(
       <Route exact path="/" component={Home} />
       <Route exact path="/recipes" component={RecipeList} />
       <Route exact path="/recipes/:id(\d+)" component={RecipeDetails} /> {/* id must be number */}
-      <Route exact path='/recipes/:id(\d+)/edit' component={RecipeEdit} />
-      <Route exact path='/user/login' component={UserLogin}/>
-      <Route exact path='/user/create' component={NewUser}/>
+      <Route exact path="/recipes/:id(\d+)/edit" component={RecipeEdit} />
+      <Route exact path="/user/login" component={UserLogin} />
+      <Route exact path="/user/create" component={NewUser} />
     </div>
   </HashRouter>,
   document.getElementById('root')

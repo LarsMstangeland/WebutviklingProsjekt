@@ -75,6 +75,7 @@ export class RecipeList extends Component {
             }}
           >
             <div style={{ margin: '0 0.5rem' }}>
+              {/* Input-field used to search for recipe.  */}
               <Form.Input style={{width : '12vw', height : '5.5vh', border : '2px solid black'}}
                 onChange={(event) => {
                   this.searchBar = event.currentTarget.value;
@@ -87,6 +88,7 @@ export class RecipeList extends Component {
               ></Form.Input>
             </div>
             <div style={{ margin: '0 0.5rem'}}>
+              {/* Selection for region */}
               <Form.Select style={{width : '12vw', height : '5.5vh', border : '2px solid black', borderRadius: '5px'}}
                 value={this.regionFilter}
                 onChange={(event) => {
@@ -103,6 +105,7 @@ export class RecipeList extends Component {
             <div style={{ margin: '0 0.5rem'}}>
               <Form.Select
               style={{width : '12vw', height : '5.5vh', border : '2px solid black', borderRadius: '5px'}}
+              // Selection for type
                 value={this.recipeTypeFilter}
                 onChange={(event) => {
                   this.recipeTypeFilter = event.currentTarget.value;
@@ -117,6 +120,7 @@ export class RecipeList extends Component {
             </div>     
           </div>
           <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center' }}>
+            {/* Returns previewcards if the recipeToShow array has objects after the filtering. if not it returns a text with 'No Results' */}
             {this.recipesToShow.length > 0 ? (
               this.recipesToShow.map((recipe) => (
                 //Maps all the different recipes and renders them as links to their respective recipe details
@@ -475,6 +479,7 @@ export class RecipeEdit extends Component<{ match: { params: { id: number } } }>
                 </Form.Select>
               </Column>
               <Column>
+              {/* inline if -sentence used to push ingredients in/out of array ingredientsToDelete. This array is later sent to an api-endpoint to have all its objects removed from the database */}
                 {this.ingredientsToDelete.findIndex(
                   (ing) => ing.ingredients_id == ingredient.ingredients_id
                 ) == -1 ? (
@@ -499,6 +504,7 @@ export class RecipeEdit extends Component<{ match: { params: { id: number } } }>
                     X
                   </Button.Danger>
                 ) : (
+                  // Button that appears if you cross out an ingredient, to give them an opportunity to change their mind before it is pushed to the database
                   <Button.Success
                     small
                     onClick={() => {
@@ -547,6 +553,7 @@ export class RecipeEdit extends Component<{ match: { params: { id: number } } }>
               </datalist>
             </Column>
             <Column>
+            {/* the input for ingredient amount */}
               <Form.Input
                 type="number"
                 max="1000"
@@ -554,6 +561,7 @@ export class RecipeEdit extends Component<{ match: { params: { id: number } } }>
                 onChange={(event) => (this.newIngredient.amount = Number(event.currentTarget.value))}
               /></Column>
             <Column>
+            {/* The input for ingredient unit */}
               <Form.Select
                 value={this.newIngredient.unit}
                   onChange={(event) => (this.newIngredient.unit = event.currentTarget.value)} >

@@ -62,9 +62,9 @@ beforeEach((done) => {
       .then(() => recipeService.createRecipe(testRecipes[2].name, testRecipes[2].description, testRecipes[2].picture_url,  testRecipes[2].region, testRecipes[2].type))
       .then(()=> done())
 
-      recipeService.createIngredient(testIngredients[0].name)
-      .then(() => recipeService.createIngredient(testIngredients[1].name))
-      .then(() => recipeService.createIngredient(testIngredients[2].name))
+      recipeService.createIngredient(testIngredients[0])
+      .then(() => recipeService.createIngredient(testIngredients[1]))
+      .then(() => recipeService.createIngredient(testIngredients[2]))
       .then(() => done());
 
       recipeService.addRecipeIngredient(1, testRecipeIngredients);
@@ -147,7 +147,7 @@ describe('Testing towards `ingredients` table in database', () => {
         
         const newIngredient = {ingredients_id : 4, name : 'chocolate'}
         //Creates a new ingredient in the database
-        await recipeService.createIngredient(newIngredient.name);
+        await recipeService.createIngredient(newIngredient);
 
         //retrieves all the ingredients in the ingredients table
         const response = await recipeService.getAllIngredients();
@@ -165,7 +165,7 @@ describe('Testing towards `ingredients` table in database', () => {
         const remainingRecipes = await recipeService.getAll();
 
         //fetches the remaining ingredients in ingredients_to_recipe with recipe_id = 1
-        const remainingRecipeIngredients = await recipeService.getAllRecipeIngredients(1);
+        const remainingRecipeIngredients = await recipeService.getRecipeIngredients(1);
 
         //expecting the first object in testRecipes to have been removed because of the id : 1 in recipeService.delete(1)
         expect(remainingRecipes).toEqual([
@@ -188,7 +188,7 @@ describe('Testing towards `ingredients_to_recipe` table in database', ()=> {
         await recipeService.deleteRecipeIngredients(1, testRecipeIngredients)
 
         //then tries to fetch all the ingredients from the ingredients_to_recipe table with recipe_id = 1
-        const response = await recipeService.getAllRecipeIngredients(1);
+        const response = await recipeService.getRecipeIngredients(1);
 
         //expecting the response to equal an empty array
         expect(response).toEqual([]);
@@ -198,7 +198,7 @@ describe('Testing towards `ingredients_to_recipe` table in database', ()=> {
 
         //have to create an ingredient with a new name in the ingredients table before adding it to ingredients_to_recipe table
         //The reason is we get the name in the sql-sentence from ingredients (i) so it has to exist in that table
-        await recipeService.createIngredient('chicken');
+        await recipeService.createIngredient({ingredients_id : 4, name: 'chicken'});
 
         //creates a new ingredient with the name of the ingredient recently added to ingredients-table
         const newIngredients : Ingredient[] = [
@@ -208,7 +208,7 @@ describe('Testing towards `ingredients_to_recipe` table in database', ()=> {
         //adds the ingredient to ingredients_to_recipe table
         await recipeService.addRecipeIngredient(1, newIngredients);
 
-        const response = await recipeService.getAllRecipeIngredients(1);
+        const response = await recipeService.getRecipeIngredients(1);
 
         //expects the recipe with id = 1 to have the new ingredient chichken in addition to the ones added in beforeEach()
         expect(response).toEqual([
@@ -221,7 +221,7 @@ describe('Testing towards `ingredients_to_recipe` table in database', ()=> {
     })
 
     test('Get all ingredients in a specific recipe', async () => {
-        const response = await recipeService.getAllRecipeIngredients(1);
+        const response = await recipeService.getRecipeIngredients(1);
 
         //expecting all ingredients of the recipe with recipe_id = 1 to be all the ingredients in the testRecipeIngredients-array because they were all added to the database with recipe_id = 1
         expect(response).toEqual(testRecipeIngredients);
@@ -236,7 +236,7 @@ describe('Testing towards `ingredients_to_recipe` table in database', ()=> {
 
         await recipeService.updateRecipeIngredients(1, updates);
 
-        const newIngredients = await recipeService.getAllRecipeIngredients(1);
+        const newIngredients = await recipeService.getRecipeIngredients(1);
 
         //expecting the the last two ingredients to recipe_id = 1 to be like 'updates' after updating table in database
         expect(newIngredients).toEqual([

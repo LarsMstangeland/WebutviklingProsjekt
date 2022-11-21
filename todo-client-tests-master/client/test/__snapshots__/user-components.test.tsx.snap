@@ -50,7 +50,7 @@ exports[`Components draw correctly tests NewUser draws correctly 1`] = `
       </Row>
       <Row>
         <Column>
-          Admin: 
+          Admin:
            
           <FormCheckbox
             checked={false}

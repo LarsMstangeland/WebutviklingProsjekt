@@ -4521,7 +4521,9 @@ class RecipeList extends react_simplified__WEBPACK_IMPORTED_MODULE_1__.Component
         height: '5.5vh',
         border: '2px solid black',
         borderRadius: '5px'
-      },
+      }
+      // Selection for type
+      ,
       value: this.recipeTypeFilter,
       onChange: event => {
         this.recipeTypeFilter = event.currentTarget.value;
@@ -4906,7 +4908,10 @@ class RecipeEdit extends react_simplified__WEBPACK_IMPORTED_MODULE_1__.Component
           this.recipeIngredients.splice(this.recipeIngredients.indexOf(ingredient), 1);
         }
       }
-    }, "X") : /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Button.Success, {
+    }, "X") :
+    /*#__PURE__*/
+    // Button that appears if you cross out an ingredient, to give them an opportunity to change their mind before it is pushed to the database
+    react__WEBPACK_IMPORTED_MODULE_0__.createElement(_widgets__WEBPACK_IMPORTED_MODULE_2__.Button.Success, {
       small: true,
       onClick: () => {
         const index = this.ingredientsToDelete.indexOf(ingredient);
@@ -5138,7 +5143,8 @@ class UserLogin extends react_simplified__WEBPACK_IMPORTED_MODULE_1__.Component 
           //where we look for a array that matches a spesific recipe id
           let ingredients = this.recipeIngredients.filter(row => row.recipe_id == recipeId);
 
-          //loop the ingredients fetched and then 
+          //loop the ingredients fetched and then check if they match with the fridge ingredients
+          //if that is the case push the recipe into filtered recipe 
           for (let k = 0; k < ingredients.length; k++) {
             if (ingredients[k].ingredients_id == this.fridgeIngredients[i].ingredients_id) {
               filteredRecipes.push(this.recipes[j]);
@@ -5146,6 +5152,9 @@ class UserLogin extends react_simplified__WEBPACK_IMPORTED_MODULE_1__.Component 
           }
         }
       } else {
+        //If it is not the first iteration we further iterate and filter the already established
+        //array, instead of pushing the recipes that meet the criteria we now splice the recipes 
+        //which does not meet the criteria
         for (let j = 0; j < filteredRecipes.length; j++) {
           let recipeId = filteredRecipes[j].recipe_id;
           let ingredients = this.recipeIngredients.filter(row => row.recipe_id == recipeId);
@@ -5807,7 +5816,7 @@ class SlideShowCard extends react_simplified__WEBPACK_IMPORTED_MODULE_1__.Compon
     return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", {
       style: {
         margin: '1rem',
-        borderRadius: "0.5rem",
+        borderRadius: '0.5rem',
         display: 'flex',
         flexDirection: 'row'
       }
@@ -5845,16 +5854,16 @@ class SlideShowCard extends react_simplified__WEBPACK_IMPORTED_MODULE_1__.Compon
       title: "Our five most popular recipes!"
     }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", {
       style: {
-        maxWidth: "20vw"
+        maxWidth: '20vw'
       }
     }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("i", null, "If you wish to learn more about the recipe displayed, click on the image!"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("p", {
       style: {
-        marginTop: "40px"
+        marginTop: '40px'
       }
     }, "We have a plethora, of different ingredients ranging from all over the world. To explore all these, click the button under!"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", {
       style: {
-        display: "flex",
-        justifyContent: "space-between"
+        display: 'flex',
+        justifyContent: 'space-between'
       }
     }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(NavBar.Link, {
       left: false,
@@ -5865,8 +5874,8 @@ class SlideShowCard extends react_simplified__WEBPACK_IMPORTED_MODULE_1__.Compon
       onClick: () => {}
     }, "To recipes!")), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", {
       style: {
-        display: "flex",
-        justifyContent: "space-between"
+        display: 'flex',
+        justifyContent: 'space-between'
       }
     }, this.props.children)))));
   }
@@ -6083,10 +6092,7 @@ class NavBar extends react_simplified__WEBPACK_IMPORTED_MODULE_1__.Component {
       activeClassName: "active",
       exact: true,
       to: "/"
-    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("img", {
-      src: "pizzaIcon",
-      alt: "Food Junkies"
-    })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", {
+    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("b", null, "Food Junkies ")), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", {
       className: "navbar-nav",
       style: {
         width: '100%'
@@ -6218,8 +6224,8 @@ class Alert extends react_simplified__WEBPACK_IMPORTED_MODULE_1__.Component {
         width: '20%',
         left: '75%',
         opacity: '90%',
-        backgroundColor: "transparent",
-        padding: this.alerts.length > 0 ? "1rem" : "0"
+        backgroundColor: 'transparent',
+        padding: this.alerts.length > 0 ? '1rem' : '0'
       }
     }, this.alerts.map((alert, i) => /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", {
       key: alert.id,
@@ -41161,11 +41167,11 @@ class Home extends react_simplified__WEBPACK_IMPORTED_MODULE_2__.Component {
   slidenr = 0;
   CurrentlyInSlide = {
     recipe_id: 0,
-    name: "",
-    description: "",
-    picture_url: "",
-    region: "",
-    type: ""
+    name: '',
+    description: '',
+    picture_url: '',
+    region: '',
+    type: ''
   };
   TypeRecommendedOnLikes = [];
   RegionRecommendedOnLikes = [];
@@ -41190,13 +41196,13 @@ class Home extends react_simplified__WEBPACK_IMPORTED_MODULE_2__.Component {
       }
     }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1__.createElement("h1", {
       style: {
-        marginLeft: "35vw",
-        height: "20vh",
-        width: "30vw",
+        marginLeft: '35vw',
+        height: '20vh',
+        width: '50vw',
         position: 'relative',
         top: '5vh'
       }
-    }, "Welcome to ", /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1__.createElement("span", {
+    }, "Welcome to ", /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1__.createElement("br", null), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1__.createElement("span", {
       style: {
         fontSize: '3rem',
         fontWeight: 'bold'

@@ -11,10 +11,14 @@ import { Recipe } from './service-files/recipe-service';
  *
  * Properties: title
  */
-export class Card extends Component<{ title: ReactNode; inline?: boolean; style? :React.CSSProperties}> {
+export class Card extends Component<{
+  title: ReactNode;
+  inline?: boolean;
+  style?: React.CSSProperties;
+}> {
   render() {
     return (
-      <div className="card" style={{padding: '1rem', paddingLeft: '2rem'}}>
+      <div className="card" style={{ padding: '1rem', paddingLeft: '2rem' }}>
         <div className="card-body">
           <h5 className="card-title">{this.props.title}</h5>
           <div className="card-text">{this.props.children}</div>
@@ -31,60 +35,65 @@ export class Card extends Component<{ title: ReactNode; inline?: boolean; style?
  */
 
 export class SlideShowCard extends Component<{
-  recipe: Recipe
-}>{
-  render(){
-    return(
-        <div style={{ margin: '1rem', borderRadius: "0.5rem", display: 'flex', flexDirection: 'row'}}>
+  recipe: Recipe;
+}> {
+  render() {
+    return (
+      <div
+        style={{ margin: '1rem', borderRadius: '0.5rem', display: 'flex', flexDirection: 'row' }}
+      >
         <NavLink to={'recipes/' + this.props.recipe.recipe_id}>
           <div style={{ display: 'flex', position: 'relative' }}>
-            <h2 style={{
-              position: 'absolute',
-              left: '0',
-              top: '0',
-              color: 'black',
-              fontSize: '2rem',
-              fontWeight: 'bold',
-              margin: '1rem',
-              padding: '0.5rem',
-              backgroundColor: 'rgba(255, 255, 255, 0.7)',
-              borderRadius: '0.5rem',
-
-            }}>{this.props.recipe.name}</h2>
+            <h2
+              style={{
+                position: 'absolute',
+                left: '0',
+                top: '0',
+                color: 'black',
+                fontSize: '2rem',
+                fontWeight: 'bold',
+                margin: '1rem',
+                padding: '0.5rem',
+                backgroundColor: 'rgba(255, 255, 255, 0.7)',
+                borderRadius: '0.5rem',
+              }}
+            >
+              {this.props.recipe.name}
+            </h2>
             <img
-
-              style={{            
-              height: '50vh',
-              width: '40vw',
-              objectFit: 'cover',
-              boxShadow: 'rgba(0, 0, 0, 0.5) 0px 4px 12px',
-              borderRadius: '10px'
-            }}
+              style={{
+                height: '50vh',
+                width: '40vw',
+                objectFit: 'cover',
+                boxShadow: 'rgba(0, 0, 0, 0.5) 0px 4px 12px',
+                borderRadius: '10px',
+              }}
               alt={this.props.recipe.name}
               src={this.props.recipe.picture_url}
             />
           </div>
         </NavLink>
         <Card title="Our five most popular recipes!">
-          <div style={{maxWidth:"20vw"}}>
+          <div style={{ maxWidth: '20vw' }}>
             <i>If you wish to learn more about the recipe displayed, click on the image!</i>
-            <p style={{marginTop:"40px"}}>We have a plethora, of different ingredients ranging from all over the world.
-              To explore all these, click the button under!
+            <p style={{ marginTop: '40px' }}>
+              We have a plethora, of different ingredients ranging from all over the world. To
+              explore all these, click the button under!
             </p>
-            <div style={{display:"flex", justifyContent:"space-between"}}>
-            <NavBar.Link left={false} to="/recipes">
-              <button type="button" className="btn btn-primary" onClick={() => {}}>
-                To recipes!
-              </button>
-            </NavBar.Link>
-            <div style={{display:"flex", justifyContent:"space-between"}}>
-              {this.props.children}
-            </div>
+            <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+              <NavBar.Link left={false} to="/recipes">
+                <button type="button" className="btn btn-primary" onClick={() => {}}>
+                  To recipes!
+                </button>
+              </NavBar.Link>
+              <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                {this.props.children}
+              </div>
             </div>
           </div>
         </Card>
       </div>
-    )
+    );
   }
 }
 
@@ -106,48 +115,56 @@ export class PreviewCard extends Component<{
         <NavLink to={'/recipes/' + this.props.id}>
           <div style={{ display: 'flex', position: 'relative' }}>
             <h2
-              style={this.props.small ? {
-                position: 'absolute',
-                left: '0',
-                top: '0',
-                color: 'black',
-                fontSize: '1.25rem',
-                fontWeight: 'bold',
-                margin: '1rem',
-                padding: '0.5rem',
-                backgroundColor: 'rgba(255, 255, 255, 0.7)',
-                borderRadius: '0.5rem',
-              } : {
-                position: 'absolute',
-                left: '0',
-                top: '0',
-                color: 'black',
-                fontSize: '2rem',
-                fontWeight: 'bold',
-                margin: '1rem',
-                padding: '0.5rem',
-                backgroundColor: 'rgba(255, 255, 255, 0.7)',
-                borderRadius: '0.5rem',
-              }}
+              style={
+                this.props.small
+                  ? {
+                      position: 'absolute',
+                      left: '0',
+                      top: '0',
+                      color: 'black',
+                      fontSize: '1.25rem',
+                      fontWeight: 'bold',
+                      margin: '1rem',
+                      padding: '0.5rem',
+                      backgroundColor: 'rgba(255, 255, 255, 0.7)',
+                      borderRadius: '0.5rem',
+                    }
+                  : {
+                      position: 'absolute',
+                      left: '0',
+                      top: '0',
+                      color: 'black',
+                      fontSize: '2rem',
+                      fontWeight: 'bold',
+                      margin: '1rem',
+                      padding: '0.5rem',
+                      backgroundColor: 'rgba(255, 255, 255, 0.7)',
+                      borderRadius: '0.5rem',
+                    }
+              }
             >
               {this.props.name}
             </h2>
             <img
               alt={this.props.name}
               src={this.props.url}
-              style={this.props.small ? {
-                height: '25vh',
-                width: '20vw',
-                objectFit: 'cover',
-                boxShadow: 'rgba(0, 0, 0, 0.5) 0px 4px 12px',
-                borderRadius: '10px',
-              } : {
-                height: '50vh',
-                width: '40vw',
-                objectFit: 'cover',
-                boxShadow: 'rgba(0, 0, 0, 0.5) 0px 4px 12px',
-                borderRadius: '10px',
-              }}
+              style={
+                this.props.small
+                  ? {
+                      height: '25vh',
+                      width: '20vw',
+                      objectFit: 'cover',
+                      boxShadow: 'rgba(0, 0, 0, 0.5) 0px 4px 12px',
+                      borderRadius: '10px',
+                    }
+                  : {
+                      height: '50vh',
+                      width: '40vw',
+                      objectFit: 'cover',
+                      boxShadow: 'rgba(0, 0, 0, 0.5) 0px 4px 12px',
+                      borderRadius: '10px',
+                    }
+              }
             />
           </div>
         </NavLink>
@@ -159,10 +176,13 @@ export class PreviewCard extends Component<{
 /**
  * Renders a row using Bootstrap classes.
  */
-export class Row extends Component<{style?: React.CSSProperties}, {}> {
-
+export class Row extends Component<{ style?: React.CSSProperties }, {}> {
   render() {
-    return <div className="row" style={this.props.style}>{this.props.children}</div>;
+    return (
+      <div className="row" style={this.props.style}>
+        {this.props.children}
+      </div>
+    );
   }
 }
 
@@ -171,10 +191,17 @@ export class Row extends Component<{style?: React.CSSProperties}, {}> {
  *
  * Properties: width, right
  */
-export class Column extends Component<{ width?: number; right?: boolean; style?: React.CSSProperties}> {
+export class Column extends Component<{
+  width?: number;
+  right?: boolean;
+  style?: React.CSSProperties;
+}> {
   render() {
     return (
-      <div className={'col' + (this.props.width ? '-' + this.props.width : '')} style={this.props.style}>
+      <div
+        className={'col' + (this.props.width ? '-' + this.props.width : '')}
+        style={this.props.style}
+      >
         <div className={'float-' + (this.props.right ? 'end' : 'start')}>{this.props.children}</div>
       </div>
     );
@@ -196,15 +223,16 @@ class ButtonSuccess extends Component<{
       <button
         type="button"
         className="btn btn-success"
-        style={
-          {...(this.props.small
+        style={{
+          ...(this.props.small
             ? {
                 padding: '5px 5px',
                 fontSize: '16px',
                 lineHeight: '0.7',
               }
-            : {}), ...this.props.style}
-        }
+            : {}),
+          ...this.props.style,
+        }}
         onClick={this.props.onClick}
       >
         {this.props.children}
@@ -228,15 +256,16 @@ class ButtonDanger extends Component<{
       <button
         type="button"
         className="btn btn-danger"
-        style={
-          {...(this.props.small
+        style={{
+          ...(this.props.small
             ? {
                 padding: '5px 5px',
                 fontSize: '16px',
                 lineHeight: '0.7',
               }
-            : {}), ...this.props.style}
-        }
+            : {}),
+          ...this.props.style,
+        }}
         onClick={this.props.onClick}
       >
         {this.props.children}
@@ -261,15 +290,16 @@ class ButtonLight extends Component<{
       <button
         type="button"
         className="btn btn-light"
-        style={
-          {...(this.props.small
+        style={{
+          ...(this.props.small
             ? {
                 padding: '5px 5px',
                 fontSize: '16px',
                 lineHeight: '0.7',
               }
-            : {}), ...this.props.style}
-        }
+            : {}),
+          ...this.props.style,
+        }}
         onClick={this.props.onClick}
       >
         {this.props.children}
@@ -326,7 +356,7 @@ export class NavBar extends Component<{ brand: ReactNode }> {
       >
         <div className="container-fluid justify-content-start">
           <NavLink className="navbar-brand" activeClassName="active" exact to="/">
-            <img src={"pizzaIcon"} alt="Food Junkies" />
+            <b>Food Junkies </b>
           </NavLink>
           <div className="navbar-nav" style={{ width: '100%' }}>
             {this.props.children}
@@ -418,7 +448,7 @@ class FormSelect extends Component<{
   value: string | number;
   onChange: (event: ChangeEvent<HTMLSelectElement>) => void;
   [prop: string]: any;
-  style? : React.CSSProperties;
+  style?: React.CSSProperties;
 }> {
   render() {
     // ...rest will contain extra passed attributes such as disabled, required, size.
@@ -454,7 +484,18 @@ export class Alert extends Component {
 
   render() {
     return (
-      <div style={{ position: 'sticky', top: '0', zIndex: 100, width: '20%', left: '75%', opacity: '90%', backgroundColor: "transparent", padding: this.alerts.length > 0 ? "1rem" : "0" }}>
+      <div
+        style={{
+          position: 'sticky',
+          top: '0',
+          zIndex: 100,
+          width: '20%',
+          left: '75%',
+          opacity: '90%',
+          backgroundColor: 'transparent',
+          padding: this.alerts.length > 0 ? '1rem' : '0',
+        }}
+      >
         {this.alerts.map((alert, i) => (
           <div
             key={alert.id}
@@ -472,8 +513,6 @@ export class Alert extends Component {
       </div>
     );
   }
-
-
 
   /**
    * Show info alert.
