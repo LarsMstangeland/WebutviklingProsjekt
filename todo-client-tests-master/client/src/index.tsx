@@ -2,7 +2,16 @@ import ReactDOM from 'react-dom';
 import * as React from 'react';
 import { Component } from 'react-simplified';
 import { HashRouter, Route } from 'react-router-dom';
-import { NavBar, Alert, PreviewCard, SlideShowCard, BootstrapPreviewCard, Button, Card, Row} from './widgets';
+import {
+  NavBar,
+  Alert,
+  PreviewCard,
+  SlideShowCard,
+  BootstrapPreviewCard,
+  Button,
+  Card,
+  Row,
+} from './widgets';
 import { RecipeList, RecipeDetails, RecipeEdit } from './component-files/recipe-components';
 import recipeService, { Recipe, Ingredient, IngredientName } from './service-files/recipe-service';
 import { NewUser, UserLogin } from './component-files/user-components';
@@ -144,38 +153,67 @@ class Home extends Component {
           </SlideShowCard>
         </div>
 
-        {userData?(
-
-        <div>
-        <h2 style={{marginLeft:"15vw", marginTop:"5vw"}}>Based on your likes you should like recipes with these types:</h2>
-        <div
-          style={{
-            display: 'flex',
-            flexWrap: 'nowrap',
-            flexDirection: 'row',
-            justifyContent: 'center',
-            alignItems: 'center',
-          }}>
-          {this.TypeRecommendedOnLikes.length > 0 ? this.TypeRecommendedOnLikes.map((recipe) => (
-            <PreviewCard small key={recipe.recipe_id} name={recipe.type} url={recipe.picture_url} id={recipe.recipe_id}></PreviewCard>
-          )): <b>You should Like some recipes to get a custom recommendation based on the type of dish</b>}
-            
+        {userData ? (
+          <div>
+            <h2 style={{ marginLeft: '15vw', marginTop: '5vw' }}>
+              Based on your likes you should like recipes with these types:
+            </h2>
+            <div
+              style={{
+                display: 'flex',
+                flexWrap: 'nowrap',
+                flexDirection: 'row',
+                justifyContent: 'center',
+                alignItems: 'center',
+              }}
+            >
+              {this.TypeRecommendedOnLikes.length > 0 ? (
+                this.TypeRecommendedOnLikes.map((recipe) => (
+                  <PreviewCard
+                    small
+                    key={recipe.recipe_id}
+                    name={recipe.type}
+                    url={recipe.picture_url}
+                    id={recipe.recipe_id}
+                  ></PreviewCard>
+                ))
+              ) : (
+                <b>
+                  You should like som recipes to get custom recommendation based on the type of dish
+                </b>
+              )}
+            </div>
+            <h2 style={{ marginLeft: '15vw', marginTop: '5vw' }}>
+              Based on your likes you should like recipes with these Regions:
+            </h2>
+            <div
+              style={{
+                display: 'flex',
+                flexDirection: 'row',
+                justifyContent: 'center',
+                alignItems: 'center',
+              }}
+            >
+              {this.RegionRecommendedOnLikes.length > 0 ? (
+                this.RegionRecommendedOnLikes.map((recipe) => (
+                  <PreviewCard
+                    small
+                    key={recipe.recipe_id}
+                    name={recipe.region}
+                    url={recipe.picture_url}
+                    id={recipe.recipe_id}
+                  ></PreviewCard>
+                ))
+              ) : (
+                <b>
+                  You should like som recipes to get custom recommendation based on the type of dish
+                </b>
+              )}
+            </div>
           </div>
-          <h2 style={{marginLeft:"15vw", marginTop:"5vw"}} >Based on your likes you should like recipes with these Regions:</h2>
-          <div
-        style={{
-            display: 'flex',
-            flexDirection: 'row',
-            justifyContent: 'center',
-            alignItems: 'center',
-          }}>
-                {this.RegionRecommendedOnLikes.length > 0 ? this.RegionRecommendedOnLikes.map((recipe) => (
-                <PreviewCard small key={recipe.recipe_id} name={recipe.region} url={recipe.picture_url} id={recipe.recipe_id}></PreviewCard>
-              )): <b>You should Like some recipes to get a custom recommendation based on the type of dish</b>}
-          </div>
-          </div>) : <h2 style={{marginLeft:"35vw", marginTop:"5vw"}}>Log in to view many more things!</h2>
-}
-        </div>
+        ) : (
+          <h2 style={{ marginLeft: '35vw', marginTop: '5vw' }}> Login to get view more</h2>
+        )}
       </div>
     );
   }
@@ -208,20 +246,25 @@ class Home extends Component {
               let newrecipe = await recipeService.get(recipe.recipe_id);
               this.RecipesThatWasLikedByUser.push(newrecipe);
 
+              let recomendedType = this.recipes.filter(
+                (recipe) => recipe.type == newrecipe.type && recipe.recipe_id != newrecipe.recipe_id
+              );
+              let recomendedRegion = this.recipes.filter(
+                (recipe) =>
+                  recipe.region == newrecipe.region && recipe.recipe_id != newrecipe.recipe_id
+              );
 
-            let recomendedType = this.recipes.filter((recipe) => recipe.type == newrecipe.type && recipe.recipe_id != newrecipe.recipe_id)
-            let recomendedRegion = this.recipes.filter((recipe) => recipe.region == newrecipe.region && recipe.recipe_id != newrecipe.recipe_id)
-
-            recomendedRegion.map((RegionRecipe) => {
-              if(this.RegionRecommendedOnLikes.length < 3){
-                this.RegionRecommendedOnLikes.push(RegionRecipe)
-              }
-            })
-            recomendedType.map((TypeRecipe) => {
-              if(this.TypeRecommendedOnLikes.length < 3){
-                this.TypeRecommendedOnLikes.push(TypeRecipe)
-              }
-            })
+              recomendedRegion.map((RecipeRegion) => {
+                if (this.RegionRecommendedOnLikes.length < 3) {
+                  this.RegionRecommendedOnLikes.push(RecipeRegion);
+                }
+              });
+              recomendedType.map((RecipeType) => {
+                if (this.TypeRecommendedOnLikes.length < 3) {
+                  this.TypeRecommendedOnLikes.push(RecipeType);
+                }
+              });
+            });
           })
         : (this.RecipesThatWasLikedByUser = []);
     } catch (error: any) {

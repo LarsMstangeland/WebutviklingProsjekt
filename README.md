@@ -1,28 +1,25 @@
-# Client tests example
+# Food Junkies
 
 ## Setup database connections
 
-You need to create two configuration files that will contain the database connection details. These
-files should not be uploaded to your git repository, and they have therefore been added to
-`.gitignore`. The connection details may vary, but example content of the two configuration files
-are as follows:
+The database connections should already set up in our config files. However these are `.gitignored` and will not show up if the repo is cloned from github. But they will be defined in this repo if you have gained access via, file sharing/zipping. The needed info will be in the server/config.ts file. You will also need to install bcrypt to support hashing passwords. We decided to keep these node_module files to make it easier for configuration and usage.
 
 `server/config.ts`:
 
 ```ts
-process.env.MYSQL_HOST = 'mysql.stud.ntnu.no';
-process.env.MYSQL_USER = 'username_todo';
-process.env.MYSQL_PASSWORD = 'username_todo';
-process.env.MYSQL_DATABASE = 'username_todo_dev';
+process.env.MYSQL_HOST = "mysql.stud.ntnu.no";
+process.env.MYSQL_USER = "larsmst_Prosjekt";
+process.env.MYSQL_PASSWORD = "****";
+process.env.MYSQL_DATABASE = "****";
 ```
 
 `server/test/config.ts`:
 
 ```ts
-process.env.MYSQL_HOST = 'mysql.stud.ntnu.no';
-process.env.MYSQL_USER = 'username_todo';
-process.env.MYSQL_PASSWORD = 'username_todo';
-process.env.MYSQL_DATABASE = 'username_todo_test';
+process.env.MYSQL_HOST = "mysql.stud.ntnu.no";
+process.env.MYSQL_USER = "larsmst_Prosjekt";
+process.env.MYSQL_PASSWORD = "****";
+process.env.MYSQL_DATABASE = "****";
 ```
 
 These environment variables will be used in the `server/src/mysql-pool.ts` file.
@@ -39,6 +36,8 @@ npm start
 
 ### Run server tests:
 
+- Note that you need to be present in the server folder
+
 ```sh
 npm test
 ```
@@ -54,6 +53,8 @@ npm start
 ```
 
 ### Run client tests:
+
+- Note that you need to be present in the client folder
 
 ```sh
 npm test
