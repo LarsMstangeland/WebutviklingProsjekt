@@ -17,6 +17,14 @@ export type Region = {
 }
 
 class UtilityService{
+
+    /**
+     * Gets all the different '
+     * units in the db
+     * 
+     * @returns Unit[]
+     */
+
     getAllUnit() {
         return new Promise<Unit[]>((resolve, reject) => {
             pool.query('SELECT * FROM units', (error: any, results: RowDataPacket[]) => {
@@ -27,16 +35,13 @@ class UtilityService{
         });
     }
 
-    /*
-    get(id: number) {
-        return new Promise<Type | undefined>((resolve, reject) => {
-            pool.query('SELECT * FROM types WHERE id = ?', [id], (error: any, results: RowDataPacket[]) => {
-              if (error) return reject(error);
-      
-              resolve(results[0] as Type);
-            });
-          });
-    }*/
+    
+    /**
+     * Gets all the different '
+     * Types in the db
+     * 
+     * @returns type[]
+     */
 
     getAllType() {
         return new Promise<Type[]>((resolve, reject) => {
@@ -47,6 +52,12 @@ class UtilityService{
             });
         });
     }
+
+    /**
+     * gets a region based on id provided
+     * @param id 
+     * @returns 
+     */
     
     getRegion(id: number) {
         return new Promise<Region | undefined>((resolve, reject) => {
@@ -57,6 +68,12 @@ class UtilityService{
                 });
             });
         }
+
+    /**
+     * gets all the regions that are present in db
+     * 
+     * @returns Region[]
+     */
     
     getAllRegion() {
         return new Promise<Region[]>((resolve, reject) => {
@@ -67,8 +84,6 @@ class UtilityService{
             });
         });
     }
-
-
 }
 const utilityService = new UtilityService();
 export default utilityService;

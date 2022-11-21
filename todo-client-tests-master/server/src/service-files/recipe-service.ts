@@ -63,6 +63,14 @@ class RecipeService {
     });
   }
 
+  /**
+   * gets the all the ingredients 
+   * in a given recipe
+   * 
+   * @param id 
+   * @returns Ingredient[]
+   */
+
   getRecipeIngredients(id: number) {
     return new Promise<Ingredient[]>((resolve, reject) => {
       pool.query(
@@ -77,6 +85,11 @@ class RecipeService {
     });
   }
 
+  /**
+   * gets all the ingredients from the database
+   * @returns Ingredient[]
+   */
+
 
   getAllIngredients() {
     return new Promise<IngredientName[]>((resolve, reject) => {
@@ -88,6 +101,11 @@ class RecipeService {
     });
   }
 
+  
+  /**
+   * gets all the ingredients from the database
+   * @returns Ingredient[]
+   */
   getIngredients() {
     return new Promise<Ingredient[]>((resolve, reject) => {
       pool.query('SELECT * FROM ingredients', (error: any, results: RowDataPacket[]) => {
@@ -97,6 +115,11 @@ class RecipeService {
       });
     });
   }
+
+    /**
+   * deletes a ingredients based on number
+   * 
+   */
 
   delete(id: number) {
     return new Promise<void>((resolve, reject) => {
@@ -113,8 +136,14 @@ class RecipeService {
     });
   }
 
+  /**
+   * takes a recipe and deletes a given set of ingredients
+   * @param id 
+   * @param ingredients 
+   * 
+   */
 
-  //delete ingredients from recipe, not from table
+
   deleteRecipeIngredients(id: number, ingredients: Ingredient[]) {
     return new Promise<void>((resolve, reject) => {
       ingredients.map((ingredient) => {
@@ -131,6 +160,19 @@ class RecipeService {
       resolve();
     });
   }
+
+  /**
+   * 
+   * Uses all the nessesary params 
+   * to create a recipe
+   * 
+   * @param name 
+   * @param description 
+   * @param picture_url 
+   * @param region 
+   * @param type 
+   * @returns the inserted id
+   */
 
   createRecipe(name: string, description: string, picture_url: string, region: string, type: string) {
     return new Promise<number>((resolve, reject) => {
@@ -149,6 +191,12 @@ class RecipeService {
   }
 
 
+  /**
+   * Updates the normal values in a recipe
+   * 
+   * @param recipe 
+   */
+
   updateRecipe(recipe: Recipe) {
     return new Promise<void>((resolve, reject) => {
       pool.query(
@@ -163,6 +211,14 @@ class RecipeService {
       );
     });
   }
+
+  /**
+   * updates the ingredients in a recipe
+   * 
+   * @param id 
+   * @param ingredients 
+   */
+
 
   updateRecipeIngredients(id: number, ingredients: Ingredient[]) {
     return new Promise<void>((resolve, reject) => {
@@ -181,6 +237,14 @@ class RecipeService {
     });
   }
 
+  /**
+   * adds a list of ingredients to a recipe
+   * 
+   * @param id 
+   * @param ingredients 
+   *  
+   */
+
   addRecipeIngredient(id: number, ingredients : Ingredient[]) {
     return new Promise<void>((resolve, reject) => {
       ingredients.map((ingredient: Ingredient) => {
@@ -196,9 +260,16 @@ class RecipeService {
         );
       });
       resolve();
-
     });
   }
+
+  /**
+   * Takes inn a array of ingredients
+   * and then adds the ingredients to the users cart
+   * 
+   * @param ingredients 
+   * @param user_id 
+   */
 
   AddIngredientsToCartFromRecipe(ingredients: Ingredient[], user_id: number){
     return new Promise<void>((resolve, reject) => {
@@ -213,6 +284,12 @@ class RecipeService {
       })
     }
 
+    /**
+     * creates a ingredient with the IngredientName object
+     * 
+     * @param ingredient 
+     */
+
   createIngredient(ingredient: IngredientName){
     return new Promise<void>((resolve, reject) => {
       pool.query(
@@ -223,6 +300,10 @@ class RecipeService {
       )
     })
   }
+  /**
+   * gets all the connections between recipes and ingredients
+   * @returns 
+   */
 
   getAllRecipeIngredients(){
     return new Promise<RecipeToIngredient[]>((resolve, reject) => {

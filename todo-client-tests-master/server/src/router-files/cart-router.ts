@@ -1,9 +1,7 @@
 import express, { request, response } from 'express';
 import cartService from '../service-files/cart-service';
 
-/**
- * Express router containing task methods.
- */
+
 const CartRouter = express.Router();
 
 CartRouter.get('/:id', (request, response) => {

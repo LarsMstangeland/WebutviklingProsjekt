@@ -39,6 +39,14 @@ class UserService {
       });
     });
   }
+
+  /**
+   * Gets a ordered array with the 
+   * most liked Recipes
+   * 
+   * @returns LikedRecipe[]
+   */
+
   getMostLikedRecipe() {
     return new Promise<LikedRecipe[]>((resolve, reject) => {
       pool.query(
@@ -55,6 +63,15 @@ class UserService {
       )
     })
   }
+
+  
+  /**
+   * Gets a array with a 
+   * users liked Recipes
+   * 
+   * @returns LikedRecipe[]
+   */
+
 
   getLikedRecipes(userId : number) {
     return new Promise<LikedRecipe[]>((resolve, reject) => {
@@ -107,18 +124,14 @@ class UserService {
     });
   }
 
-
-  // reset() {
-  //   return new Promise<void>((resolve,reject) => {
-  //     pool.query(
-  //       'TRUNCATE TABLE user', (error, results) => {
-  //         if (error) return console.error(error);
-
-  //         else return console.log(results);
-  //       }
-  //     )
-  //   })
-  // }
+  /**
+   * Sets up a connection between 
+   * user and a recipe to create a like
+   * 
+   * @param userId 
+   * @param recipeId 
+   * @returns Void
+   */
 
   likeRecipe(userId : number, recipeId : number) {
     return new Promise<void>((resolve, reject) => {
@@ -134,16 +147,28 @@ class UserService {
     })
   }
 
+  /**
+   * 
+   * Removed a connection between a user
+   * and a recipe, so that the user
+   * unlikes the given recipe
+   * 
+   * @param userId 
+   * @param recipeId 
+   * @returns Void
+   */
+
   removeLikedRecipe(userId : number, recipeId : number) {
     return new Promise<void>((resolve, reject) => {
-      pool.query('DELETE FROM user_to_recipe WHERE user_id = ? AND recipe_id = ?',
-      [userId, recipeId],
-      (error, results: ResultSetHeader) => {
-        if(error) return reject(error);
-        if(results.affectedRows == 0) return reject(new Error('No row deleted'));
+      pool.query(
+        'DELETE FROM user_to_recipe WHERE user_id = ? AND recipe_id = ?',
+        [userId, recipeId],
+        (error, results: ResultSetHeader) => {
+          if(error) return reject(error);
+          if(results.affectedRows == 0) return reject(new Error('No row deleted'));
 
-        resolve();
-      }
+          resolve();
+        }
       )
     })
   }

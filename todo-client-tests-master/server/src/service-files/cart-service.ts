@@ -10,6 +10,13 @@ export type CartItem = {
 
 class CartService{
 
+  /**
+   * takes in a id and fetches a cartitem object
+   * 
+   * @param id 
+   * @returns CartItem[]
+   */
+
     get(id: number) {
         return new Promise<CartItem[] | undefined>((resolve, reject) => {
           pool.query('SELECT * FROM cart WHERE user_id = ?', [id], (error: any, results: RowDataPacket[]) => {
@@ -20,6 +27,11 @@ class CartService{
         });
       }
 
+      /**
+       * takes in a id and deletes a cartitem object from cart
+       * @param id 
+       * @returns 
+       */
 
     delete(id: number) {
 

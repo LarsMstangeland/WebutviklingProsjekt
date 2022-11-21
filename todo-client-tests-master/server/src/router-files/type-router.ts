@@ -10,13 +10,4 @@ TypeRouter.get('', (_request, response) => {
       .catch((error) => response.status(500).send(error));
   });
 
-/*
-TypeRouter.get('/:id', (request, response) => {
-    const id = Number(request.params.id);
-    utilityService
-      .getType(id)
-      .then((recipe) => (recipe ? response.send(recipe) : response.status(404).send('Type not found')))
-      .catch((error) => response.status(500).send(error));
-  });*/
-
 export default TypeRouter;
