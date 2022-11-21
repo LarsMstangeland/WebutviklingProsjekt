@@ -41186,11 +41186,11 @@ class Home extends react_simplified__WEBPACK_IMPORTED_MODULE_2__.Component {
   slidenr = 0;
   CurrentlyInSlide = {
     recipe_id: 0,
-    name: "",
-    description: "",
-    picture_url: "",
-    region: "",
-    type: ""
+    name: '',
+    description: '',
+    picture_url: '',
+    region: '',
+    type: ''
   };
   TypeRecommendedOnLikes = [];
   RegionRecommendedOnLikes = [];
@@ -41218,13 +41218,13 @@ class Home extends react_simplified__WEBPACK_IMPORTED_MODULE_2__.Component {
       }
     }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1__.createElement("h1", {
       style: {
-        marginLeft: "35vw",
-        height: "20vh",
-        width: "30vw",
+        marginLeft: '35vw',
+        height: '20vh',
+        width: '50vw',
         position: 'relative',
         top: '5vh'
       }
-    }, "Welcome to ", /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1__.createElement("span", {
+    }, "Welcome to ", /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1__.createElement("br", null), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1__.createElement("span", {
       style: {
         fontSize: '3rem',
         fontWeight: 'bold'
@@ -41276,8 +41276,8 @@ class Home extends react_simplified__WEBPACK_IMPORTED_MODULE_2__.Component {
       d: "M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 0 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8z"
     }))))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1__.createElement("h2", {
       style: {
-        marginLeft: "15vw",
-        marginTop: "5vw"
+        marginLeft: '15vw',
+        marginTop: '5vw'
       }
     }, "Based on your likes you should like recipes with these types:"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1__.createElement("div", {
       style: {
@@ -41295,8 +41295,8 @@ class Home extends react_simplified__WEBPACK_IMPORTED_MODULE_2__.Component {
       id: recipe.recipe_id
     }))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1__.createElement("h2", {
       style: {
-        marginLeft: "15vw",
-        marginTop: "5vw"
+        marginLeft: '15vw',
+        marginTop: '5vw'
       }
     }, "Based on your likes you should like recipes with these Regions:"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1__.createElement("div", {
       style: {
