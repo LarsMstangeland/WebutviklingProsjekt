@@ -2,8 +2,7 @@ import * as React from 'react';
 import { shallow } from 'enzyme';
 import { NavLink } from 'react-router-dom';
 import {UserLogin, NewUser} from '../src/component-files/user-components';
-import userService, {User, LikedRecipe} from '../src/service-files/user-service';
-import { Form , Button, NavBar} from '../src/widgets';
+import { Form , Button, NavBar, Column, Row} from '../src/widgets';
 
 jest.mock('../src/service-files/user-service', () => {
     class UserService {
@@ -27,25 +26,156 @@ jest.mock('../src/service-files/user-service', () => {
         delete() {
             return Promise.resolve();
         }
+        likeRecipe() {
+            return Promise.resolve();
+        }
 
+        getLikedRecipes() {
+            return Promise.resolve([
+                {recipe_id : 1, name : 'duck'},
+                {recipe_id : 2, name : 'chicken'}
+            ]);
+        }
+        removeLikedRecipe() {
+            return Promise.resolve();
+        }
+    }
+    return new UserService();
+})
+
+jest.mock('../src/service-files/cart-service', () => {
+    class CartService {
+        get() {
+            return Promise.resolve(
+                {cart_id : 1, ingredients : 'salt'}
+            );
+        }
+        getAllIngredients(){
+            return Promise.resolve([
+                {cart_id : 1, ingredients : 'salt'},
+                {cart_id : 2, ingredients : 'pepper'},
+                {cart_id : 3, ingredients : 'oil'},
+            ]);
+        }
+        deleteIngredientFromCart() {
+            return Promise.resolve();
+        }
+    }
+    return new CartService();
+})
+
+jest.mock('../src/service-files/recipe-service', () => {
+    class RecipeService {
+        createIngredient(){
+            return Promise.resolve();
+        }
+        getAllRecipeIngredients(){
+            return Promise.resolve([
+                {
+                    ingredients_id: 1,
+                    recipe_id: 3,
+                    amount: 4,
+                    unit: 'dl'
+                },
+                {
+                    ingredients_id: 4,
+                    recipe_id: 1,
+                    amount: 4,
+                    unit: 'g'
+                },
+                {
+                    ingredients_id: 8,
+                    recipe_id: 1,
+                    amount: 3,
+                    unit: 'l'
+                }
+            ]);
+        }
+        getAll(){
+            return Promise.resolve([
+                {
+                    recipe_id: 1,
+                    name: 'chicken',
+                    region: 'africa',
+                    type: 'meat',
+                    picture_url: '',
+                    description: 'very tasty'
+                },
+                {
+                    recipe_id: 2,
+                    name: 'beef',
+                    region: 'europe',
+                    type: 'meat',
+                    picture_url: '',
+                    description: 'very tasty yumyum'
+                },
+                {
+                    recipe_id: 3,
+                    name: 'corn',
+                    region: 'america',
+                    type: 'vegan',
+                    picture_url: '',
+                    description: 'it has the juice'
+                }
+            ]);
+        }
+        getIngredients(){
+            return Promise.resolve([
+                {
+                    ingredients_id: 1,
+                    name: 'ham',
+                    amount: '2',
+                    unit: 'kg'
+                },
+                {
+                    ingredients_id: 2,
+                    name: 'rice',
+                    amount: '2',
+                    unit: 'dl'
+                },
+                {
+                    ingredients_id: 3,
+                    name: 'pepper',
+                    amount: '7',
+                    unit: 'l'
+                }
+            ]);
+        }
     }
 })
 
-// jest.setTimeout(30000);
+beforeEach(() => {
+    window.sessionStorage.clear();
+});
+
 
 describe('Components draw correctly tests' , () => {
-    test('UserLogin draws correctly' , () => {
+
+    test('UserLogin draws correctly when not logged in' , () => {
         const wrapper = shallow(<UserLogin/>);
 
         expect(wrapper).toMatchSnapshot();
     });
+    
+    
+    test('UserLogin draws correctly when logged in', () => {
+        let userData = {user_id : 1, name : 'larsy', password : 'larserkul', admin : true};
+        
+        window.sessionStorage.setItem('user', JSON.stringify(userData));
+        
+        const wrapper = shallow(<UserLogin></UserLogin>);
+        
+        expect(wrapper).toMatchSnapshot();
+    })
 
-    // test('NewUser draws correctly' , () => {
-    //     const wrapper = shallow(<NewUser/>);
+    test('NewUser draws correctly' , () => {
+        const wrapper = shallow(<NewUser/>);
 
-    //         expect(wrapper).toMatchSnapshot();
-    // });
+            expect(wrapper).toMatchSnapshot();
+    });
+
 });
+
 
 describe('Testing NewUser-component', () => {
     test('Input fields value changes', (done) => {
@@ -63,19 +193,19 @@ describe('Testing NewUser-component', () => {
         });
 
         //@ts-ignore
-        wrapper.find('#username').simulate('change', {currentTarget : {value : 'vetleek'}});                
+        wrapper.find(Form.Input).at(0).simulate('change', {currentTarget : {value : 'vetleek'}});                
         //@ts-ignore
-        expect(wrapper.containsMatchingElement(<Form.Input value="vetleek"></Form.Input>)).toEqual(true);
+        expect(wrapper.containsMatchingElement(<Form.Input type="text" value="vetleek"></Form.Input>)).toEqual(true);
 
         //@ts-ignore
-        wrapper.find('#password').simulate('change', {currentTarget : {value : 'pass'}});                
+        wrapper.find(Form.Input).at(1).simulate('change', {currentTarget : {value : 'pass'}});                
         //@ts-ignore
-        expect(wrapper.containsMatchingElement(<Form.Input value="pass"></Form.Input>)).toEqual(true);
+        expect(wrapper.containsMatchingElement(<Form.Input type="password" value="pass"></Form.Input>)).toEqual(true);
 
         //@ts-ignore
-        wrapper.find('#passwordCheck').simulate('change', {currentTarget : {value : 'pass'}});                
+        wrapper.find(Form.Input).at(2).simulate('change', {currentTarget : {value : 'pass'}});                
         //@ts-ignore
-        expect(wrapper.containsMatchingElement(<Form.Input value="pass"></Form.Input>)).toEqual(true);
+        expect(wrapper.containsMatchingElement(<Form.Input type="password" value="pass"></Form.Input>)).toEqual(true);
 
         done();
     });
@@ -96,15 +226,56 @@ describe('Testing NewUser-component', () => {
         done();
     });
 
-    test('Button correctly sets location on click', (done) => {
+    test('Buttons correctly sets location on click', (done) => {
         const wrapper = shallow(<NewUser></NewUser>);
 
+        setTimeout(() => {
         wrapper.find(Button.Success).simulate('click');
         
 
-        setTimeout(() => {
             expect(location.hash).toEqual('#/user/login');
+        });
+
+        setTimeout(() => {
+        wrapper.find(Button.Danger).simulate('click');
+
+            expect(location.hash).toEqual('#/user/login/');
         });
         done();
     });
+
+});
+
+
+
+describe('Testing UserLogin-component', () => {
+
+    test('Buttons set correct location on click', (done) => {
+        const wrapper = shallow(<UserLogin></UserLogin>);
+
+        setTimeout(() => {
+        wrapper.find(Button.Danger).at(0).simulate('click');
+
+            expect(location.hash).toEqual('#/user/login');   
+        });
+
+        setTimeout(() => {
+            wrapper.find(Button.Danger).at(1).simulate('click');
+            expect(location.hash).toEqual('#/user/login/');   
+        })
+        done();
+    });
+
+    test('Fucked up test that should fail', (done) => {
+        const wrapper = shallow(<UserLogin></UserLogin>);
+
+        setTimeout(() => {
+            expect(wrapper.containsMatchingElement(
+                <NewUser></NewUser>
+           )).toEqual(true);
+        });
+        done();
+    })
+
+
 });

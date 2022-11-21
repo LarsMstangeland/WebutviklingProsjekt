@@ -21,7 +21,7 @@ class CartService {
   }
 
   getAllIngredients() {  
-    return axios.get<Ingredient[]>('/cart/addIngredients')
+    return axios.get<CartItem[]>('/cart/addIngredients')
     .then((response) => response.data)
     .catch((error) => console.log(error))
   }

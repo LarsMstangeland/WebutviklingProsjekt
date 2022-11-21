@@ -6,7 +6,6 @@ import { NavBar, InfoCard, Alert, PreviewCard, SlideShowCard, BootstrapPreviewCa
 import { RecipeList, RecipeDetails, RecipeEdit } from './component-files/recipe-components';
 import recipeService, { Recipe, Ingredient, IngredientName } from './service-files/recipe-service';
 import {NewUser, UserLogin} from './component-files/user-components';
-import { CartContent } from './component-files/cart-components';
 import userService, { LikedRecipe } from './service-files/user-service';
 
 //@ts-ignore
